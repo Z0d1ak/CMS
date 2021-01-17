@@ -1,12 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace web.Services
 {
+    /// <summary>
+    /// Интерфейс провайдера, который хранит инентификатор компании (тенанта),
+    /// в контексте которой происходит запрос в текущей сессии.
+    /// </summary>
     public interface ICompanyIdProvider
     {
-        Guid CompanyID { get; set; }
+        /// <summary>
+        /// Id компании (тенанта).
+        /// </summary>
+        Guid CompanyId { get; set; }
     }
 }

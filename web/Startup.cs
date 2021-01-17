@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using web.Db;
 using web.Services;
@@ -19,12 +13,22 @@ namespace web
 {
     public class Startup
     {
+        #region Private Fields
+
+        private readonly IConfiguration configuration;
+
+        #endregion
+
+        #region Constructor
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        #endregion
+
+        #region Public Methods
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -38,7 +42,8 @@ namespace web
             services.AddScoped<ICompanyIdProvider, CompanyIdProvider>();
 
             services.AddDbContext<DataContext>(options =>
-                    options.UseNpgsql(Configuration.GetConnectionString("MyWebApiConection")));
+                    options.UseNpgsql(this.configuration.GetConnectionString("MyWebApiConection"))
+                    .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,5 +67,7 @@ namespace web
                 endpoints.MapControllers();
             });
         }
+
+        #endregion
     }
 }

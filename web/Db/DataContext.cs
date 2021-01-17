@@ -1,17 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web.Entities;
 using web.Services;
 
 namespace web.Db
 {
+    /// <summary>
+    /// Конекст данных.
+    /// </summary>
+    /// <remarks>
+    /// Для сущностей по умолчанию есть фильтр по компании (теннату).
+    /// </remarks>
     public class DataContext : DbContext
     {
+        #region Private Fields
+
         private readonly ICompanyIdProvider companyIdProvider;
+
+        #endregion
+
+        #region Constructor
+
+        public DataContext(
+           DbContextOptions<DataContext> options,
+           ICompanyIdProvider companyIdProvider)
+           : base(options)
+        {
+            //this.Database.EnsureCreated();
+            this.companyIdProvider = companyIdProvider;
+        }
+
+        #endregion
+
+        #region Public Properties
 
         public DbSet<User> Users { get; set; }
 
@@ -23,14 +44,9 @@ namespace web.Db
 
         public DbSet<Article> Articles { get; set; }
 
-        public DataContext(
-            DbContextOptions<DataContext> options,
-            ICompanyIdProvider companyIdProvider)
-            : base(options)
-        {
-            //this.Database.EnsureCreated();
-            this.companyIdProvider = companyIdProvider;
-        }
+        #endregion
+
+        #region Base Overrides
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,19 +57,23 @@ namespace web.Db
             ConfigureWfTaskEntity(modelBuilder);
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void ConfigureArticleEntity(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Article>().HasKey(x => x.Id);
-            modelBuilder.Entity<Article>().Property(x => x.CompanyID).IsRequired();
+            modelBuilder.Entity<Article>().Property(x => x.CompanyId).IsRequired();
             
-            modelBuilder.Entity<Article>().HasQueryFilter(x => x.CompanyID == this.companyIdProvider.CompanyID);
+            modelBuilder.Entity<Article>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
 
             modelBuilder.Entity<Article>().HasOne(x => x.Initiator)
                 .WithMany(x => x.InitiatedArticles)
-                .HasForeignKey(x => x.InitiatorID);
+                .HasForeignKey(x => x.InitiatorId);
 
             modelBuilder.Entity<Article>().Property(x => x.CreationDate).IsRequired();
-            modelBuilder.Entity<Article>().Property(x => x.InitiatorID).IsRequired();
+            modelBuilder.Entity<Article>().Property(x => x.InitiatorId).IsRequired();
             modelBuilder.Entity<Article>().Property(x => x.State).IsRequired();
             modelBuilder.Entity<Article>().Property(x => x.Title).IsRequired().HasMaxLength(256);
             modelBuilder.Entity<Article>().Property(x => x.Content).HasColumnType("jsonb");
@@ -66,16 +86,16 @@ namespace web.Db
             modelBuilder.Entity<Article>()
                 .HasOne(x => x.Company)
                 .WithMany(x => x.Articles)
-                .HasForeignKey(x => x.CompanyID)
+                .HasForeignKey(x => x.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 
         private void ConfigureRoleEntity(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>().HasKey(x => x.Id);
-            modelBuilder.Entity<Role>().Property(x => x.CompanyID).IsRequired();
+            modelBuilder.Entity<Role>().Property(x => x.CompanyId).IsRequired();
 
-            modelBuilder.Entity<Role>().HasQueryFilter(x => x.CompanyID == this.companyIdProvider.CompanyID);
+            modelBuilder.Entity<Role>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
 
             modelBuilder.Entity<Role>().Property(x => x.Name).IsRequired().HasMaxLength(32);
             modelBuilder.Entity<Role>().Property(x => x.Type)
@@ -88,7 +108,7 @@ namespace web.Db
             modelBuilder.Entity<Role>()
                 .HasOne(x => x.Company)
                 .WithMany(x => x.Roles)
-                .HasForeignKey(x => x.CompanyID)
+                .HasForeignKey(x => x.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
         }
@@ -96,9 +116,9 @@ namespace web.Db
         private void ConfigureUserEntity(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(x => x.Id);
-            modelBuilder.Entity<User>().Property(x => x.CompanyID).IsRequired();
+            modelBuilder.Entity<User>().Property(x => x.CompanyId).IsRequired();
 
-            modelBuilder.Entity<User>().HasQueryFilter(x => x.CompanyID == this.companyIdProvider.CompanyID);
+            modelBuilder.Entity<User>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
 
             modelBuilder.Entity<User>().ToTable("users");
 
@@ -113,7 +133,7 @@ namespace web.Db
             modelBuilder.Entity<User>()
                 .HasOne(x => x.Company)
                 .WithMany(x => x.Users)
-                .HasForeignKey(x => x.CompanyID)
+                .HasForeignKey(x => x.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
@@ -133,13 +153,13 @@ namespace web.Db
         private void ConfigureWfTaskEntity(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<WfTask>().HasKey(x => x.Id);
-            modelBuilder.Entity<WfTask>().Property(x => x.CompanyID).IsRequired();
+            modelBuilder.Entity<WfTask>().Property(x => x.CompanyId).IsRequired();
 
-            modelBuilder.Entity<WfTask>().HasQueryFilter(x => x.CompanyID == this.companyIdProvider.CompanyID);
+            modelBuilder.Entity<WfTask>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
 
 
             modelBuilder.Entity<WfTask>().Property(x => x.AuthorId).IsRequired();
-            modelBuilder.Entity<WfTask>().Property(x => x.ArticleID).IsRequired();
+            modelBuilder.Entity<WfTask>().Property(x => x.ArticleId).IsRequired();
             modelBuilder.Entity<WfTask>().Property(x => x.CreationDate).IsRequired();
             modelBuilder.Entity<WfTask>().Property(x => x.Comment).HasMaxLength(512);
             modelBuilder.Entity<WfTask>().Property(x => x.Description).HasMaxLength(512);
@@ -152,7 +172,7 @@ namespace web.Db
             modelBuilder.Entity<WfTask>()
                 .HasOne(x => x.Company)
                 .WithMany(x => x.Tasks)
-                .HasForeignKey(x => x.CompanyID)
+                .HasForeignKey(x => x.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<WfTask>()
@@ -163,7 +183,7 @@ namespace web.Db
             modelBuilder.Entity<WfTask>()
                 .HasOne(x => x.Article)
                 .WithMany(x => x.Tasks)
-                .HasForeignKey(x => x.ArticleID);
+                .HasForeignKey(x => x.ArticleId);
 
             modelBuilder.Entity<WfTask>()
                 .HasOne(x => x.Performer)
@@ -171,5 +191,7 @@ namespace web.Db
                 .HasForeignKey(x => x.PerformerId);
 
         }
+
+        #endregion
     }
 }

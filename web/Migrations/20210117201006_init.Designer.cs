@@ -10,8 +10,8 @@ using web.Db;
 namespace web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210116213256_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210117201006_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,7 +42,7 @@ namespace web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
@@ -51,7 +51,7 @@ namespace web.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("InitiatorID")
+                    b.Property<Guid>("InitiatorId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("State")
@@ -65,9 +65,9 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyID");
+                    b.HasIndex("CompanyId");
 
-                    b.HasIndex("InitiatorID");
+                    b.HasIndex("InitiatorId");
 
                     b.ToTable("articles");
                 });
@@ -94,7 +94,7 @@ namespace web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -108,7 +108,7 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyID");
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("roles");
                 });
@@ -119,7 +119,7 @@ namespace web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -151,7 +151,7 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyID");
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("users");
                 });
@@ -162,8 +162,11 @@ namespace web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ArticleID")
+                    b.Property<Guid>("ArticleId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("AssignmentDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
@@ -172,7 +175,7 @@ namespace web.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
@@ -185,26 +188,23 @@ namespace web.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<Guid?>("PerformerId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("TakenToWorkDate")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("СompletionDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ArticleID");
+                    b.HasIndex("ArticleId");
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("CompanyID");
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("PerformerId");
 
@@ -230,13 +230,13 @@ namespace web.Migrations
                 {
                     b.HasOne("web.Entities.Company", "Company")
                         .WithMany("Articles")
-                        .HasForeignKey("CompanyID")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("web.Entities.User", "Initiator")
                         .WithMany("InitiatedArticles")
-                        .HasForeignKey("InitiatorID")
+                        .HasForeignKey("InitiatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -249,7 +249,7 @@ namespace web.Migrations
                 {
                     b.HasOne("web.Entities.Company", "Company")
                         .WithMany("Roles")
-                        .HasForeignKey("CompanyID")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -260,7 +260,7 @@ namespace web.Migrations
                 {
                     b.HasOne("web.Entities.Company", "Company")
                         .WithMany("Users")
-                        .HasForeignKey("CompanyID")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -271,7 +271,7 @@ namespace web.Migrations
                 {
                     b.HasOne("web.Entities.Article", "Article")
                         .WithMany("Tasks")
-                        .HasForeignKey("ArticleID")
+                        .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -283,7 +283,7 @@ namespace web.Migrations
 
                     b.HasOne("web.Entities.Company", "Company")
                         .WithMany("Tasks")
-                        .HasForeignKey("CompanyID")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -5,25 +5,30 @@ using System.Threading.Tasks;
 
 namespace web.Services
 {
+    /// <summary>
+    /// Провайдера, который хранит инентификатор компании (тенанта),
+    /// в контексте которой происходит запрос в текущей сессии.
+    /// </summary>
     public class CompanyIdProvider : ICompanyIdProvider
     {
-        private Guid? companyID;
+        private Guid? companyId;
+
         public CompanyIdProvider() { }
 
-        public Guid CompanyID
+        public Guid CompanyId
         {
             get
             {
-                if(this.companyID is null)
+                if(this.companyId is null)
                 {
                     throw new Exception();
                 }
 
-                return this.companyID.Value;
+                return this.companyId.Value;
             }
             set
             {
-                this.companyID = value;
+                this.companyId = value;
             }
         }
     }

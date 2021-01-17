@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace web.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,7 +24,7 @@ namespace web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CompanyID = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false)
                 },
@@ -32,8 +32,8 @@ namespace web.Migrations
                 {
                     table.PrimaryKey("PK_roles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_roles_companies_CompanyID",
-                        column: x => x.CompanyID,
+                        name: "FK_roles_companies_CompanyId",
+                        column: x => x.CompanyId,
                         principalTable: "companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -44,7 +44,7 @@ namespace web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CompanyID = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
                     Login = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     Email = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     FirstName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
@@ -56,8 +56,8 @@ namespace web.Migrations
                 {
                     table.PrimaryKey("PK_users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_users_companies_CompanyID",
-                        column: x => x.CompanyID,
+                        name: "FK_users_companies_CompanyId",
+                        column: x => x.CompanyId,
                         principalTable: "companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -68,8 +68,8 @@ namespace web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    InitiatorID = table.Column<Guid>(type: "uuid", nullable: false),
-                    CompanyID = table.Column<Guid>(type: "uuid", nullable: false),
+                    InitiatorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     State = table.Column<string>(type: "text", nullable: false),
                     Title = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
@@ -79,14 +79,14 @@ namespace web.Migrations
                 {
                     table.PrimaryKey("PK_articles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_articles_companies_CompanyID",
-                        column: x => x.CompanyID,
+                        name: "FK_articles_companies_CompanyId",
+                        column: x => x.CompanyId,
                         principalTable: "companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_articles_users_InitiatorID",
-                        column: x => x.InitiatorID,
+                        name: "FK_articles_users_InitiatorId",
+                        column: x => x.InitiatorId,
                         principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -121,13 +121,13 @@ namespace web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CompanyID = table.Column<Guid>(type: "uuid", nullable: false),
-                    ArticleID = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uuid", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
                     PerformerId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    TakenToWorkDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    AssignmentDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    СompletionDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     Comment = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     Type = table.Column<string>(type: "text", nullable: false),
@@ -137,14 +137,14 @@ namespace web.Migrations
                 {
                     table.PrimaryKey("PK_tasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_tasks_articles_ArticleID",
-                        column: x => x.ArticleID,
+                        name: "FK_tasks_articles_ArticleId",
+                        column: x => x.ArticleId,
                         principalTable: "articles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tasks_companies_CompanyID",
-                        column: x => x.CompanyID,
+                        name: "FK_tasks_companies_CompanyId",
+                        column: x => x.CompanyId,
                         principalTable: "companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -163,19 +163,19 @@ namespace web.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_articles_CompanyID",
+                name: "IX_articles_CompanyId",
                 table: "articles",
-                column: "CompanyID");
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_articles_InitiatorID",
+                name: "IX_articles_InitiatorId",
                 table: "articles",
-                column: "InitiatorID");
+                column: "InitiatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_roles_CompanyID",
+                name: "IX_roles_CompanyId",
                 table: "roles",
-                column: "CompanyID");
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleUser_UsersId",
@@ -183,9 +183,9 @@ namespace web.Migrations
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tasks_ArticleID",
+                name: "IX_tasks_ArticleId",
                 table: "tasks",
-                column: "ArticleID");
+                column: "ArticleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tasks_AuthorId",
@@ -193,9 +193,9 @@ namespace web.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tasks_CompanyID",
+                name: "IX_tasks_CompanyId",
                 table: "tasks",
-                column: "CompanyID");
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tasks_PerformerId",
@@ -203,9 +203,9 @@ namespace web.Migrations
                 column: "PerformerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_CompanyID",
+                name: "IX_users_CompanyId",
                 table: "users",
-                column: "CompanyID");
+                column: "CompanyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

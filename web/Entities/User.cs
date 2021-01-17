@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace web.Entities
 {
     /// <summary>
-    /// Пользователь системы.
+    /// Объект, описывающий сущность пользователя в системе.
     /// </summary>
-    [Table("users")]
     public sealed class User
     {
         public Guid Id { get; set; }
 
-        public Guid CompanyID { get; set; }
+        public Guid CompanyId { get; set; }
         public Company Company { get; set; }
 
         public string Login { get; set; }

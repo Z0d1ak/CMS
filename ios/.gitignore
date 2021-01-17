@@ -1,0 +1,7 @@
+# XCodeProject
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj*
+!*.xcodeproj/xcshareddata*
+
+# Other
+.DS_Store

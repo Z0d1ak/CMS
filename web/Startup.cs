@@ -92,9 +92,10 @@ namespace web
                }
                );
 
-            services.AddDbContext<DataContext>(options =>
-                    options.UseNpgsql(this.configuration.GetConnectionString("MyWebApiConection"))
-                    .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
+            //services.AddDbContext<DataContext>(options =>
+            //        options.UseNpgsql(this.configuration.GetConnectionString("MyWebApiConection"))
+            //        .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
+            services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase(databaseName: "Test"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web.Entities;
 using web.Services;
@@ -17,6 +21,8 @@ namespace web.Db
 
         private readonly ICompanyIdProvider companyIdProvider;
 
+        private readonly static Guid AdminGuid = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f");
+
         #endregion
 
         #region Constructor
@@ -26,7 +32,7 @@ namespace web.Db
            ICompanyIdProvider companyIdProvider)
            : base(options)
         {
-            //this.Database.EnsureCreated();
+            this.Database.EnsureCreated();
             this.companyIdProvider = companyIdProvider;
         }
 
@@ -50,11 +56,11 @@ namespace web.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ConfigureArticleEntity(modelBuilder);
-            ConfigureRoleEntity(modelBuilder);
-            ConfigureUserEntity(modelBuilder);
-            ConfigureCompanyEntity(modelBuilder);
-            ConfigureWfTaskEntity(modelBuilder);
+            this.ConfigureArticleEntity(modelBuilder);
+            this.ConfigureRoleEntity(modelBuilder);
+            this.ConfigureUserEntity(modelBuilder);
+            this.ConfigureCompanyEntity(modelBuilder);
+            this.ConfigureWfTaskEntity(modelBuilder);
         }
 
         #endregion
@@ -81,8 +87,6 @@ namespace web.Db
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<ArticleState>());
 
-            modelBuilder.Entity<Article>().ToTable("articles");
-
             modelBuilder.Entity<Article>()
                 .HasOne(x => x.Company)
                 .WithMany(x => x.Articles)
@@ -102,8 +106,14 @@ namespace web.Db
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<RoleType>());
 
-
-            modelBuilder.Entity<Role>().ToTable("roles");
+            var adminRole = new Role()
+            {
+                Id = AdminGuid,
+                CompanyId = AdminGuid,
+                Name = "SuperAdmin",
+                Type = RoleType.SuperAdmin
+            };
+            modelBuilder.Entity<Role>().HasData(adminRole);
 
             modelBuilder.Entity<Role>()
                 .HasOne(x => x.Company)
@@ -115,17 +125,23 @@ namespace web.Db
 
         private void ConfigureUserEntity(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasKey(x => x.Id);
+            modelBuilder.Entity<User>()
+                .HasKey(x => x.Id);
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.Email)
+                .IsUnique();
+
             modelBuilder.Entity<User>().Property(x => x.CompanyId).IsRequired();
 
             modelBuilder.Entity<User>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
 
-            modelBuilder.Entity<User>().ToTable("users");
-
             modelBuilder.Entity<User>().Property(x => x.PasswordHash).IsRequired();
             modelBuilder.Entity<User>().Property(x => x.PasswordSalt).IsRequired();
-            modelBuilder.Entity<User>().Property(x => x.Login).IsRequired().HasMaxLength(32);
-            modelBuilder.Entity<User>().Property(x => x.Email).IsRequired().HasMaxLength(32);
+            modelBuilder.Entity<User>()
+                .Property(x => x.Email)
+                    .IsRequired()
+                    .HasMaxLength(32);
+                    
             modelBuilder.Entity<User>().Property(x => x.FirstName).IsRequired().HasMaxLength(32);
             modelBuilder.Entity<User>().Property(x => x.LastName).HasMaxLength(32);
 
@@ -136,9 +152,22 @@ namespace web.Db
                 .HasForeignKey(x => x.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            using var hmac = new HMACSHA512();
+            var admin = new User()
+            {
+                Id = AdminGuid,
+                Email = "admin@admin.com",
+                FirstName = "Admin",
+                CompanyId = AdminGuid,
+                PasswordSalt = hmac.Key,
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Master1234"))
+            };
+            modelBuilder.Entity<User>().HasData(admin);
+
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Roles)
-                .WithMany(x => x.Users);
+                .WithMany(x => x.Users)
+                .UsingEntity(j => j.HasData(new { UsersId = AdminGuid, RolesId = AdminGuid }));
         }
 
         private void ConfigureCompanyEntity(ModelBuilder modelBuilder)
@@ -147,7 +176,12 @@ namespace web.Db
 
             modelBuilder.Entity<Company>().Property(x => x.Name).IsRequired().HasMaxLength(64);
 
-            modelBuilder.Entity<Company>().ToTable("companies");
+            var adminCompany = new Company()
+            {
+                Id = AdminGuid,
+                Name = "SuperAdminCompany"
+            };
+            modelBuilder.Entity<Company>().HasData(adminCompany);
         }
 
         private void ConfigureWfTaskEntity(ModelBuilder modelBuilder)
@@ -166,8 +200,6 @@ namespace web.Db
             modelBuilder.Entity<WfTask>().Property(x => x.Type)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<TaskType>());
-
-            modelBuilder.Entity<WfTask>().ToTable("tasks");
 
             modelBuilder.Entity<WfTask>()
                 .HasOne(x => x.Company)
@@ -189,7 +221,6 @@ namespace web.Db
                 .HasOne(x => x.Performer)
                 .WithMany(x => x.PerfomingTasks)
                 .HasForeignKey(x => x.PerformerId);
-
         }
 
         #endregion

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace web.Controllers
+namespace web.Other.ServiceResult
 {
-    public class LoginController
+    public enum ServiceMessageTypes
     {
+        Warning = 0,
+        Error = 1,
     }
 }

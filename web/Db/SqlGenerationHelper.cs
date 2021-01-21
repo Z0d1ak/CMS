@@ -5,7 +5,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal;
 namespace web.Db
 {
     /// <summary>
-    /// Конвертер имен из объектной модели в имена из бд.
+    /// Конвертер имен из объектной модели в имена в бд.
     /// Имена из CamelCase конвертируются в snake_case. 
     /// Имена приводятся к нижнему регистру.
     /// </summary>

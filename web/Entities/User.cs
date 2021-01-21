@@ -12,9 +12,8 @@ namespace web.Entities
         public Guid Id { get; set; }
 
         public Guid CompanyId { get; set; }
-        public Company Company { get; set; }
 
-        public string Login { get; set; }
+        public Company Company { get; set; }
 
         public string Email { get; set; }
 
@@ -26,12 +25,12 @@ namespace web.Entities
 
         public byte[] PasswordSalt { get; set; }
 
-        public ICollection<Role> Roles { get; set; }
+        public ICollection<Role> Roles { get; set; } = new List<Role>();
 
-        public ICollection<Article> InitiatedArticles { get; set; }
+        public ICollection<Article> InitiatedArticles { get; set; } = new List<Article>();
 
-        public ICollection<WfTask> CreatedTasks { get; set; }
+        public ICollection<WfTask> CreatedTasks { get; set; } = new List<WfTask>();
 
-        public ICollection<WfTask> PerfomingTasks { get; set; }
+        public ICollection<WfTask> PerfomingTasks { get; set; } = new List<WfTask>();
     }
 }

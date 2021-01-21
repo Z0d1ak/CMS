@@ -32,6 +32,13 @@ namespace web.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("RoleUser");
+
+                    b.HasData(
+                        new
+                        {
+                            RolesId = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            UsersId = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f")
+                        });
                 });
 
             modelBuilder.Entity("web.Entities.Article", b =>
@@ -67,7 +74,7 @@ namespace web.Migrations
 
                     b.HasIndex("InitiatorId");
 
-                    b.ToTable("articles");
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("web.Entities.Company", b =>
@@ -83,7 +90,14 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("companies");
+                    b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            Name = "SuperAdminCompany"
+                        });
                 });
 
             modelBuilder.Entity("web.Entities.Role", b =>
@@ -108,7 +122,16 @@ namespace web.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("roles");
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            CompanyId = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            Name = "SuperAdmin",
+                            Type = "SuperAdmin"
+                        });
                 });
 
             modelBuilder.Entity("web.Entities.User", b =>
@@ -134,11 +157,6 @@ namespace web.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
-
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("bytea");
@@ -151,7 +169,21 @@ namespace web.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("users");
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            CompanyId = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            Email = "admin@admin.com",
+                            FirstName = "Admin",
+                            PasswordHash = new byte[] { 102, 125, 27, 31, 218, 9, 201, 212, 156, 189, 232, 184, 171, 181, 194, 121, 19, 189, 117, 11, 198, 95, 114, 86, 230, 7, 130, 232, 73, 226, 24, 243, 247, 197, 248, 27, 117, 137, 24, 147, 109, 137, 214, 134, 174, 71, 219, 56, 200, 214, 72, 221, 15, 148, 205, 85, 149, 215, 179, 143, 248, 133, 155, 197 },
+                            PasswordSalt = new byte[] { 65, 8, 139, 187, 235, 186, 141, 143, 33, 173, 221, 30, 46, 136, 135, 155, 94, 212, 14, 120, 155, 105, 182, 249, 213, 166, 55, 151, 86, 150, 126, 239, 100, 97, 116, 24, 23, 24, 17, 135, 18, 109, 126, 160, 78, 120, 205, 196, 198, 97, 141, 58, 237, 44, 9, 134, 116, 48, 145, 97, 146, 240, 98, 190, 230, 151, 55, 231, 39, 191, 178, 219, 68, 10, 27, 87, 204, 78, 151, 143, 77, 198, 125, 230, 172, 7, 142, 180, 235, 20, 114, 123, 38, 219, 226, 69, 175, 197, 123, 85, 111, 107, 113, 49, 127, 209, 161, 66, 35, 18, 237, 222, 143, 7, 39, 213, 71, 171, 204, 133, 32, 168, 25, 171, 105, 242, 138, 65 }
+                        });
                 });
 
             modelBuilder.Entity("web.Entities.WfTask", b =>
@@ -206,7 +238,7 @@ namespace web.Migrations
 
                     b.HasIndex("PerformerId");
 
-                    b.ToTable("tasks");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("RoleUser", b =>

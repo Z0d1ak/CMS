@@ -28,6 +28,9 @@ namespace web
 
         private readonly IConfiguration configuration;
 
+        private static bool UseInMemoryDatabase = Environment.GetEnvironmentVariable("db_type") == "inmemory";
+        private static bool IsDevelopment = Environment.GetEnvironmentVariable("IsDevelopment") == "true";
+
         #endregion
 
         #region Constructor
@@ -92,16 +95,22 @@ namespace web
                }
                );
 
-            //services.AddDbContext<DataContext>(options =>
-            //        options.UseNpgsql(this.configuration.GetConnectionString("MyWebApiConection"))
-            //        .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
-            services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase(databaseName: "Test"));
+            if (UseInMemoryDatabase)
+            {
+                services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase(databaseName: "Test"));
+            }
+            else
+            {
+                services.AddDbContext<DataContext>(options =>
+                        options.UseNpgsql(this.configuration.GetConnectionString("MyWebApiConection"))
+                        .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (IsDevelopment || env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();

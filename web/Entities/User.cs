@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace web.Entities
 {
+    #nullable disable
+
     /// <summary>
     /// Объект, описывающий сущность пользователя в системе.
     /// </summary>

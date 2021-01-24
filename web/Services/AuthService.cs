@@ -7,9 +7,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using web.Dto;
+using web.Other;
 using web.Repositories;
 
 namespace web.Services
@@ -27,17 +29,17 @@ namespace web.Services
             this.userRepository = userRepository;
         }
 
-        public async Task<LoginResponseDto> LoginAsync(LoginRequestDto authDto, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<LoginResponseDto>> LoginAsync(LoginRequestDto authDto, CancellationToken cancellationToken = default)
         {
-            var user = await this.userRepository.FindUserByEmailAsync(authDto.Email, cancellationToken);
+            var user = await this.userRepository.LoginAsync(authDto.Email, cancellationToken);
 
             if(user is null)
             {
-                return null;
+                return new ServiceResult<LoginResponseDto>(StatusCodes.Status401Unauthorized);
             }
             if(!VerifyPasswordHash(authDto.Password, user.PasswordHash, user.PasswordSalt))
             {
-                return null;
+                return new ServiceResult<LoginResponseDto>(StatusCodes.Status401Unauthorized);
             }
 
             var claims = new List<Claim>()
@@ -66,23 +68,22 @@ namespace web.Services
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return new LoginResponseDto() { 
+            return new ServiceResult<LoginResponseDto>(new LoginResponseDto()
+            {
                 SecurityToken = tokenHandler.WriteToken(token),
-                User = new UserDto(user)
-            };
+                User = user.ToDto()
+            });
         }
 
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new HMACSHA512(passwordSalt))
+            using var hmac = new HMACSHA512(passwordSalt);
+            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            if (!hash.SequenceEqual(passwordHash))
             {
-                var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-                if (!hash.SequenceEqual(passwordHash))
-                {
-                    return false;
-                }
-                return true;
+                return false;
             }
+            return true;
         }
     }
 }

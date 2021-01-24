@@ -19,7 +19,7 @@ namespace web.Db
     {
         #region Private Fields
 
-        private readonly ICompanyIdProvider companyIdProvider;
+        private readonly IUserInfoProvider userInfoProvider;
 
         private readonly static Guid AdminGuid = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f");
 
@@ -29,26 +29,26 @@ namespace web.Db
 
         public DataContext(
            DbContextOptions<DataContext> options,
-           ICompanyIdProvider companyIdProvider)
+           IUserInfoProvider userInfoProvider)
            : base(options)
         {
             this.Database.EnsureCreated();
-            this.companyIdProvider = companyIdProvider;
+            this.userInfoProvider = userInfoProvider;
         }
 
         #endregion
 
         #region Public Properties
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; } = null!;
 
-        public DbSet<Company> Companies { get; set; }
+        public DbSet<Company> Companies { get; set; } = null!;
 
-        public DbSet<WfTask> Tasks { get; set; }
+        public DbSet<WfTask> Tasks { get; set; } = null!;
 
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<Role> Roles { get; set; } = null!;
 
-        public DbSet<Article> Articles { get; set; }
+        public DbSet<Article> Articles { get; set; } = null!;
 
         #endregion
 
@@ -72,7 +72,7 @@ namespace web.Db
             modelBuilder.Entity<Article>().HasKey(x => x.Id);
             modelBuilder.Entity<Article>().Property(x => x.CompanyId).IsRequired();
             
-            modelBuilder.Entity<Article>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
+            modelBuilder.Entity<Article>().HasQueryFilter(x => x.CompanyId == this.userInfoProvider.CompanyId);
 
             modelBuilder.Entity<Article>().HasOne(x => x.Initiator)
                 .WithMany(x => x.InitiatedArticles)
@@ -99,7 +99,10 @@ namespace web.Db
             modelBuilder.Entity<Role>().HasKey(x => x.Id);
             modelBuilder.Entity<Role>().Property(x => x.CompanyId).IsRequired();
 
-            modelBuilder.Entity<Role>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
+            modelBuilder.Entity<Role>()
+                .HasQueryFilter(x =>
+                    this.userInfoProvider.CompanyId == AdminGuid
+                    || this.userInfoProvider.CompanyId == x.CompanyId);
 
             modelBuilder.Entity<Role>().Property(x => x.Name).IsRequired().HasMaxLength(32);
             modelBuilder.Entity<Role>().Property(x => x.Type)
@@ -133,7 +136,10 @@ namespace web.Db
 
             modelBuilder.Entity<User>().Property(x => x.CompanyId).IsRequired();
 
-            modelBuilder.Entity<User>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
+            modelBuilder.Entity<User>()
+                .HasQueryFilter(x =>
+                    this.userInfoProvider.CompanyId == AdminGuid
+                    || this.userInfoProvider.CompanyId == x.CompanyId);
 
             modelBuilder.Entity<User>().Property(x => x.PasswordHash).IsRequired();
             modelBuilder.Entity<User>().Property(x => x.PasswordSalt).IsRequired();
@@ -175,6 +181,10 @@ namespace web.Db
             modelBuilder.Entity<Company>().HasKey(x => x.Id);
 
             modelBuilder.Entity<Company>().Property(x => x.Name).IsRequired().HasMaxLength(64);
+            modelBuilder.Entity<Company>()
+                .HasQueryFilter(x => 
+                    this.userInfoProvider.CompanyId == AdminGuid
+                    || this.userInfoProvider.CompanyId == x.Id);
 
             var adminCompany = new Company()
             {
@@ -189,7 +199,7 @@ namespace web.Db
             modelBuilder.Entity<WfTask>().HasKey(x => x.Id);
             modelBuilder.Entity<WfTask>().Property(x => x.CompanyId).IsRequired();
 
-            modelBuilder.Entity<WfTask>().HasQueryFilter(x => x.CompanyId == this.companyIdProvider.CompanyId);
+            modelBuilder.Entity<WfTask>().HasQueryFilter(x => x.CompanyId == this.userInfoProvider.CompanyId);
 
 
             modelBuilder.Entity<WfTask>().Property(x => x.AuthorId).IsRequired();

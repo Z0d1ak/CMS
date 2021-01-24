@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace web.Dto
 {
-    public class UserDto
+    public class CreateAdminDto
     {
         [Key]
         [Required]
@@ -21,8 +20,10 @@ namespace web.Dto
 
         [MaxLength(32)]
         public string LastName { get; set; } = null!;
-
-        [MaxLength(5)]
-        public IEnumerable<Guid>? Roles { get; set; }
+        
+        [Required]
+        [MinLength(8)]
+        [MaxLength(32)]
+        public string Password { get; set; } = null!;
     }
 }

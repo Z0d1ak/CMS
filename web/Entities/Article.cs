@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace web.Entities
 {
+    #nullable disable
+
     /// <summary>
     /// Объект, описывающий сущность статьи.
     /// </summary>

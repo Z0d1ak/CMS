@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web.Dto;
@@ -43,19 +40,17 @@ namespace web.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginRequestDto authDto)
         {
-            var loginResponceDto = await this.authService.LoginAsync(authDto, this.HttpContext.RequestAborted);
+            var serviceResult = await this.authService.LoginAsync(authDto, this.HttpContext.RequestAborted);
 
-            if(loginResponceDto is null)
+            if(serviceResult.IsSuccessful())
             {
-                return this.Unauthorized();
+                return this.Ok(serviceResult.Value);
             }
-
-            return this.Ok(loginResponceDto);
+            else
+            {
+                return this.StatusCode(serviceResult.ErrorStatusCode);
+            }
         }
-
-        #endregion
-
-        #region Private Methods
 
         #endregion
     }

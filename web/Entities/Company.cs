@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace web.Entities
 {
     /// <summary>
@@ -12,14 +14,14 @@ namespace web.Entities
 
         public string Name { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<User> Users { get; set; } = new List<User>();
 
-        public ICollection<Article> Articles { get; set; }
+        public ICollection<Article> Articles { get; set; } = new List<Article>();
 
-        public ICollection<WfTask> Tasks { get; set; }
+        public ICollection<WfTask> Tasks { get; set; } = new List<WfTask>();
 
 
-        public ICollection<Role> Roles { get; set; }
+        public ICollection<Role> Roles { get; set; } = new List<Role>();
 
     }
 }

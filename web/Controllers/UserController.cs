@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web.Dto;
-using web.Entities;
 using web.Options;
 using web.Other.SearchParameters;
 using web.Services;
@@ -15,24 +14,23 @@ namespace web.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly ICompanyService companyService;
+        private readonly IUserService userService;
 
-        public CompanyController(ICompanyService companyService)
+        public UserController(IUserService userService)
         {
-            this.companyService = companyService;
+            this.userService = userService;
         }
-
-        [Authorize(Roles = AccessRoles.SuperAdmin)]
+        [Authorize(Roles = AccessRoles.CompanyAdmin)]
         [HttpPost]
-        public async Task<ActionResult> Create(CreateCompanyDto createCompanyDto)
+        public async Task<ActionResult<UserDto>> Create(CreateUserDto createUserDto)
         {
-            var result = await this.companyService.CreateAsync(createCompanyDto, this.HttpContext.RequestAborted);
+            var result = await this.userService.CreateAsync(createUserDto, this.HttpContext.RequestAborted);
 
             if (result.IsSuccessful())
             {
-                return this.CreatedAtAction(nameof(CompanyController.GetCompany), result.Value.Id, result.Value);
+                return this.CreatedAtAction(nameof(UserController.GetUser), result.Value);
             }
             else
             {
@@ -40,11 +38,11 @@ namespace web.Controllers
             }
         }
 
-        [HttpGet("{id}", Name = nameof(CompanyController.GetCompany))]
+        [HttpGet("{id}", Name = nameof(UserController.GetUser))]
         [Authorize]
-        public async Task<ActionResult<CompanyDto>> GetCompany([FromRoute] Guid id)
+        public async Task<ActionResult<UserDto>> GetUser([FromRoute] Guid id)
         {
-            var result = await this.companyService.GetByIdAsync(id, this.HttpContext.RequestAborted);
+            var result = await this.userService.GetByIdAsync(id, this.HttpContext.RequestAborted);
 
             if (result.IsSuccessful())
             {
@@ -56,11 +54,11 @@ namespace web.Controllers
             }
         }
 
-        [HttpGet()]
-        [Authorize(Roles = AccessRoles.SuperAdmin)]
-        public async Task<ActionResult<IEnumerable<CompanyDto>>> Find([FromQuery] CompanySearchParameters searchParameters)
+        [HttpGet]
+        [Authorize(Roles = AccessRoles.AnyAdmin)]
+        public async Task<ActionResult<IEnumerable<UserDto>>> Find([FromQuery] UserSearchParameters searchParameters)
         {
-            var result = await this.companyService.FindAsync(searchParameters, this.HttpContext.RequestAborted);
+            var result = await this.userService.FindAsync(searchParameters, this.HttpContext.RequestAborted);
 
             if (result.IsSuccessful())
             {
@@ -73,10 +71,10 @@ namespace web.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = AccessRoles.AnyAdmin)]
-        public async Task<ActionResult> Update(CompanyDto companyDto)
+        [Authorize]
+        public async Task<ActionResult> Update(StoreUserDto storeUserDto)
         {
-            var result = await this.companyService.UpdateAsync(companyDto, this.HttpContext.RequestAborted);
+            var result = await this.userService.UpdateAsync(storeUserDto, this.HttpContext.RequestAborted);
 
             if (result.IsSucessful())
             {
@@ -88,11 +86,11 @@ namespace web.Controllers
             }
         }
 
-        [Authorize(Roles = AccessRoles.SuperAdmin)]
         [HttpDelete("{id}")]
+        [Authorize(Roles = AccessRoles.AnyAdmin)]
         public async Task<ActionResult> Delete([FromRoute] Guid id)
         {
-            var result = await this.companyService.DeleteAsync(id, this.HttpContext.RequestAborted);
+            var result = await this.userService.DeleteAsync(id, this.HttpContext.RequestAborted);
 
             if (result.IsSucessful())
             {

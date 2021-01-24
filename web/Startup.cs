@@ -28,8 +28,9 @@ namespace web
 
         private readonly IConfiguration configuration;
 
-        private static bool UseInMemoryDatabase = Environment.GetEnvironmentVariable("db_type") == "inmemory";
-        private static bool IsDevelopment = Environment.GetEnvironmentVariable("IsDevelopment") == "true";
+        private static readonly bool Server_UseInMemoryDatabase = Environment.GetEnvironmentVariable("db_type") == "inmemory";
+        private static readonly bool Server_IsDevelopment = Environment.GetEnvironmentVariable("IsDevelopment") == "true";
+        private static readonly bool Server_Test = Environment.GetEnvironmentVariable("Test") == "true";
 
         #endregion
 
@@ -51,27 +52,32 @@ namespace web
             services.AddControllers();
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = "web", Version = "v1" });
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = "Описание API", Version = "v1" });
 
                 x.AddSecurityDefinition(name: "Bearer", new OpenApiSecurityScheme()
                 {
-                    Description = "JWT Authorization header using the bearer scheme",
+                    Description = "Не забывайте писать \"Bearer \" перед токеном.",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
                 });
                 x.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    {new OpenApiSecurityScheme{Reference = new OpenApiReference
                     {
-                        Id = "Bearer",
-                        Type = ReferenceType.SecurityScheme
-                    }}, new List<string>()}
+                        new OpenApiSecurityScheme{
+                            Reference = new OpenApiReference
+                            {
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                    },
+                    new List<string>()}
                 });
             });
-            services.AddScoped<ICompanyIdProvider, CompanyIdProvider>();
+            services.AddScoped<IUserInfoProvider, UserInfoProvider>();
             services.AddServices();
             services.AddRepositories();
+            services.AddHttpContextAccessor();
 
             services.AddAuthentication(x =>
             {
@@ -90,19 +96,26 @@ namespace web
                        ValidateIssuer = false,
                        ValidateAudience = false,
                        RequireExpirationTime = false,
-                       ValidateLifetime = true
+                       ValidateLifetime = true,
+                       RoleClaimType = ClaimTypes.Role
                    };
                }
                );
 
-            if (UseInMemoryDatabase)
+            if (Server_UseInMemoryDatabase)
             {
                 services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase(databaseName: "Test"));
+            }
+            else if(Server_Test)
+            {
+                services.AddDbContext<DataContext>(options =>
+                        options.UseNpgsql(this.configuration.GetConnectionString("Test"))
+                        .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
             }
             else
             {
                 services.AddDbContext<DataContext>(options =>
-                        options.UseNpgsql(this.configuration.GetConnectionString("MyWebApiConection"))
+                        options.UseNpgsql(this.configuration.GetConnectionString("Default"))
                         .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
             }
         }
@@ -110,7 +123,7 @@ namespace web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (IsDevelopment || env.IsDevelopment())
+            if (Server_IsDevelopment || env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
@@ -126,6 +139,7 @@ namespace web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
         }
 

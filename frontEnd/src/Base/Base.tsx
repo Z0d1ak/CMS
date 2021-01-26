@@ -38,6 +38,7 @@ const { Header, Sider, Content } = Layout;
 export class Base extends React.Component<{},{}> {
     state = {
         collapsed: false,
+        contentBox:<div></div>
     };
 
     toggle = () => {
@@ -66,11 +67,12 @@ export class Base extends React.Component<{},{}> {
 
     generateMenu() {
         let optList:string[]=["В работе","Все статьи","Сотрудники","Инфографика"]
+        let ElementsList:JSX.Element[]=[<InWork/>,<AllTexts/>,<Employees/>,<Infographic/>]
         let iconList:JSX.Element[]=[<UsbOutlined/>,<SnippetsOutlined />,<IdcardOutlined />,<AreaChartOutlined />]
         return (<Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             {optList.map((r, i) => {
                 return (
-                    <Menu.Item key={i} icon={iconList[i]}>
+                    <Menu.Item key={i} icon={iconList[i]} onClick={()=>{this.setState({contentBox:ElementsList[i]})}}>
                         {r}
                     </Menu.Item>
                 )
@@ -103,10 +105,7 @@ export class Base extends React.Component<{},{}> {
                             minHeight: 280,
                         }}
                     >
-                        <Employees/>
-                        <BackTop>
-                            <div className="BackUp">Вверх</div>
-                        </BackTop>
+                        {this.state.contentBox}
                     </Content>
                 </Layout>
             </Layout>

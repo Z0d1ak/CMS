@@ -2,7 +2,7 @@ import React from 'react';
 import './Employees.css';
 import 'antd/dist/antd.css';
 import {CustomCard, GenerateCustomCardList} from "../Cards/Cards";
-import {Col, Pagination, Row} from "antd";
+import {BackTop, Col, Pagination, Row} from "antd";
 import SearchBox from "../Filters/Filters";
 
 export class Employees extends React.Component<{},{}> {
@@ -29,7 +29,9 @@ export class Employees extends React.Component<{},{}> {
             </Row>
             <GenerateCustomCardList/>
             {this.generatePagination()}
-
+            <BackTop>
+                <div className="BackUp">Вверх</div>
+            </BackTop>
 
         </div>);
     }

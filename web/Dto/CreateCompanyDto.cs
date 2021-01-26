@@ -2,8 +2,11 @@
 
 namespace web.Dto
 {
-    public class CreateCompanyDto : CompanyDto
+    public class CreateCompanyDto
     {
+        [Required]
+        public CompanyDto Company { get; set; } = null!;
+
         [Required]
         public CreateAdminDto Admin { get; set; } = null!;
     }

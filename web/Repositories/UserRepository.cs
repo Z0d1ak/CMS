@@ -62,20 +62,27 @@ namespace web.Repositories
 
         public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var user = new User()
+            try
             {
-                Id = id
-            };
+                var user = new User()
+                {
+                    Id = id
+                };
 
-            this.dataContext.Entry(user).State = EntityState.Deleted;
+                this.dataContext.Entry(user).State = EntityState.Deleted;
 
-            var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
+                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
 
-            if (changes == 0)
+                if (changes == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (DbUpdateException)
             {
                 return false;
             }
-            return true;
         }
 
         public async Task<IEnumerable<UserDto>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
@@ -101,39 +108,67 @@ namespace web.Repositories
 
         public async ValueTask<UserDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var user = await this.dataContext.Users.FindAsync(new object[] { id }, cancellationToken);
-            return user.ToDto();
+            var user = await this.dataContext.Users
+                    .Include(x => x.Roles)
+                    .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return user?.ToDto();
         }
 
         public async Task<bool> UpdateAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken = default)
         {
-            var user = storeUserDto.ToEntity();
-            this.dataContext.Attach(user);
-
-            if (storeUserDto.Password is not null)
+            try
             {
-                using var hmac = new HMACSHA512();
-                user.PasswordSalt = hmac.Key;
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(storeUserDto.Password));
+                var user = await this.dataContext.Users
+                    .Include(x => x.Roles)
+                    .FirstOrDefaultAsync(x => x.Id == storeUserDto.Id, cancellationToken);
+                if(user is null)
+                {
+                    return false;
+                }
 
-                this.dataContext.Entry(user).Property(x => x.PasswordSalt).IsModified = true;
-                this.dataContext.Entry(user).Property(x => x.PasswordHash).IsModified = true;
+                user.Email = storeUserDto.Email;
+                user.FirstName = storeUserDto.FirstName;
+                user.LastName = storeUserDto.LastName;
+                
+                //this.dataContext.Attach(user);
+                //this.dataContext.Entry(user).Property(x => x.Email).IsModified = true;
+                //this.dataContext.Entry(user).Property(x => x.FirstName).IsModified = true;
+                //this.dataContext.Entry(user).Property(x => x.LastName).IsModified = true;
+
+                if (storeUserDto.Password is not null)
+                {
+                    using var hmac = new HMACSHA512();
+                    user.PasswordSalt = hmac.Key;
+                    user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(storeUserDto.Password));
+
+                    //this.dataContext.Entry(user).Property(x => x.PasswordSalt).IsModified = true;
+                    //this.dataContext.Entry(user).Property(x => x.PasswordHash).IsModified = true;
+                }
+
+                if (storeUserDto.Roles is not null)
+                {
+                    user.Roles = await this.dataContext.Roles
+                        .Where(x => storeUserDto.Roles.Contains(x.Id))
+                        .ToListAsync();
+                    //this.dataContext.Entry(user).Collection(x => x.Roles).IsModified = true;
+                }
+
+                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
+
+                if (changes == 0)
+                {
+                    return false;
+                }
+                return true;
             }
-
-            if(storeUserDto.Roles is not null)
-            {
-                user.Roles = storeUserDto.Roles.Select(x => new Role { Id = x }).ToList();
-                this.dataContext.Entry(user).Property(x => x.Roles).IsModified = true;
-            }
-
-            var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
-
-            if (changes == 0)
+            catch (DbUpdateException e)
             {
                 return false;
             }
-            return true;
+            catch(Exception e)
+            {
+                return false;
+            }
         }
-
     }
 }

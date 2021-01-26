@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +33,10 @@ namespace web
         private static readonly bool Server_UseInMemoryDatabase = Environment.GetEnvironmentVariable("db_type") == "inmemory";
         private static readonly bool Server_IsDevelopment = Environment.GetEnvironmentVariable("IsDevelopment") == "true";
         private static readonly bool Server_Test = Environment.GetEnvironmentVariable("Test") == "true";
+        private static string SWAGGER_DESCRIPTION =
+@"Ёто страница с описанием API сервера, на которой можно как посмотреть описание API и контракты данных, так и протестировать API (жми Try it out справо от названи€ метода). 
+Ѕазовый адрес сервера - https://hse-cms.herokuapp.com.
+Ќапример, дл€ авторизации используетс€ endpoint https://hse-cms.herokuapp.com/api/auth/login";
 
         #endregion
 
@@ -52,7 +58,7 @@ namespace web
             services.AddControllers();
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = "ќписание API", Version = "v1" });
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = "ќписание API", Version = "v1", Description = SWAGGER_DESCRIPTION });
 
                 x.AddSecurityDefinition(name: "Bearer", new OpenApiSecurityScheme()
                 {
@@ -73,6 +79,12 @@ namespace web
                     },
                     new List<string>()}
                 });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                x.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+                
             });
             services.AddScoped<IUserInfoProvider, UserInfoProvider>();
             services.AddServices();
@@ -109,14 +121,12 @@ namespace web
             else if(Server_Test)
             {
                 services.AddDbContext<DataContext>(options =>
-                        options.UseNpgsql(this.configuration.GetConnectionString("Test"))
-                        .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
+                        options.UseNpgsql(this.configuration.GetConnectionString("Test")));
             }
             else
             {
                 services.AddDbContext<DataContext>(options =>
-                        options.UseNpgsql(this.configuration.GetConnectionString("Default"))
-                        .ReplaceService<ISqlGenerationHelper, SqlGenerationHelper>());
+                        options.UseNpgsql(this.configuration.GetConnectionString("Default")));
             }
         }
 

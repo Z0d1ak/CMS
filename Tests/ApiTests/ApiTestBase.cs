@@ -50,16 +50,16 @@ namespace Tests.ApiTests
         }
 
         [OneTimeSetUp]
-        public virtual void OneTimeSetUp()
+        public virtual async Task OneTimeSetUpAsync()
         {
-            this.DataContext.Database.EnsureDeleted();
-            this.DataContext.Database.EnsureCreated();
+            await this.DataContext.Database.EnsureDeletedAsync();
+            await this.DataContext.Database.EnsureCreatedAsync();
         }
 
         [OneTimeTearDown]
-        public virtual void OneTimeTearDown()
+        public virtual async Task OneTimeTearDownAsync()
         {
-            this.DataContext.Database.EnsureDeleted();
+            await this.DataContext.Database.EnsureDeletedAsync();
         }
 
         protected async Task<ResponseWrapper<TResponseDto>> PostAsync<TRequestDto, TResponseDto>(
@@ -87,16 +87,28 @@ namespace Tests.ApiTests
         
         protected async Task<ResponseWrapper<IEnumerable<TResponseDto>>> FindAsync<TResponseDto>(
             string url,
-            ISearchParameter searchParameter,
+            ISearchParameter? searchParameter = null,
             CancellationToken cancellationToken = default)
         {
             this.ProvideAthorization();
 
-            var response = await this.Client.GetAsync(url + searchParameter.ToString(), cancellationToken);
+            var response = await this.Client.GetAsync(url + searchParameter?.ToString(), cancellationToken);
             return await ConvertAsync<IEnumerable<TResponseDto>>(response);
         }
 
-        protected async Task<ResponseWrapper<TResponseDto>> DeleteAsync<TResponseDto>(
+        protected async Task<int> UpdateAsync<TRequestDto>(
+            string url,
+            TRequestDto requestDto,
+            CancellationToken cancellationToken = default)
+        {
+            this.ProvideAthorization();
+
+            var request = JsonContent.Create(requestDto);
+            var response = await this.Client.PutAsync(url, request, cancellationToken); ;
+            return (int)response.StatusCode;
+        }
+
+        protected async Task<int> DeleteAsync(
             string url,
             Guid id,
             CancellationToken cancellationToken = default)
@@ -104,7 +116,16 @@ namespace Tests.ApiTests
             this.ProvideAthorization();
 
             var response = await this.Client.DeleteAsync($"{url.TrimEnd('/')}/{id}", cancellationToken);
-            return await ConvertAsync<TResponseDto>(response);
+            return (int)response.StatusCode;
+        }
+
+        protected async Task<AuthenticationScope> AuthAsync(LoginRequestDto loginRequestDto, CancellationToken cancellationToken = default)
+        {
+            var response = await this.PostAsync<LoginRequestDto, LoginResponseDto>(
+                "api/auth/login",
+                loginRequestDto);
+            Assert.AreEqual(response.StatusCode, StatusCodes.Status200OK);
+            return new AuthenticationScope(response.Content.SecurityToken);
         }
 
         private void ProvideAthorization()

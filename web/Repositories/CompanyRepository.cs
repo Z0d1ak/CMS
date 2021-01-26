@@ -29,8 +29,8 @@ namespace web.Repositories
             {
                 var company = new Company()
                 {
-                    Id = createCompanyDto.Id,
-                    Name = createCompanyDto.Name
+                    Id = createCompanyDto.Company.Id,
+                    Name = createCompanyDto.Company.Name
                 };
                 this.dataContext.Companies.Add(company);
 
@@ -97,7 +97,7 @@ namespace web.Repositories
 
                 return company.ToDto();
             }
-            catch (DbUpdateException e)
+            catch (DbUpdateException)
             {
                 return null;
             }
@@ -105,20 +105,27 @@ namespace web.Repositories
 
         public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var company = new Company()
+            try
             {
-                Id = id
-            };
+                var company = new Company()
+                {
+                    Id = id
+                };
 
-            this.dataContext.Entry(company).State = EntityState.Deleted;
+                this.dataContext.Entry(company).State = EntityState.Deleted;
 
-            var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
+                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
 
-            if(changes == 0)
+                if (changes == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (DbUpdateException)
             {
                 return false;
             }
-            return true;
         }
 
         public async Task<IEnumerable<CompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
@@ -133,23 +140,30 @@ namespace web.Repositories
         public async ValueTask<CompanyDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var company = await this.dataContext.Companies.FindAsync(new object[] { id }, cancellationToken);
-            return company.ToDto();
+            return company?.ToDto();
         }
 
         public async Task<bool> UpdateAsync(CompanyDto companyDto, CancellationToken cancellationToken = default)
         {
             var company = companyDto.ToEntity();
 
-            this.dataContext.Attach(company);
-            this.dataContext.Entry(company).Property(x => x.Name).IsModified = true;
+            try
+            {
+                this.dataContext.Attach(company);
+                this.dataContext.Entry(company).Property(x => x.Name).IsModified = true;
 
-            var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
+                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
 
-            if (changes == 0)
+                if (changes == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch(DbUpdateException)
             {
                 return false;
             }
-            return true;
         }
     }
 }

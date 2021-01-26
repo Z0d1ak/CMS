@@ -11,12 +11,14 @@ namespace web.Other
             serviceCollection.AddScoped<IAuthService, AuthService>();
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<ICompanyService, CompanyService>();
+            serviceCollection.AddScoped<IRoleService, RoleService>();
         }
 
         public static void AddRepositories(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
             serviceCollection.AddScoped<ICompanyRepository, CompanyRepository>();
+            serviceCollection.AddScoped<IRoleRepository, RoleRepository>();
         }
     }
 }

@@ -7,12 +7,21 @@ namespace web.Other.SearchParameters
 {
     public class UserSearchParameters : ISearchParameter
     {
+        /// <summary>
+        /// Email пользователя наинается с...
+        /// </summary>
         [MaxLength(32)]
         public string? EmailStartsWith { get; set; }
 
+        /// <summary>
+        /// Имя пользователя начинается с...
+        /// </summary>
         [MaxLength(32)]
         public string? NameStartsWith { get; set; }
 
+        /// <summary>
+        /// Пользователь входит в роль.
+        /// </summary>
         public Guid? Role { get; set; }
 
         public string ToUrlParameter()

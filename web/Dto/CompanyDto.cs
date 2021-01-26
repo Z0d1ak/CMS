@@ -4,6 +4,9 @@ using web.Entities;
 
 namespace web.Dto
 {
+    /// <summary>
+    /// Контракт данных для обмена информацией о компании.
+    /// </summary>
     public class CompanyDto
     {
         [Key]

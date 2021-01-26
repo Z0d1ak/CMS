@@ -83,13 +83,6 @@ namespace web.Services
                 return new ServiceResult(StatusCodes.Status403Forbidden);
             }
 
-            if (storeUserDto.Password is not null
-                && !this.userInfoProvider.User.IsInRole(AccessRoles.CompanyAdmin)
-                && !this.userInfoProvider.User.IsInRole(AccessRoles.SuperAdmin))
-            {
-                return new ServiceResult(StatusCodes.Status403Forbidden);
-            }
-
             bool isUpdated = await this.userRepository.UpdateAsync(storeUserDto, cancellationToken);
 
             if (!isUpdated)

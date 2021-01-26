@@ -4,10 +4,11 @@ using System.Web;
 
 namespace web.Other.SearchParameters
 {
-    public class CompanySearchParameters : ISearchParameter
+    public class RoleSearchParameters
+        : ISearchParameter
     {
         /// <summary>
-        /// Название компании начинается с...
+        /// Название роли начинается с...
         /// </summary>
         [MaxLength(32)]
         public string? StartsWith { get; set; }

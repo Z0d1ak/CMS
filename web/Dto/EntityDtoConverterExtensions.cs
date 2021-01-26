@@ -26,18 +26,6 @@ namespace web.Dto
             };
         }
 
-        public static User ToEntity(this UserDto dto)
-        {
-            return new User
-            {
-                Id = dto.Id,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                Email = dto.Email,
-                Roles = dto.Roles?.Select(x => new Role { Id = x }).ToList()
-            };
-        }
-
         public static UserDto ToDto(this User entity)
         {
             return new UserDto
@@ -47,6 +35,16 @@ namespace web.Dto
                 LastName = entity.LastName,
                 Email = entity.Email,
                 Roles = entity.Roles.Select(x => x.Id)
+            };
+        }
+
+        public static RoleDto ToDto(this Role role)
+        {
+            return new RoleDto
+            {
+                Id = role.Id,
+                Name = role.Name,
+                Type = role.Type
             };
         }
     }

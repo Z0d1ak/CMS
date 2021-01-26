@@ -30,7 +30,6 @@ namespace web
 
         private readonly IConfiguration configuration;
 
-        private static readonly bool Server_UseInMemoryDatabase = Environment.GetEnvironmentVariable("db_type") == "inmemory";
         private static readonly bool Server_IsDevelopment = Environment.GetEnvironmentVariable("IsDevelopment") == "true";
         private static readonly bool Server_Test = Environment.GetEnvironmentVariable("Test") == "true";
         private static string SWAGGER_DESCRIPTION =
@@ -114,9 +113,12 @@ namespace web
                }
                );
 
-            if (Server_UseInMemoryDatabase)
+            var herocuDatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+            if (herocuDatabaseUrl is not null)
             {
-                services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase(databaseName: "Test"));
+                services.AddDbContext<DataContext>(options =>
+                        options.UseNpgsql(GetHerokuConnectionString(herocuDatabaseUrl)));
             }
             else if(Server_Test)
             {
@@ -151,6 +153,20 @@ namespace web
                 endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
             });
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private string GetHerokuConnectionString(string connectionUrl)
+        {
+            var databaseUri = new Uri(connectionUrl);
+
+            string db = databaseUri.LocalPath.TrimStart('/');
+            string[] userInfo = databaseUri.UserInfo.Split(':', StringSplitOptions.RemoveEmptyEntries);
+
+            return $"User ID={userInfo[0]};Password={userInfo[1]};Host={databaseUri.Host};Port={databaseUri.Port};Database={db};Pooling=true;SSL Mode=Require;Trust Server Certificate=True;";
         }
 
         #endregion

@@ -9,12 +9,12 @@ namespace web.Options
     {
         public const string Swagger = "Swagger";
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public string AuthDescription { get; set; }
+        public string? AuthDescription { get; set; }
 
-        public string Version { get; set; }
+        public string? Version { get; set; }
     }
 }

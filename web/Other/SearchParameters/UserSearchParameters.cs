@@ -5,7 +5,8 @@ using System.Web;
 
 namespace web.Other.SearchParameters
 {
-    public class UserSearchParameters : ISearchParameter
+    public class UserSearchParameters
+        : DefaultSearchParameters
     {
         /// <summary>
         /// Email пользователя наинается с...
@@ -22,12 +23,13 @@ namespace web.Other.SearchParameters
         /// <summary>
         /// Пользователь входит в роль.
         /// </summary>
-        public Guid? Role { get; set; }
+        public string? Role { get; set; }
 
-        public string ToUrlParameter()
+        public override void ToParametersList(List<string> parameters)
         {
-            var parameters = new List<string>();
-            if(this.EmailStartsWith is not null)
+            base.ToParametersList(parameters);
+
+            if (this.EmailStartsWith is not null)
             {
                 parameters.Add($"{HttpUtility.UrlEncode(nameof(this.EmailStartsWith))}={HttpUtility.UrlEncode(this.EmailStartsWith)}");
             }
@@ -37,15 +39,8 @@ namespace web.Other.SearchParameters
             }
             if (this.Role is not null)
             {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.Role))}={HttpUtility.UrlEncode(this.Role.Value.ToString())}");
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.Role))}={HttpUtility.UrlEncode(this.Role)}");
             }
-
-            if(parameters.Count == 0)
-            {
-                return string.Empty;
-            }
-
-            return '?' + string.Join("&", parameters);
         }
     }
 }

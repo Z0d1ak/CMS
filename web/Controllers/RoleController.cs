@@ -92,6 +92,9 @@ namespace web.Controllers
         /// <summary>
         /// Изменяет данные роли.
         /// </summary>
+        /// <remarks>
+        /// Тип роли <see cref="RoleDto.Type"/> изменять нельзя.
+        /// </remarks>
         /// <param name="roleDto">Изменная компания.</param>
         /// <param name="cancellationToken">Токен для отмены операции.</param>
         /// <response code="204">Данные роли успешно изменены.</response>

@@ -4,28 +4,23 @@ using System.Web;
 
 namespace web.Other.SearchParameters
 {
-    public class CompanySearchParameters : ISearchParameter
+    public class CompanySearchParameters
+        : DefaultSearchParameters
     {
         /// <summary>
         /// Название компании начинается с...
         /// </summary>
         [MaxLength(32)]
-        public string? StartsWith { get; set; }
+        public string? NameStartsWith { get; set; }
 
-        public string ToUrlParameter()
+        public override void ToParametersList(List<string> parameters)
         {
-            var parameters = new List<string>();
-            if (this.StartsWith is not null)
-            {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.StartsWith))}={HttpUtility.UrlEncode(this.StartsWith)}");
-            }
+            base.ToParametersList(parameters);
 
-            if (parameters.Count == 0)
+            if (this.NameStartsWith is not null)
             {
-                return string.Empty;
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.NameStartsWith))}={HttpUtility.UrlEncode(this.NameStartsWith)}");
             }
-
-            return '?' + string.Join("&", parameters);
         }
     }
 }

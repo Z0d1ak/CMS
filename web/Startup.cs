@@ -32,10 +32,16 @@ namespace web
 
         private static readonly bool Server_IsDevelopment = Environment.GetEnvironmentVariable("IsDevelopment") == "true";
         private static readonly bool Server_Test = Environment.GetEnvironmentVariable("Test") == "true";
-        private static string SWAGGER_DESCRIPTION =
-@"Ёто страница с описанием API сервера, на которой можно как посмотреть описание API и контракты данных, так и протестировать API (жми Try it out справо от названи€ метода). 
+        private static string SWAGGER_DESCRIPTION_UTF16 =
+@"Ёто страница с описанием API сервера, на которой можно как посмотреть описание API и контракты данных, так и протестировать API (жми Try it out справа от названи€ метода). 
+
 Ѕазовый адрес сервера - https://hse-cms.herokuapp.com.
-Ќапример, дл€ авторизации используетс€ endpoint https://hse-cms.herokuapp.com/api/auth/login";
+
+Ќапример, дл€ авторизации используетс€ endpoint https://hse-cms.herokuapp.com/api/auth/login.
+
+ƒл€ всех €зыков программировани€ есть тулзы, который на основе описани€ сваггера (ссылка /swagger/v1/swagger.json чуть выше) создают готовый клиентский код дл€ обращени€ к серверу.";
+
+        private static string SWAGGER_TITLE_UTF16 = "ќписание API";
 
         #endregion
 
@@ -57,7 +63,7 @@ namespace web
             services.AddControllers();
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = "ќписание API", Version = "v1", Description = SWAGGER_DESCRIPTION });
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = ToUTF8(SWAGGER_TITLE_UTF16), Version = "v1", Description = ToUTF8(SWAGGER_DESCRIPTION_UTF16)});
 
                 x.AddSecurityDefinition(name: "Bearer", new OpenApiSecurityScheme()
                 {
@@ -158,6 +164,12 @@ namespace web
         #endregion
 
         #region Private Methods
+
+        private static string ToUTF8(string utf16string)
+        {
+            byte[] bytes = Encoding.Default.GetBytes(utf16string);
+            return Encoding.UTF8.GetString(bytes);
+        }
 
         private string GetHerokuConnectionString(string connectionUrl)
         {

@@ -132,7 +132,8 @@ namespace web.Repositories
         {
             var companies = await this.dataContext.Companies
                 .Where(x =>
-                   (searchParameters.StartsWith == null || x.Name.StartsWith(searchParameters.StartsWith)))
+                   (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith))
+                   && (searchParameters.QuickSearch == null || x.Name.StartsWith(searchParameters.QuickSearch)))
                 .ToListAsync(cancellationToken);
             return companies.Select(x => x.ToDto());
         }

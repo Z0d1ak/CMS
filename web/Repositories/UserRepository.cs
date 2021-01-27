@@ -44,7 +44,7 @@ namespace web.Repositories
 
             if (createUserDto.Roles is not null)
             {
-                user.Roles = await this.dataContext.Roles.Where(x => createUserDto.Roles.Contains(x.Id)).ToListAsync(cancellationToken);
+                user.Roles = await this.dataContext.Roles.Where(x => createUserDto.Roles.Contains(x.Type.ToString())).ToListAsync(cancellationToken);
             }
 
             this.dataContext.Users.Add(user);
@@ -92,7 +92,7 @@ namespace web.Repositories
                 .Where(x =>
                     (searchParameters.EmailStartsWith == null || x.Email.StartsWith(searchParameters.EmailStartsWith))
                     && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
-                    && (searchParameters.Role == null || x.Roles.Any(x => x.Id == searchParameters.Role)))
+                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type.ToString() == searchParameters.Role)))
                 .ToListAsync(cancellationToken);
             return users.Select(x => x.ToDto());
         }
@@ -129,11 +129,6 @@ namespace web.Repositories
                 user.Email = storeUserDto.Email;
                 user.FirstName = storeUserDto.FirstName;
                 user.LastName = storeUserDto.LastName;
-                
-                //this.dataContext.Attach(user);
-                //this.dataContext.Entry(user).Property(x => x.Email).IsModified = true;
-                //this.dataContext.Entry(user).Property(x => x.FirstName).IsModified = true;
-                //this.dataContext.Entry(user).Property(x => x.LastName).IsModified = true;
 
                 if (storeUserDto.Password is not null)
                 {
@@ -141,16 +136,13 @@ namespace web.Repositories
                     user.PasswordSalt = hmac.Key;
                     user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(storeUserDto.Password));
 
-                    //this.dataContext.Entry(user).Property(x => x.PasswordSalt).IsModified = true;
-                    //this.dataContext.Entry(user).Property(x => x.PasswordHash).IsModified = true;
                 }
 
                 if (storeUserDto.Roles is not null)
                 {
                     user.Roles = await this.dataContext.Roles
-                        .Where(x => storeUserDto.Roles.Contains(x.Id))
+                        .Where(x => storeUserDto.Roles.Contains((string)(object)x.Type))
                         .ToListAsync();
-                    //this.dataContext.Entry(user).Collection(x => x.Roles).IsModified = true;
                 }
 
                 var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
@@ -161,11 +153,7 @@ namespace web.Repositories
                 }
                 return true;
             }
-            catch (DbUpdateException e)
-            {
-                return false;
-            }
-            catch(Exception e)
+            catch (DbUpdateException)
             {
                 return false;
             }

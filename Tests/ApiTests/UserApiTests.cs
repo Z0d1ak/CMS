@@ -23,18 +23,7 @@ namespace Tests.ApiTests
                 var company1Response = await this.PostAsync<CreateCompanyDto, CompanyDto>("api/company", DefaultDtos.CreateCompany1Dto);
                 Assert.AreEqual(StatusCodes.Status201Created, company1Response.StatusCode);
             }
-
-            using (await this.AuthAsync(DefaultDtos.Admin1LoginDto))
-            {
-                var rolesResponse = await this.FindAsync<RoleDto>("api/role");
-                Assert.AreEqual(StatusCodes.Status200OK, rolesResponse.StatusCode);
-
-                this.roles = rolesResponse.Content;
-                Assert.AreEqual(5, roles.Count());
-            }
         }
-
-        private IEnumerable<RoleDto> roles = null!;
 
         [Test, Order(1)]
         public async Task CreateUserTest()
@@ -115,7 +104,7 @@ namespace Tests.ApiTests
                 FirstName = "UPDATED_" + DefaultDtos.CreateUser1Dto.FirstName,
                 LastName = "UPDATED_" + DefaultDtos.CreateUser1Dto.LastName,
                 Email = "UPDATED_" + DefaultDtos.CreateUser1Dto.Email,
-                Roles = this.roles.Where(x => x.Type == RoleType.Author).Select(x => x.Id),
+                Roles = new List<string>() { RoleType.Author.ToString() },
                 Password = "UPDATED_" + DefaultDtos.CreateUser1Dto.Password
             };
 

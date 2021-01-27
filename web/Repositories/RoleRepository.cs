@@ -24,7 +24,7 @@ namespace web.Repositories
         {
             var roles = await this.dataContext.Roles
                 .Where(x =>
-                   (searchParameters.StartsWith == null || x.Name.StartsWith(searchParameters.StartsWith)))
+                   (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith)))
                 .ToListAsync(cancellationToken);
             return roles.Select(x => x.ToDto());
         }

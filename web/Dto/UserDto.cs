@@ -23,6 +23,6 @@ namespace web.Dto
         public string LastName { get; set; } = null!;
 
         [MaxLength(5)]
-        public IEnumerable<Guid>? Roles { get; set; }
+        public IEnumerable<string>? Roles { get; set; }
     }
 }

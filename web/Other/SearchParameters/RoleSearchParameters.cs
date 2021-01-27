@@ -5,28 +5,20 @@ using System.Web;
 namespace web.Other.SearchParameters
 {
     public class RoleSearchParameters
-        : ISearchParameter
+        : DefaultSearchParameters
     {
         /// <summary>
         /// Название роли начинается с...
         /// </summary>
         [MaxLength(32)]
-        public string? StartsWith { get; set; }
+        public string? NameStartsWith { get; set; }
 
-        public string ToUrlParameter()
+        public override void ToParametersList(List<string> parameters)
         {
-            var parameters = new List<string>();
-            if (this.StartsWith is not null)
+            if (this.NameStartsWith is not null)
             {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.StartsWith))}={HttpUtility.UrlEncode(this.StartsWith)}");
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.NameStartsWith))}={HttpUtility.UrlEncode(this.NameStartsWith)}");
             }
-
-            if (parameters.Count == 0)
-            {
-                return string.Empty;
-            }
-
-            return '?' + string.Join("&", parameters);
         }
     }
 }

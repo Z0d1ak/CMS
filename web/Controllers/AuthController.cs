@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web.Dto;
@@ -41,6 +42,7 @@ namespace web.Controllers
         /// <response code="200">Авторизация прошла успешно.</response>
         /// <response code="401">Пароль или почта неверные.</response>
         [HttpPost("login")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<LoginResponseDto>> LoginAsync([FromBody] LoginRequestDto authDto, CancellationToken cancellationToken)

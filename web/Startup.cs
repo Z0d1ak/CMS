@@ -1,23 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using web.Db;
 using web.Options;
 using web.Other;
@@ -55,12 +51,17 @@ namespace web
         {
             var swaggerConfig = new SwaggerConfig();
             this.configuration.GetSection(SwaggerConfig.Swagger).Bind(swaggerConfig);
-
             services.AddControllers();
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = swaggerConfig.Title, Version = swaggerConfig.Version, Description = swaggerConfig.Description});
-    
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                x.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+
+                x.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+
                 x.AddSecurityDefinition(name: "Bearer", new OpenApiSecurityScheme()
                 {
                     Description = swaggerConfig.AuthDescription,
@@ -68,6 +69,7 @@ namespace web
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
                 });
+           
                 x.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -80,12 +82,6 @@ namespace web
                     },
                     new List<string>()}
                 });
-
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                x.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
-                
             });
             services.AddScoped<IUserInfoProvider, UserInfoProvider>();
             services.AddServices();

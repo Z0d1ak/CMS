@@ -32,7 +32,7 @@ namespace web.Db
            IUserInfoProvider userInfoProvider)
            : base(options)
         {
-            this.Database.EnsureCreated();
+            this.Database.Migrate();
             this.userInfoProvider = userInfoProvider;
         }
 

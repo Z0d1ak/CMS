@@ -19,11 +19,15 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using web.Db;
+using web.Options;
 using web.Other;
 using web.Services;
 
 namespace web
 {
+    /// <summary>
+    /// ћЅ тут повезет
+    /// </summary>
     public class Startup
     {
         #region Private Fields
@@ -32,16 +36,6 @@ namespace web
 
         private static readonly bool Server_IsDevelopment = Environment.GetEnvironmentVariable("IsDevelopment") == "true";
         private static readonly bool Server_Test = Environment.GetEnvironmentVariable("Test") == "true";
-        private static string SWAGGER_DESCRIPTION_UTF16 =
-@"Ёто страница с описанием API сервера, на которой можно как посмотреть описание API и контракты данных, так и протестировать API (жми Try it out справа от названи€ метода). 
-
-Ѕазовый адрес сервера - https://hse-cms.herokuapp.com.
-
-Ќапример, дл€ авторизации используетс€ endpoint https://hse-cms.herokuapp.com/api/auth/login.
-
-ƒл€ всех €зыков программировани€ есть тулзы, который на основе описани€ сваггера (ссылка /swagger/v1/swagger.json чуть выше) создают готовый клиентский код дл€ обращени€ к серверу.";
-
-        private static string SWAGGER_TITLE_UTF16 = "ќписание API";
 
         #endregion
 
@@ -59,15 +53,17 @@ namespace web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var swaggerConfig = new SwaggerConfig();
+            this.configuration.GetSection(SwaggerConfig.Swagger).Bind(swaggerConfig);
 
             services.AddControllers();
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = ToUTF8(SWAGGER_TITLE_UTF16), Version = "v1", Description = ToUTF8(SWAGGER_DESCRIPTION_UTF16)});
-
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = swaggerConfig.Title, Version = swaggerConfig.Version, Description = swaggerConfig.Description});
+    
                 x.AddSecurityDefinition(name: "Bearer", new OpenApiSecurityScheme()
                 {
-                    Description = "Ќе забывайте писать \"Bearer \" перед токеном.",
+                    Description = swaggerConfig.AuthDescription,
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
@@ -164,12 +160,6 @@ namespace web
         #endregion
 
         #region Private Methods
-
-        private static string ToUTF8(string utf16string)
-        {
-            byte[] bytes = Encoding.Default.GetBytes(utf16string);
-            return Encoding.UTF8.GetString(bytes);
-        }
 
         private string GetHerokuConnectionString(string connectionUrl)
         {

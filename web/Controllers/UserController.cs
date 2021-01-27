@@ -46,8 +46,10 @@ namespace web.Controllers
         /// <returns>Созданный пользователь.</returns>
         /// <response code="201">Пользователь успешно создан.</response>
         /// <response code="409">Конфликт данных создаваемого пользователя и существующих данных в БД.</response>
-        [Authorize(Roles = AccessRoles.CompanyAdmin)]
         [HttpPost]
+        [Authorize(Roles = AccessRoles.CompanyAdmin)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult<UserDto>> Create(CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             var result = await this.userService.CreateAsync(createUserDto, cancellationToken);
@@ -72,6 +74,8 @@ namespace web.Controllers
         /// <response code="404">Пользователь не найден.</response>
         [HttpGet("{id}", Name = nameof(UserController.GetUser))]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserDto>> GetUser([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await this.userService.GetByIdAsync(id, cancellationToken);
@@ -95,6 +99,7 @@ namespace web.Controllers
         /// <response code="200">Запрос успешный.</response>
         [HttpGet]
         [Authorize(Roles = AccessRoles.AnyAdmin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<UserDto>>> Find([FromQuery] UserSearchParameters searchParameters, CancellationToken cancellationToken)
         {
             var result = await this.userService.FindAsync(searchParameters, cancellationToken);
@@ -116,10 +121,14 @@ namespace web.Controllers
         /// <param name="cancellationToken">Токен для отмены операции.</param>
         /// <response code="204">Данные пользователя успешно изменены.</response>
         /// <response code="403">Недостаточно прав.</response>
-        /// <response code="404">Компания не найдена.</response>
+        /// <response code="404">Пользователь не найден.</response>
         /// <response code="409">[В планах] Конфликт новых данных пользователя и существующих данных в БД.</response>
         [HttpPut]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> Update(StoreUserDto storeUserDto, CancellationToken cancellationToken)
         {
             var result = await this.userService.UpdateAsync(storeUserDto, cancellationToken);
@@ -139,8 +148,12 @@ namespace web.Controllers
         /// </summary>
         /// <param name="id">Индентификатор пользователя.</param>
         /// <param name="cancellationToken">Токен для отмены операции.</param>
+        /// <response code="204">Пользователь успешно удален.</response>
+        /// <response code="404">Пользователь не найден.</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = AccessRoles.AnyAdmin)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await this.userService.DeleteAsync(id, cancellationToken);

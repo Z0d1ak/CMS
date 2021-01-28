@@ -9,7 +9,7 @@ namespace web.Other.SearchParameters
         {
             var parameters = new List<string>();
             searchParameter.ToParametersList(parameters);
-            if(parameters.Count() == 0)
+            if(parameters.Count == 0)
             {
                 return string.Empty;
             }

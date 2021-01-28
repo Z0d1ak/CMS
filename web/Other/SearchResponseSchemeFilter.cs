@@ -19,7 +19,7 @@ namespace web.Other
             }
 
             var keyType = context.Type.GetGenericArguments()[0];
-            var entityName = new Pluralizer().Pluralize(keyType.Name.Substring(0, keyType.Name.Length - 3));
+            var entityName = new Pluralizer().Pluralize(keyType.Name[0..^3]);
             schema.Title = entityName + "SearchResponseDto";
         }
     }

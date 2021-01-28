@@ -160,7 +160,7 @@ namespace web
 
         #region Private Methods
 
-        private string GetHerokuConnectionString(string connectionUrl)
+        private static string GetHerokuConnectionString(string connectionUrl)
         {
             var databaseUri = new Uri(connectionUrl);
 

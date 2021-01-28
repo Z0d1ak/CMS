@@ -9,7 +9,7 @@ namespace Tests.Helpers
 {
     public static class DefaultDtos
     {
-        public static LoginRequestDto SuperAdminLoginDto = new LoginRequestDto
+        public static readonly LoginRequestDto SuperAdminLoginDto = new LoginRequestDto
         {
             Email = "admin@admin.com",
             Password = "Master1234"

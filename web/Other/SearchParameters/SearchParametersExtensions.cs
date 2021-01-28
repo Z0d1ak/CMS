@@ -7,6 +7,11 @@ namespace web.Other.SearchParameters
     {
         public static string ToUrlParameter(this ISearchParameter searchParameter)
         {
+            if(searchParameter is null)
+            {
+                return string.Empty;
+            }
+
             var parameters = new List<string>();
             searchParameter.ToParametersList(parameters);
             if(parameters.Count == 0)

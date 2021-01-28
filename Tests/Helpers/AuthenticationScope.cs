@@ -6,23 +6,28 @@ namespace Tests.Helpers
 {
     public class AuthenticationScope : IDisposable
     {
-        private static List<AuthenticationScope> scopesStack = new List<AuthenticationScope>(); 
+        private static readonly List<AuthenticationScope> scopesStack = new List<AuthenticationScope>();
+
+        private bool disposed = false;
+
         public static AuthenticationScope? Current
         {
             get => scopesStack.FirstOrDefault();
         }
 
-        public AuthenticationScope(string token)
+        public string Token { get; }
+
+        public AuthenticationScope(string securityToken)
         {
-            this.Token = token;
+            this.Token = securityToken ?? throw new ArgumentNullException(nameof(securityToken));
             scopesStack.Insert(0, this);
         }
 
-        public string Token { get; }
-
-        private bool disposed = false;
-
-        public void Dispose() => Dispose(true);
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         protected virtual void Dispose(bool disposing)
         {

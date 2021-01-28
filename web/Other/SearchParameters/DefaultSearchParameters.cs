@@ -61,7 +61,6 @@ namespace web.Other.SearchParameters
 
         /// <summary>
         /// Направление сортировки.
-        /// 0 - ASC, 1 - DESC.
         /// </summary>
         public ListSortDirection? SortDirection { get; set; }
 

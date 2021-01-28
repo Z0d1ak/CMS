@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
@@ -21,6 +16,8 @@ using web;
 using web.Db;
 using web.Dto;
 using web.Other.SearchParameters;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Tests.ApiTests
 {
@@ -68,8 +65,7 @@ namespace Tests.ApiTests
         {
             this.ProvideAthorization();
 
-            var request = JsonContent.Create(requestDto);
-            var response = await this.Client.PostAsync(url, request, cancellationToken);
+            var response = await this.Client.PostAsJsonAsync(url, requestDto, cancellationToken);
             return await ConvertAsync<TResponseDto>(response, cancellationToken);
         }
 
@@ -91,7 +87,7 @@ namespace Tests.ApiTests
         {
             this.ProvideAthorization();
 
-            var response = await this.Client.GetAsync(url + searchParameter?.ToString(), cancellationToken);
+            var response = await this.Client.GetAsync(url + searchParameter?.ToUrlParameter(), cancellationToken);
             return await ConvertAsync<SearchResponseDto<TResponseDto>>(response, cancellationToken);
         }
 
@@ -102,8 +98,7 @@ namespace Tests.ApiTests
         {
             this.ProvideAthorization();
 
-            var request = JsonContent.Create(requestDto);
-            var response = await this.Client.PutAsync(url, request, cancellationToken); ;
+            var response = await this.Client.PutAsJsonAsync(url, requestDto, cancellationToken); ;
             return (int)response.StatusCode;
         }
 
@@ -146,9 +141,14 @@ namespace Tests.ApiTests
             HttpResponseMessage responseMessage,
             CancellationToken cancellationToken = default)
         {
+
             if (responseMessage.IsSuccessStatusCode)
             {
-                var content = await responseMessage.Content.ReadFromJsonAsync<TResponseDto>(cancellationToken: cancellationToken);
+                //var content = await responseMessage.Content.ReadFromJsonAsync<TResponseDto>(cancellationToken: cancellationToken);
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new JsonStringEnumConverter());
+                var content = JsonSerializer.Deserialize<TResponseDto>(await responseMessage.Content.ReadAsByteArrayAsync(cancellationToken), options);
+
                 return new ResponseWrapper<TResponseDto>(responseMessage.StatusCode, content!);
             }
             else

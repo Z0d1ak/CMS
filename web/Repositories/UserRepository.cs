@@ -44,7 +44,7 @@ namespace web.Repositories
 
             if (createUserDto.Roles is not null)
             {
-                user.Roles = await this.dataContext.Roles.Where(x => createUserDto.Roles.Contains(x.Type.ToString())).ToListAsync(cancellationToken);
+                user.Roles = await this.dataContext.Roles.Where(x => createUserDto.Roles.Contains(x.Type)).ToListAsync(cancellationToken);
             }
 
             this.dataContext.Users.Add(user);
@@ -92,14 +92,14 @@ namespace web.Repositories
                 .Where(x =>
                     (searchParameters.EmailStartsWith == null || x.Email.StartsWith(searchParameters.EmailStartsWith))
                     && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
-                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type.ToString() == searchParameters.Role)))
+                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type == searchParameters.Role)))
                 .ToListAsync(cancellationToken);
             var count = await this.dataContext.Users
                 .Include(x => x.Roles)
                 .Where(x =>
                     (searchParameters.EmailStartsWith == null || x.Email.StartsWith(searchParameters.EmailStartsWith))
                     && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
-                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type.ToString() == searchParameters.Role)))
+                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type == searchParameters.Role)))
                 .CountAsync(cancellationToken);
             return new SearchResponseDto<UserDto>(count, users.Select(x => x.ToDto()));
         }
@@ -148,7 +148,7 @@ namespace web.Repositories
                 if (storeUserDto.Roles is not null)
                 {
                     user.Roles = await this.dataContext.Roles
-                        .Where(x => storeUserDto.Roles.Contains((string)(object)x.Type))
+                        .Where(x => storeUserDto.Roles.Contains(x.Type))
                         .ToListAsync(cancellationToken);
                 }
 

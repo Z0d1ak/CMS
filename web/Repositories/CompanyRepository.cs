@@ -44,8 +44,8 @@ namespace web.Repositories
                 var correctorRole = new Role
                 {
                     Id = Guid.NewGuid(),
-                    Name = RoleType.Сorrector.ToString(),
-                    Type = RoleType.Сorrector,
+                    Name = RoleType.Corrector.ToString(),
+                    Type = RoleType.Corrector,
                     CompanyId = company.Id
                 };
                 var authorRole = new Role

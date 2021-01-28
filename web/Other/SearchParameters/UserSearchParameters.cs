@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using System.Web;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using web.Entities;
 
 namespace web.Other.SearchParameters
 {
@@ -23,7 +26,7 @@ namespace web.Other.SearchParameters
         /// <summary>
         /// Пользователь входит в роль.
         /// </summary>
-        public string? Role { get; set; }
+        public RoleType? Role { get; set; }
 
         public override void ToParametersList(List<string> parameters)
         {
@@ -39,7 +42,7 @@ namespace web.Other.SearchParameters
             }
             if (this.Role is not null)
             {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.Role))}={HttpUtility.UrlEncode(this.Role)}");
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.Role))}={HttpUtility.UrlEncode(this.Role.ToString())}");
             }
         }
     }

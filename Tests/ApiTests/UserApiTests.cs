@@ -104,7 +104,7 @@ namespace Tests.ApiTests
                 FirstName = "UPDATED_" + DefaultDtos.CreateUser1Dto.FirstName,
                 LastName = "UPDATED_" + DefaultDtos.CreateUser1Dto.LastName,
                 Email = "UPDATED_" + DefaultDtos.CreateUser1Dto.Email,
-                Roles = new List<string>() { RoleType.Author.ToString() },
+                Roles = new List<RoleType>() { RoleType.Author },
                 Password = "UPDATED_" + DefaultDtos.CreateUser1Dto.Password
             };
 

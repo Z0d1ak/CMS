@@ -14,7 +14,7 @@ namespace web.Dto
         public Guid Id { get; set; }
 
         [Required]
-        public string Type { get; set; } = null!;
+        public RoleType Type { get; set; }
 
         [Required]
         [MinLength(4)]

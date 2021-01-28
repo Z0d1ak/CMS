@@ -34,7 +34,7 @@ namespace web.Dto
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 Email = entity.Email,
-                Roles = entity.Roles.Select(x => x.Type.ToString())
+                Roles = entity.Roles.Select(x => x.Type)
             };
         }
 
@@ -44,7 +44,7 @@ namespace web.Dto
             {
                 Id = role.Id,
                 Name = role.Name,
-                Type = role.Type.ToString()
+                Type = role.Type
             };
         }
     }

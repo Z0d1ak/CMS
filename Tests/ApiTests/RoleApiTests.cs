@@ -30,6 +30,14 @@ namespace Tests.ApiTests
         [Test, Order(1)]
         public async Task GetRolesTest()
         {
+            var response = await this.PostAsync<LoginRequestDto, LoginResponseDto>(
+                "api/auth/login",
+                DefaultDtos.SuperAdminLoginDto);
+            Assert.AreEqual(response.StatusCode, StatusCodes.Status200OK);
+
+            var superAdmin = response.Content.User;
+            Assert.AreEqual("admin@admin.com", superAdmin.Email);
+
             using (await this.AuthAsync(DefaultDtos.Admin1LoginDto))
             {
                 var rolesResponse = await this.FindAsync<RoleDto>("api/role");

@@ -16,7 +16,7 @@ namespace web.Options
 
         public const string ChiefRedactor = nameof(RoleType.ChiefRedactor);
 
-        public const string Сorrector = nameof(RoleType.Сorrector);
+        public const string Сorrector = nameof(RoleType.Corrector);
 
         public const string Author = nameof(RoleType.Author);
 

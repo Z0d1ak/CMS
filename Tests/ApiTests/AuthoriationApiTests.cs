@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
+using Tests.Helpers;
 using web.Dto;
 
 namespace Tests.ApiTests
@@ -11,15 +12,9 @@ namespace Tests.ApiTests
         [Test]
         public async Task SimpleAuthTest()
         {
-            var adminLoginRequestDto = new LoginRequestDto
-            {
-                Email = "admin@admin.com",
-                Password = "Master1234"
-            };
-
             var response = await this.PostAsync<LoginRequestDto, LoginResponseDto>(
                 "api/auth/login",
-                adminLoginRequestDto);
+                DefaultDtos.SuperAdminLoginDto);
             Assert.AreEqual(response.StatusCode, StatusCodes.Status200OK);
 
             var superAdmin = response.Content.User;

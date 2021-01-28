@@ -75,7 +75,7 @@ namespace web.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<SearchResponseDto<CompanyDto>>> Find([FromQuery] RoleSearchParameters searchParameters, CancellationToken cancellationToken)
+        public async Task<ActionResult<SearchResponseDto<RoleDto>>> Find([FromQuery] RoleSearchParameters searchParameters, CancellationToken cancellationToken)
         {
             var result = await this.roleService.FindAsync(searchParameters, cancellationToken);
 

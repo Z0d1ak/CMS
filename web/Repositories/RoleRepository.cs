@@ -20,13 +20,17 @@ namespace web.Repositories
             this.dataContext = dataContext;
         }
 
-        public async Task<IEnumerable<RoleDto>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<SearchResponseDto<RoleDto>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var roles = await this.dataContext.Roles
                 .Where(x =>
                    (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith)))
                 .ToListAsync(cancellationToken);
-            return roles.Select(x => x.ToDto());
+            var count = await this.dataContext.Roles
+                .Where(x =>
+                   (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith)))
+                .CountAsync(cancellationToken);
+            return new SearchResponseDto<RoleDto>(count, roles.Select(x => x.ToDto()));
         }
 
         public async ValueTask<RoleDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

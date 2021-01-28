@@ -20,11 +20,11 @@ namespace web.Services
             this.roleRepository = roleRepository;
         }
 
-        public async Task<ServiceResult<IEnumerable<RoleDto>>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<SearchResponseDto<RoleDto>>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var companyDtos = await this.roleRepository.FindAsync(searchParameters, cancellationToken);
 
-            return new ServiceResult<IEnumerable<RoleDto>>(companyDtos);
+            return new ServiceResult<SearchResponseDto<RoleDto>>(companyDtos);
         }
 
         public async Task<ServiceResult<RoleDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

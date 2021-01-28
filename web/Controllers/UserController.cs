@@ -100,7 +100,7 @@ namespace web.Controllers
         [HttpGet]
         [Authorize(Roles = AccessRoles.AnyAdmin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<UserDto>>> Find([FromQuery] UserSearchParameters searchParameters, CancellationToken cancellationToken)
+        public async Task<ActionResult<SearchResponseDto<UserDto>>> Find([FromQuery] UserSearchParameters searchParameters, CancellationToken cancellationToken)
         {
             var result = await this.userService.FindAsync(searchParameters, cancellationToken);
 

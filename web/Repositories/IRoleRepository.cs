@@ -11,7 +11,7 @@ namespace web.Repositories
     {
         ValueTask<RoleDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<RoleDto>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default);
+        Task<SearchResponseDto<RoleDto>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default);
 
         Task<bool> UpdateAsync(RoleDto roleDto, CancellationToken cancellationToken = default);
     }

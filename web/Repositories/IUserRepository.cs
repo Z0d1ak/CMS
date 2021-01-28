@@ -17,7 +17,7 @@ namespace web.Repositories
 
         ValueTask<UserDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<UserDto>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default);
+        Task<SearchResponseDto<UserDto>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default);
 
         Task<bool> UpdateAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken = default);
 

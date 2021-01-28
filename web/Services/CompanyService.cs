@@ -43,11 +43,11 @@ namespace web.Services
             return ServiceResult.Successfull;
         }
 
-        public async Task<ServiceResult<IEnumerable<CompanyDto>>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<SearchResponseDto<CompanyDto>>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var companyDtos = await this.companyRepository.FindAsync(searchParameters, cancellationToken);
 
-            return new ServiceResult<IEnumerable<CompanyDto>>(companyDtos);
+            return new ServiceResult<SearchResponseDto<CompanyDto>>(companyDtos);
         }
 
         public async Task<ServiceResult<CompanyDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

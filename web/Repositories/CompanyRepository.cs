@@ -128,14 +128,19 @@ namespace web.Repositories
             }
         }
 
-        public async Task<IEnumerable<CompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<SearchResponseDto<CompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var companies = await this.dataContext.Companies
                 .Where(x =>
                    (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith))
                    && (searchParameters.QuickSearch == null || x.Name.StartsWith(searchParameters.QuickSearch)))
                 .ToListAsync(cancellationToken);
-            return companies.Select(x => x.ToDto());
+            var count = await this.dataContext.Companies
+                .Where(x =>
+                   (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith))
+                   && (searchParameters.QuickSearch == null || x.Name.StartsWith(searchParameters.QuickSearch)))
+                .CountAsync(cancellationToken);
+            return new SearchResponseDto<CompanyDto>(count, companies.Select(x => x.ToDto()));
         }
 
         public async ValueTask<CompanyDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

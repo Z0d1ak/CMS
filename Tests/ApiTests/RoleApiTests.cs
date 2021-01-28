@@ -35,8 +35,8 @@ namespace Tests.ApiTests
                 var rolesResponse = await this.FindAsync<RoleDto>("api/role");
                 Assert.AreEqual(StatusCodes.Status200OK, rolesResponse.StatusCode);
 
-                this.roles = rolesResponse.Content;
-                Assert.AreEqual(5, roles.Count());
+                this.roles = rolesResponse.Content.Items;
+                Assert.AreEqual(5, rolesResponse.Content.Count);
             }
         }
 

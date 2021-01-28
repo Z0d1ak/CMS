@@ -103,7 +103,7 @@ namespace web.Controllers
         [HttpGet]
         [Authorize(Roles = AccessRoles.SuperAdmin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<CompanyDto>>> Find([FromQuery] CompanySearchParameters searchParameters, CancellationToken cancellationToken)
+        public async Task<ActionResult<SearchResponseDto<CompanyDto>>> Find([FromQuery] CompanySearchParameters searchParameters, CancellationToken cancellationToken)
         {
             var result = await this.companyService.FindAsync(searchParameters, cancellationToken);
 

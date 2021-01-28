@@ -53,7 +53,6 @@ namespace Tests.ApiTests
         public virtual async Task OneTimeSetUpAsync()
         {
             await this.DataContext.Database.EnsureDeletedAsync();
-            await this.DataContext.Database.EnsureCreatedAsync();
         }
 
         [OneTimeTearDown]
@@ -71,7 +70,7 @@ namespace Tests.ApiTests
 
             var request = JsonContent.Create(requestDto);
             var response = await this.Client.PostAsync(url, request, cancellationToken);
-            return await ConvertAsync<TResponseDto>(response);
+            return await ConvertAsync<TResponseDto>(response, cancellationToken);
         }
 
         protected async Task<ResponseWrapper<TResponseDto>> GetAsync<TResponseDto>(
@@ -82,10 +81,10 @@ namespace Tests.ApiTests
             this.ProvideAthorization();
 
             var response = await this.Client.GetAsync($"{url.TrimEnd('/')}/{id}", cancellationToken);
-            return await ConvertAsync<TResponseDto>(response);
+            return await ConvertAsync<TResponseDto>(response, cancellationToken);
         }
         
-        protected async Task<ResponseWrapper<IEnumerable<TResponseDto>>> FindAsync<TResponseDto>(
+        protected async Task<ResponseWrapper<SearchResponseDto<TResponseDto>>> FindAsync<TResponseDto>(
             string url,
             ISearchParameter? searchParameter = null,
             CancellationToken cancellationToken = default)
@@ -93,7 +92,7 @@ namespace Tests.ApiTests
             this.ProvideAthorization();
 
             var response = await this.Client.GetAsync(url + searchParameter?.ToString(), cancellationToken);
-            return await ConvertAsync<IEnumerable<TResponseDto>>(response);
+            return await ConvertAsync<SearchResponseDto<TResponseDto>>(response, cancellationToken);
         }
 
         protected async Task<int> UpdateAsync<TRequestDto>(
@@ -123,7 +122,8 @@ namespace Tests.ApiTests
         {
             var response = await this.PostAsync<LoginRequestDto, LoginResponseDto>(
                 "api/auth/login",
-                loginRequestDto);
+                loginRequestDto,
+                cancellationToken);
             Assert.AreEqual(response.StatusCode, StatusCodes.Status200OK);
             return new AuthenticationScope(response.Content.SecurityToken);
         }
@@ -142,7 +142,7 @@ namespace Tests.ApiTests
             }
         }
 
-        private async Task<ResponseWrapper<TResponseDto>> ConvertAsync<TResponseDto>(
+        private static async Task<ResponseWrapper<TResponseDto>> ConvertAsync<TResponseDto>(
             HttpResponseMessage responseMessage,
             CancellationToken cancellationToken = default)
         {

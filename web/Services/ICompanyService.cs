@@ -12,7 +12,7 @@ namespace web.Services
     {
         Task<ServiceResult<CompanyDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<ServiceResult<IEnumerable<CompanyDto>>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default);
+        Task<ServiceResult<SearchResponseDto<CompanyDto>>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default);
 
         Task<ServiceResult<CompanyDto>> CreateAsync(CreateCompanyDto companyDto, CancellationToken cancellationToken = default);
 

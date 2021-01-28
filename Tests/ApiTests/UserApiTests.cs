@@ -77,8 +77,8 @@ namespace Tests.ApiTests
                 var usersResponse = await this.FindAsync<UserDto>("api/user");
                 Assert.AreEqual(StatusCodes.Status200OK, usersResponse.StatusCode);
 
-                var users = usersResponse.Content;
-                Assert.AreEqual(4, users.Count());
+                var users = usersResponse.Content.Items;
+                Assert.AreEqual(4, usersResponse.Content.Count);
 
                 var user1Response = await this.GetAsync<UserDto>("api/user", DefaultDtos.User1.Id);
                 Assert.AreEqual(StatusCodes.Status200OK, user1Response.StatusCode);
@@ -176,9 +176,7 @@ namespace Tests.ApiTests
 
                 var usersResponse = await this.FindAsync<UserDto>("api/user");
                 Assert.AreEqual(StatusCodes.Status200OK, usersResponse.StatusCode);
-
-                var users = usersResponse.Content;
-                Assert.AreEqual(3, users.Count());
+                Assert.AreEqual(3, usersResponse.Content.Count);
 
                 var user1Response = await this.GetAsync<UserDto>("api/user", DefaultDtos.User1.Id);
                 Assert.AreEqual(StatusCodes.Status404NotFound, user1Response.StatusCode);

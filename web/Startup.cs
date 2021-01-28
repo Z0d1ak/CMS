@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using web.Db;
+using web.Dto;
 using web.Options;
 using web.Other;
 using web.Services;
@@ -61,6 +62,8 @@ namespace web
                 x.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 
                 x.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+
+                x.SchemaFilter<SearchResponseSchemeFilter>();
 
                 x.AddSecurityDefinition(name: "Bearer", new OpenApiSecurityScheme()
                 {

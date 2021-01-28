@@ -53,8 +53,8 @@ namespace Tests.ApiTests
             {
                 var getCompaniesResponse = await this.FindAsync<CompanyDto>("api/company");
                 Assert.AreEqual(StatusCodes.Status200OK, getCompaniesResponse.StatusCode);
-                var companies = getCompaniesResponse.Content;
-                Assert.AreEqual(2, companies.Count());
+                var companies = getCompaniesResponse.Content.Items;
+                Assert.AreEqual(2, getCompaniesResponse.Content.Count);
                 var company1 = companies.FirstOrDefault(x => x.Id == DefaultDtos.Company1.Id);
                 Assert.NotNull(company1);
             }
@@ -92,8 +92,7 @@ namespace Tests.ApiTests
 
                 var getCompaniesResponse = await this.FindAsync<CompanyDto>("api/company");
                 Assert.AreEqual(StatusCodes.Status200OK, getCompaniesResponse.StatusCode);
-                var companies = getCompaniesResponse.Content;
-                Assert.AreEqual(1, companies.Count());
+                Assert.AreEqual(1, getCompaniesResponse.Content.Count);
             }
             using (await this.AuthAsync(DefaultDtos.SuperAdminLoginDto))
             {

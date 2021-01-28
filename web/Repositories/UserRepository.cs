@@ -85,7 +85,7 @@ namespace web.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserDto>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<SearchResponseDto<UserDto>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var users = await this.dataContext.Users
                 .Include(x => x.Roles)
@@ -94,7 +94,14 @@ namespace web.Repositories
                     && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
                     && (searchParameters.Role == null || x.Roles.Any(x => x.Type.ToString() == searchParameters.Role)))
                 .ToListAsync(cancellationToken);
-            return users.Select(x => x.ToDto());
+            var count = await this.dataContext.Users
+                .Include(x => x.Roles)
+                .Where(x =>
+                    (searchParameters.EmailStartsWith == null || x.Email.StartsWith(searchParameters.EmailStartsWith))
+                    && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
+                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type.ToString() == searchParameters.Role)))
+                .CountAsync(cancellationToken);
+            return new SearchResponseDto<UserDto>(count, users.Select(x => x.ToDto()));
         }
 
         public Task<User> LoginAsync(string email, CancellationToken cancellationToken = default)
@@ -142,7 +149,7 @@ namespace web.Repositories
                 {
                     user.Roles = await this.dataContext.Roles
                         .Where(x => storeUserDto.Roles.Contains((string)(object)x.Type))
-                        .ToListAsync();
+                        .ToListAsync(cancellationToken);
                 }
 
                 var changes = await this.dataContext.SaveChangesAsync(cancellationToken);

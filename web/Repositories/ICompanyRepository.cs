@@ -13,7 +13,7 @@ namespace web.Repositories
 
         ValueTask<CompanyDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<CompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default);
+        Task<SearchResponseDto<CompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default);
 
         Task<bool> UpdateAsync(CompanyDto companyDto, CancellationToken cancellationToken = default);
 

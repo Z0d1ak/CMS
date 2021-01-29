@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using System.Web;
 
 namespace web.Other.SearchParameters
@@ -57,6 +58,7 @@ namespace web.Other.SearchParameters
         /// <summary>
         /// Имя колонки для сортировки.
         /// </summary>
+        [MaxLength(32)]
         public string? SortColumn { get; set; }
 
         /// <summary>

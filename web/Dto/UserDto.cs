@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using web.Entities;
 
 namespace web.Dto
@@ -22,6 +23,7 @@ namespace web.Dto
 
         [MaxLength(32)]
         public string LastName { get; set; } = null!;
+
 
         [MaxLength(5)]
         public IEnumerable<RoleType>? Roles { get; set; }

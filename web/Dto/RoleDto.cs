@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using web.Entities;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace web.Dto
 {

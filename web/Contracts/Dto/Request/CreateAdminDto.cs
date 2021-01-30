@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto.Request
+namespace web.Contracts.Dto.Request
 {
     /// <summary>
     /// Контракт данных дял создания адмиситратора компании.
@@ -36,7 +36,7 @@ namespace web.Dto.Request
         /// </summary>
         [MaxLength(32)]
         public string? LastName { get; set; }
-        
+
         /// <summary>
         /// Пароль.
         /// </summary>

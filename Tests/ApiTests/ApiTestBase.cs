@@ -15,10 +15,10 @@ using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using Tests.Helpers;
 using web;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
+using web.Contracts.SearchParameters;
 using web.Db;
-using web.Dto.Request;
-using web.Dto.Response;
-using web.Other.SearchParameters;
 
 namespace Tests.ApiTests
 {

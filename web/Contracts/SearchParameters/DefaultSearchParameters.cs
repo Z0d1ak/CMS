@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using System.Web;
 
-namespace web.Other.SearchParameters
+namespace web.Contracts.SearchParameters
 {
     public abstract class DefaultSearchParameters
         : ISearchParameter
@@ -26,13 +24,13 @@ namespace web.Other.SearchParameters
         {
             get
             {
-                return this.pageLimit;
+                return pageLimit;
             }
             set
             {
-                if(value is not null)
+                if (value is not null)
                 {
-                    this.pageLimit = value.Value;
+                    pageLimit = value.Value;
                 }
             }
         }
@@ -44,33 +42,22 @@ namespace web.Other.SearchParameters
         {
             get
             {
-                return this.pageNumber;
+                return pageNumber;
             }
             set
             {
                 if (value is not null)
                 {
-                    this.pageNumber = value.Value;
+                    pageNumber = value.Value;
                 }
             }
         }
-
-        /// <summary>
-        /// Имя колонки для сортировки.
-        /// </summary>
-        [MaxLength(32)]
-        public string? SortColumn { get; set; }
-
-        /// <summary>
-        /// Направление сортировки.
-        /// </summary>
-        public ListSortDirection? SortDirection { get; set; }
 
         public virtual void ToParametersList(List<string> parameters)
         {
             if (this.QuickSearch is not null)
             {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.QuickSearch))}={HttpUtility.UrlEncode(this.QuickSearch)}");
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.QuickSearch))}={HttpUtility.UrlEncode(QuickSearch)}");
             }
 
             if (this.PageLimit != 20)
@@ -81,11 +68,6 @@ namespace web.Other.SearchParameters
             if (this.PageNumber != 1)
             {
                 parameters.Add($"{HttpUtility.UrlEncode(nameof(this.PageNumber))}={this.PageNumber!.Value}");
-            }
-
-            if (this.SortColumn is not null)
-            {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.SortColumn))}={HttpUtility.UrlEncode(this.SortColumn)}");
             }
         }
     }

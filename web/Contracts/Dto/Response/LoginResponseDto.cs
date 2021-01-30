@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto.Response
+namespace web.Contracts.Dto.Response
 {
     /// <summary>
     /// Контракт данных для ответа сервера при успешной авторизации пользователя.

@@ -1,9 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using web.Dto;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
 using web.Other;
-using web.Dto.Request;
-using web.Dto.Response;
 
 namespace web.Repositories
 {

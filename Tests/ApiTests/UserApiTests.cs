@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using Tests.Helpers;
-using web.Dto;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
 using web.Entities;
-using web.Dto.Request;
-using web.Dto.Response;
 
 namespace Tests.ApiTests
 {

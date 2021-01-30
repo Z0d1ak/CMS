@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using web.Entities;
 
-namespace web.Dto.Request
+namespace web.Contracts.Dto.Request
 {
     /// <summary>
-    /// Контракт данных дял создания пользователя.
+    /// Контракт данных для сохранения информации о пользователе.
     /// </summary>
-    public class CreateUserDto
+    public class StoreUserDto
     {
         /// <summary>
         /// Уникальный идентификатор.
@@ -42,10 +42,9 @@ namespace web.Dto.Request
         /// <summary>
         /// Пароль.
         /// </summary>
-        [Required]
         [MinLength(8)]
         [MaxLength(32)]
-        public string Password { get; set; } = null!;
+        public string? Password { get; set; }
 
         /// <summary>
         /// Список ролей, в которые входит пользователь.

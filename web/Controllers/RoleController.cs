@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using web.Dto;
-using web.Dto.Request;
-using web.Dto.Response;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
+using web.Contracts.SearchParameters;
 using web.Options;
-using web.Other.SearchParameters;
 using web.Services;
 
 namespace web.Controllers

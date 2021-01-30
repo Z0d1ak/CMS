@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
+using web.Contracts.SearchParameters;
 using web.Db;
-using web.Dto;
 using web.Entities;
-using web.Other.SearchParameters;
-using web.Dto.Request;
-using web.Dto.Response;
 
 namespace web.Repositories
 {

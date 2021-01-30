@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using web.Dto;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
+using web.Contracts.SearchParameters;
 using web.Other;
-using web.Other.SearchParameters;
 using web.Repositories;
-using web.Dto.Request;
-using web.Dto.Response;
 
 namespace web.Services
 {

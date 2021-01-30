@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto.Request
+namespace web.Contracts.Dto.Request
 {
     /// <summary>
     /// Контракт данных для создания компании.

@@ -1,7 +1,6 @@
 ﻿using System;
-using web.Dto;
-using web.Dto.Request;
-using web.Dto.Response;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
 
 namespace Tests.Helpers
 {

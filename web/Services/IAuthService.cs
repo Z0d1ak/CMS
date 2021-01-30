@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using web.Dto.Request;
-using web.Dto.Response;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
 using web.Other;
 
 namespace web.Services

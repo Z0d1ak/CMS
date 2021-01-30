@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using web.Dto;
-using web.Dto.Request;
-using web.Dto.Response;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
 using web.Other;
 using web.Repositories;
 

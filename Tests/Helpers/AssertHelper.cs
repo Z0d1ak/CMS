@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using web.Dto.Request;
-using web.Dto.Response;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
 
 namespace Tests.Helpers
 {

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using web.Entities;
 
-namespace web.Dto.Response
+namespace web.Contracts.Dto.Request
 {
     /// <summary>
-    /// Контракт данных для получения информации о роли.
+    /// Контракт данных для сохранения инфрмации о роли.
     /// </summary>
-    public class ResponseRoleDto
+    public class StoreRoleDto
     {
         /// <summary>
         /// Уникальный идентификатор.
@@ -15,12 +14,6 @@ namespace web.Dto.Response
         [Required]
         [Key]
         public Guid Id { get; set; }
-
-        /// <summary>
-        /// Тип роли.
-        /// </summary>
-        [Required]
-        public RoleType Type { get; set; }
 
         /// <summary>
         /// Название.

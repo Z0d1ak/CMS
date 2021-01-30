@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace web.Other.SearchParameters
+namespace web.Contracts.SearchParameters
 {
     public interface ISearchParameter
     {

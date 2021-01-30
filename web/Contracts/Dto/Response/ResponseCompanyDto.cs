@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto.Request
+namespace web.Contracts.Dto.Response
 {
     /// <summary>
     /// Контракт данных для получения информации о компании.
     /// </summary>
-    public class StoreCompanyDto
+    public class ResponseCompanyDto
     {
         /// <summary>
         /// Уникальный идентификатор.

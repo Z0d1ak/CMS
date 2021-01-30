@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using web.Entities;
 
-namespace web.Dto.Response
+namespace web.Contracts.Dto.Response
 {
     public static class EntityToResponseDtoExtensions
     {

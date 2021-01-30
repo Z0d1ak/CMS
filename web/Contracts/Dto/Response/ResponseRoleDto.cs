@@ -1,26 +1,33 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using web.Entities;
 
-namespace web.Dto.Response
+namespace web.Contracts.Dto.Response
 {
     /// <summary>
-    /// Контракт данных для получения информации о компании.
+    /// Контракт данных для получения информации о роли.
     /// </summary>
-    public class ResponseCompanyDto
+    public class ResponseRoleDto
     {
         /// <summary>
         /// Уникальный идентификатор.
         /// </summary>
-        [Key]
         [Required]
+        [Key]
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Тип роли.
+        /// </summary>
+        [Required]
+        public RoleType Type { get; set; }
 
         /// <summary>
         /// Название.
         /// </summary>
         [Required]
-        [MinLength(1)]
-        [MaxLength(64)]
+        [MinLength(4)]
+        [MaxLength(32)]
         public string Name { get; set; } = null!;
     }
 }

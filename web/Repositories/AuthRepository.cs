@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
 using web.Db;
-using web.Dto;
-using web.Entities;
 using web.Other;
 using web.Services;
-using web.Dto.Request;
-using web.Dto.Response;
 
 namespace web.Repositories
 {

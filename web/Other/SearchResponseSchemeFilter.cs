@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using web.Dto;
+﻿using Microsoft.OpenApi.Models;
 using Pluralize.NET.Core;
-using web.Dto.Request;
-using web.Dto.Response;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using web.Contracts.Dto.Response;
 
 namespace web.Other
 {

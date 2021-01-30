@@ -1,26 +1,26 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto.Request
+namespace web.Contracts.Dto.Request
 {
     /// <summary>
-    /// Контракт данных для сохранения инфрмации о роли.
+    /// Контракт данных для получения информации о компании.
     /// </summary>
-    public class StoreRoleDto
+    public class StoreCompanyDto
     {
         /// <summary>
         /// Уникальный идентификатор.
         /// </summary>
-        [Required]
         [Key]
+        [Required]
         public Guid Id { get; set; }
 
         /// <summary>
         /// Название.
         /// </summary>
         [Required]
-        [MinLength(4)]
-        [MaxLength(32)]
+        [MinLength(1)]
+        [MaxLength(64)]
         public string Name { get; set; } = null!;
     }
 }

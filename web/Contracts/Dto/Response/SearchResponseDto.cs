@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto.Response
+namespace web.Contracts.Dto.Response
 {
     /// <summary>
     /// Контракт данных для результата поиска.
@@ -11,8 +11,8 @@ namespace web.Dto.Response
     {
         public SearchResponseDto(int count, IEnumerable<TItem> items)
         {
-            this.Count = count;
-            this.Items = items;
+            Count = count;
+            Items = items;
         }
 
         /// <summary>

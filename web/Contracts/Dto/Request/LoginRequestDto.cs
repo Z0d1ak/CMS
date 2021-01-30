@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto.Request
+namespace web.Contracts.Dto.Request
 {
     /// <summary>
     /// Контракт данных для авторизации пользователя.
@@ -21,6 +21,6 @@ namespace web.Dto.Request
         [Required]
         [MinLength(8)]
         [MaxLength(32)]
-        public string Password {get; set;} = null!;
+        public string Password { get; set; } = null!;
     }
 }

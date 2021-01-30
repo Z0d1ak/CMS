@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using web.Entities;
 
-namespace web.Dto.Response
+namespace web.Contracts.Dto.Request
 {
     /// <summary>
-    /// Контракт данных для получения информации о пользователе.
+    /// Контракт данных дял создания пользователя.
     /// </summary>
-    public class ResponseUserDto
+    public class CreateUserDto
     {
         /// <summary>
         /// Уникальный идентификатор.
@@ -16,12 +16,6 @@ namespace web.Dto.Response
         [Key]
         [Required]
         public Guid Id { get; set; }
-
-        /// <summary>
-        /// Идентификатор компании пользователя.
-        /// </summary>
-        [Required]
-        public Guid CompanyId { get; set; }
 
         /// <summary>
         /// Email адрес.
@@ -46,10 +40,17 @@ namespace web.Dto.Response
         public string? LastName { get; set; }
 
         /// <summary>
+        /// Пароль.
+        /// </summary>
+        [Required]
+        [MinLength(8)]
+        [MaxLength(32)]
+        public string Password { get; set; } = null!;
+
+        /// <summary>
         /// Список ролей, в которые входит пользователь.
         /// </summary>
         [MaxLength(5)]
-        [Required]
-        public IEnumerable<RoleType> Roles { get; set; } = null!;
+        public IEnumerable<RoleType>? Roles { get; set; }
     }
 }

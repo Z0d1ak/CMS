@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using Tests.Helpers;
-using web.Dto;
-using web.Dto.Request;
-using web.Dto.Response;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
 
 namespace Tests.ApiTests
 {

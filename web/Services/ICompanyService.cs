@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using web.Dto;
-using web.Dto.Request;
-using web.Dto.Response;
+using web.Contracts.Dto.Request;
+using web.Contracts.Dto.Response;
+using web.Contracts.SearchParameters;
 using web.Other;
-using web.Other.SearchParameters;
 
 namespace web.Services
 {

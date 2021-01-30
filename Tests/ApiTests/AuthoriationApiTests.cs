@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using Tests.Helpers;
 using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 
 namespace Tests.ApiTests
 {
@@ -15,10 +17,10 @@ namespace Tests.ApiTests
             var response = await this.PostAsync<LoginRequestDto, LoginResponseDto>(
                 "api/auth/login",
                 DefaultDtos.SuperAdminLoginDto);
-            Assert.AreEqual(response.StatusCode, StatusCodes.Status200OK);
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
 
             var superAdmin = response.Content.User;
-            Assert.AreEqual("admin@admin.com", superAdmin.Email);
+            Assert.AreEqual(DefaultDtos.SuperAdminLoginDto.Email, superAdmin.Email);
         } 
     }
 }

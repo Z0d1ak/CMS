@@ -8,6 +8,8 @@ using web.Dto;
 using web.Other;
 using web.Other.SearchParameters;
 using web.Repositories;
+using web.Dto.Request;
+using web.Dto.Response;
 
 namespace web.Services
 {
@@ -20,25 +22,25 @@ namespace web.Services
             this.roleRepository = roleRepository;
         }
 
-        public async Task<ServiceResult<SearchResponseDto<RoleDto>>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<SearchResponseDto<ResponseRoleDto>>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var companyDtos = await this.roleRepository.FindAsync(searchParameters, cancellationToken);
 
-            return new ServiceResult<SearchResponseDto<RoleDto>>(companyDtos);
+            return new ServiceResult<SearchResponseDto<ResponseRoleDto>>(companyDtos);
         }
 
-        public async Task<ServiceResult<RoleDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<ResponseRoleDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var roleDto = await this.roleRepository.GetByIdAsync(id, cancellationToken);
             if (roleDto is null)
             {
-                return new ServiceResult<RoleDto>(StatusCodes.Status404NotFound);
+                return new ServiceResult<ResponseRoleDto>(StatusCodes.Status404NotFound);
             }
 
-            return new ServiceResult<RoleDto>(roleDto);
+            return new ServiceResult<ResponseRoleDto>(roleDto);
         }
 
-        public async Task<ServiceResult> UpdateAsync(RoleDto roleDto, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult> UpdateAsync(StoreRoleDto roleDto, CancellationToken cancellationToken = default)
         {
             bool isUpdated = await this.roleRepository.UpdateAsync(roleDto, cancellationToken);
 

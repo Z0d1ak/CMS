@@ -6,6 +6,8 @@ using NUnit.Framework;
 using Tests.Helpers;
 using web.Dto;
 using web.Entities;
+using web.Dto.Request;
+using web.Dto.Response;
 
 namespace Tests.ApiTests
 {
@@ -20,7 +22,7 @@ namespace Tests.ApiTests
 
             using(await this.AuthAsync(DefaultDtos.SuperAdminLoginDto))
             {
-                var company1Response = await this.PostAsync<CreateCompanyDto, CompanyDto>("api/company", DefaultDtos.CreateCompany1Dto);
+                var company1Response = await this.PostAsync<CreateCompanyDto, ResponseCompanyDto>("api/company", DefaultDtos.CreateCompany1Dto);
                 Assert.AreEqual(StatusCodes.Status201Created, company1Response.StatusCode);
             }
         }
@@ -30,20 +32,20 @@ namespace Tests.ApiTests
         {
             using(await this.AuthAsync(DefaultDtos.Admin1LoginDto))
             {
-                var user1Response = await this.PostAsync<CreateUserDto, UserDto>("api/user", DefaultDtos.CreateUser1Dto);
+                var user1Response = await this.PostAsync<CreateUserDto, ResponseUserDto>("api/user", DefaultDtos.CreateUser1Dto);
                 Assert.AreEqual(StatusCodes.Status201Created, user1Response.StatusCode);
                 var user1 = user1Response.Content;
-                AssertHelper.AsserUserEquals(DefaultDtos.User1, user1);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser1Dto, user1);
 
-                var user2Response = await this.PostAsync<CreateUserDto, UserDto>("api/user", DefaultDtos.CreateUser2Dto);
+                var user2Response = await this.PostAsync<CreateUserDto, ResponseUserDto>("api/user", DefaultDtos.CreateUser2Dto);
                 Assert.AreEqual(StatusCodes.Status201Created, user2Response.StatusCode);
                 var user2 = user2Response.Content;
-                AssertHelper.AsserUserEquals(DefaultDtos.User2, user2);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser2Dto, user2);
 
-                var user3Response = await this.PostAsync<CreateUserDto, UserDto>("api/user", DefaultDtos.CreateUser3Dto);
+                var user3Response = await this.PostAsync<CreateUserDto, ResponseUserDto>("api/user", DefaultDtos.CreateUser3Dto);
                 Assert.AreEqual(StatusCodes.Status201Created, user3Response.StatusCode);
                 var user3 = user3Response.Content;
-                AssertHelper.AsserUserEquals(DefaultDtos.User3, user3);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser3Dto, user3);
             }
         }
 
@@ -52,20 +54,20 @@ namespace Tests.ApiTests
         {
             using (await this.AuthAsync(DefaultDtos.Admin1LoginDto))
             {
-                var user1Response = await this.GetAsync<UserDto>("api/user", DefaultDtos.User1.Id);
+                var user1Response = await this.GetAsync<ResponseUserDto>("api/user", DefaultDtos.User1Id);
                 Assert.AreEqual(StatusCodes.Status200OK, user1Response.StatusCode);
                 var user1 = user1Response.Content;
-                AssertHelper.AsserUserEquals(DefaultDtos.User1, user1);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser1Dto, user1);
 
-                var user2Response = await this.GetAsync<UserDto>("api/user", DefaultDtos.User2.Id);
+                var user2Response = await this.GetAsync<ResponseUserDto>("api/user", DefaultDtos.User2Id);
                 Assert.AreEqual(StatusCodes.Status200OK, user2Response.StatusCode);
                 var user2 = user2Response.Content;
-                AssertHelper.AsserUserEquals(DefaultDtos.User2, user2);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser2Dto, user2);
 
-                var user3Response = await this.GetAsync<UserDto>("api/user", DefaultDtos.User3.Id);
+                var user3Response = await this.GetAsync<ResponseUserDto>("api/user", DefaultDtos.User3Id);
                 Assert.AreEqual(StatusCodes.Status200OK, user3Response.StatusCode);
                 var user3 = user3Response.Content;
-                AssertHelper.AsserUserEquals(DefaultDtos.User3, user3);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser3Dto, user3);
             }
         }
 
@@ -74,24 +76,24 @@ namespace Tests.ApiTests
         {
             using (await this.AuthAsync(DefaultDtos.Admin1LoginDto))
             {
-                var usersResponse = await this.FindAsync<UserDto>("api/user");
+                var usersResponse = await this.FindAsync<ResponseUserDto>("api/user");
                 Assert.AreEqual(StatusCodes.Status200OK, usersResponse.StatusCode);
 
                 var users = usersResponse.Content.Items;
                 Assert.AreEqual(4, usersResponse.Content.Count);
 
-                var user1Response = await this.GetAsync<UserDto>("api/user", DefaultDtos.User1.Id);
+                var user1Response = await this.GetAsync<ResponseUserDto>("api/user", DefaultDtos.User1Id);
                 Assert.AreEqual(StatusCodes.Status200OK, user1Response.StatusCode);
                 var user1 = user1Response.Content;
-                AssertHelper.AsserUserEquals(DefaultDtos.User1, user1);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser1Dto, user1);
 
-                var user2 = users.FirstOrDefault(x => x.Id == DefaultDtos.User2.Id);
+                var user2 = users.FirstOrDefault(x => x.Id == DefaultDtos.User2Id);
                 Assert.IsNotNull(user2);
-                AssertHelper.AsserUserEquals(DefaultDtos.User2, user2!);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser2Dto, user2!);
 
-                var user3 = users.FirstOrDefault(x => x.Id == DefaultDtos.User3.Id);
+                var user3 = users.FirstOrDefault(x => x.Id == DefaultDtos.User3Id);
                 Assert.IsNotNull(user3);
-                AssertHelper.AsserUserEquals(DefaultDtos.User3, user3!);
+                AssertHelper.AreEquals(DefaultDtos.StoreUser3Dto, user3!);
             }
         }
 
@@ -113,10 +115,10 @@ namespace Tests.ApiTests
                 var statusCode = await this.UpdateAsync("api/user", updatedUser);
                 Assert.AreEqual(StatusCodes.Status204NoContent, statusCode);
 
-                var userResponse = await this.GetAsync<UserDto>("api/user", updatedUser.Id);
+                var userResponse = await this.GetAsync<ResponseUserDto>("api/user", updatedUser.Id);
                 Assert.AreEqual(StatusCodes.Status200OK, userResponse.StatusCode);
                 var user = userResponse.Content;
-                AssertHelper.AsserUserEquals(updatedUser, user);
+                AssertHelper.AreEquals(updatedUser, user);
             }
 
             var testLoginRequestDto = new LoginRequestDto
@@ -151,10 +153,10 @@ namespace Tests.ApiTests
                 var statusCode = await this.UpdateAsync("api/user", updatedUser);
                 Assert.AreEqual(StatusCodes.Status204NoContent, statusCode);
 
-                var userResponse = await this.GetAsync<UserDto>("api/user", updatedUser.Id);
+                var userResponse = await this.GetAsync<ResponseUserDto>("api/user", updatedUser.Id);
                 Assert.AreEqual(StatusCodes.Status200OK, userResponse.StatusCode);
                 var user = userResponse.Content;
-                AssertHelper.AsserUserEquals(updatedUser, user);
+                AssertHelper.AreEquals(updatedUser, user);
             }
 
             var testLoginRequestDto = new LoginRequestDto
@@ -171,14 +173,14 @@ namespace Tests.ApiTests
         {
             using (await this.AuthAsync(DefaultDtos.Admin1LoginDto))
             {
-                var statusCode = await this.DeleteAsync("api/user", DefaultDtos.User1.Id);
+                var statusCode = await this.DeleteAsync("api/user", DefaultDtos.User1Id);
                 Assert.AreEqual(StatusCodes.Status204NoContent, statusCode);
 
-                var usersResponse = await this.FindAsync<UserDto>("api/user");
+                var usersResponse = await this.FindAsync<ResponseUserDto>("api/user");
                 Assert.AreEqual(StatusCodes.Status200OK, usersResponse.StatusCode);
                 Assert.AreEqual(3, usersResponse.Content.Count);
 
-                var user1Response = await this.GetAsync<UserDto>("api/user", DefaultDtos.User1.Id);
+                var user1Response = await this.GetAsync<ResponseUserDto>("api/user", DefaultDtos.User1Id);
                 Assert.AreEqual(StatusCodes.Status404NotFound, user1Response.StatusCode);
             }
         }

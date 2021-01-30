@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using Tests.Helpers;
-using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 
 
 namespace Tests.ApiTests
@@ -20,19 +21,19 @@ namespace Tests.ApiTests
 
             using (await this.AuthAsync(DefaultDtos.SuperAdminLoginDto))
             {
-                var company1Response = await this.PostAsync<CreateCompanyDto, CompanyDto>("api/company", DefaultDtos.CreateCompany1Dto);
+                var company1Response = await this.PostAsync<CreateCompanyDto, ResponseCompanyDto>("api/company", DefaultDtos.CreateCompany1Dto);
                 Assert.AreEqual(StatusCodes.Status201Created, company1Response.StatusCode);
             }
         }
 
-        private IEnumerable<RoleDto> roles = null!;
+        private IEnumerable<ResponseRoleDto> roles = null!;
 
         [Test, Order(1)]
         public async Task GetRolesTest()
         {
             using (await this.AuthAsync(DefaultDtos.Admin1LoginDto))
             {
-                var rolesResponse = await this.FindAsync<RoleDto>("api/role");
+                var rolesResponse = await this.FindAsync<ResponseRoleDto>("api/role");
                 Assert.AreEqual(StatusCodes.Status200OK, rolesResponse.StatusCode);
 
                 this.roles = rolesResponse.Content.Items;
@@ -49,7 +50,7 @@ namespace Tests.ApiTests
             {
                 foreach (var role in this.roles)
                 {
-                    var roleFromDbResponse = await this.GetAsync<RoleDto>("api/role", role.Id);
+                    var roleFromDbResponse = await this.GetAsync<ResponseRoleDto>("api/role", role.Id);
                     Assert.AreEqual(StatusCodes.Status200OK, roleFromDbResponse.StatusCode);
                     var roleFromDb = roleFromDbResponse.Content;
 
@@ -67,22 +68,20 @@ namespace Tests.ApiTests
             using (await this.AuthAsync(DefaultDtos.Admin1LoginDto))
             {
                 var firstRole = this.roles.First();
-                var roleForUpdate = new RoleDto
+                var roleForUpdate = new StoreRoleDto
                 {
                     Id = firstRole.Id,
-                    Name = firstRole.Name + "_UPDATED",
-                    Type = firstRole.Type
+                    Name = firstRole.Name + "_UPDATED"
                 };
 
                 var statusCode = await this.UpdateAsync("api/role", roleForUpdate);
                 Assert.AreEqual(StatusCodes.Status204NoContent, statusCode);
 
-                var roleFromDbResponse = await this.GetAsync<RoleDto>("api/role", roleForUpdate.Id);
+                var roleFromDbResponse = await this.GetAsync<ResponseRoleDto>("api/role", roleForUpdate.Id);
                 Assert.AreEqual(StatusCodes.Status200OK, roleFromDbResponse.StatusCode);
                 var roleFromDb = roleFromDbResponse.Content;
 
                 Assert.AreEqual(roleForUpdate.Name, roleFromDb.Name);
-                Assert.AreEqual(roleForUpdate.Type, roleFromDb.Type);
             }
         }
     }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
-using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 using web.Other;
 
 namespace web.Services

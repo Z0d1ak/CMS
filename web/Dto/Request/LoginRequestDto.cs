@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto
+namespace web.Dto.Request
 {
     /// <summary>
     /// Контракт данных для авторизации пользователя.

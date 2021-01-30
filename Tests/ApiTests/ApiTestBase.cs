@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -14,10 +16,9 @@ using NUnit.Framework;
 using Tests.Helpers;
 using web;
 using web.Db;
-using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 using web.Other.SearchParameters;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Tests.ApiTests
 {
@@ -27,7 +28,7 @@ namespace Tests.ApiTests
         protected HttpClient Client { get; }
         protected DataContext DataContext { get; }
 
-        private JsonSerializerOptions options = new JsonSerializerOptions();
+        private readonly JsonSerializerOptions options = new JsonSerializerOptions();
 
         public ApiTestBase()
         {
@@ -122,7 +123,7 @@ namespace Tests.ApiTests
                 "api/auth/login",
                 loginRequestDto,
                 cancellationToken);
-            Assert.AreEqual(response.StatusCode, StatusCodes.Status200OK);
+            Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
             return new AuthenticationScope(response.Content.SecurityToken);
         }
 

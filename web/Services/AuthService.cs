@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 using web.Other;
 using web.Repositories;
 
@@ -19,28 +21,26 @@ namespace web.Services
     public class AuthService : IAuthService
     {
         private readonly IConfiguration configuration;
-        private readonly IUserRepository userRepository;
+        private readonly IAuthRepository authRepository;
 
         public AuthService(
             IConfiguration configuration,
-            IUserRepository userRepository)
+            IAuthRepository authRepository)
         {
             this.configuration = configuration;
-            this.userRepository = userRepository;
+            this.authRepository = authRepository;
         }
 
-        public async Task<ServiceResult<LoginResponseDto>> LoginAsync(LoginRequestDto authDto, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<LoginResponseDto>> LoginAsync(LoginRequestDto loginRequestDto, CancellationToken cancellationToken = default)
         {
-            var user = await this.userRepository.LoginAsync(authDto.Email, cancellationToken);
+            var serviceResult = await this.authRepository.LoginAsync(loginRequestDto, cancellationToken);
 
-            if(user is null)
+            if(!serviceResult.IsSuccessful())
             {
                 return new ServiceResult<LoginResponseDto>(StatusCodes.Status401Unauthorized);
             }
-            if(!VerifyPasswordHash(authDto.Password, user.PasswordHash, user.PasswordSalt))
-            {
-                return new ServiceResult<LoginResponseDto>(StatusCodes.Status401Unauthorized);
-            }
+
+            var user = serviceResult.Value;
 
             var claims = new List<Claim>()
             {
@@ -49,7 +49,7 @@ namespace web.Services
             };
             foreach (var role in user.Roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role.Type.ToString()));
+                claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
             }
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
@@ -71,19 +71,8 @@ namespace web.Services
             return new ServiceResult<LoginResponseDto>(new LoginResponseDto()
             {
                 SecurityToken = tokenHandler.WriteToken(token),
-                User = user.ToDto()
+                User = user
             });
-        }
-
-        private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using var hmac = new HMACSHA512(passwordSalt);
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            if (!hash.SequenceEqual(passwordHash))
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace web.Dto
+namespace web.Dto.Response
 {
     /// <summary>
     /// Контракт данных для ответа сервера при успешной авторизации пользователя.
@@ -16,7 +11,7 @@ namespace web.Dto
         /// Информация о пользователе.
         /// </summary>
         [Required]
-        public UserDto User { get; set; } = null!;
+        public ResponseUserDto User { get; set; } = null!;
 
         /// <summary>
         /// JWT токен.

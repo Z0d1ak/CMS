@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 using web.Options;
 using web.Other.SearchParameters;
 using web.Services;
@@ -47,11 +49,11 @@ namespace web.Controllers
         /// <returns>Роль.</returns>
         /// <response code="200">Роль найдена.</response>
         /// <response code="404">Роль не найдена.</response>
-        [HttpGet("{id}", Name = nameof(RoleController.GetRole))]
+        [HttpGet("{id}", Name = nameof(RoleController.GetRoleAsync))]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CompanyDto>> GetRole([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult<ResponseRoleDto>> GetRoleAsync([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await this.roleService.GetByIdAsync(id, cancellationToken);
 
@@ -68,16 +70,16 @@ namespace web.Controllers
         /// <summary>
         /// Возвращает список ролей, удовлитворяющий параметрам фильтрации.
         /// </summary>
-        /// <param name="searchParameters">Параметры фильтрации.</param>
+        /// <param name="roleSearchParameters">Параметры фильтрации.</param>
         /// <param name="cancellationToken">Токен для отмены операции.</param>
         /// <returns>Список Ролей.</returns>
         /// <response code="200">Запрос успешный.</response>
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<SearchResponseDto<RoleDto>>> Find([FromQuery] RoleSearchParameters searchParameters, CancellationToken cancellationToken)
+        public async Task<ActionResult<SearchResponseDto<ResponseRoleDto>>> FindRolesAsync([FromQuery] RoleSearchParameters roleSearchParameters, CancellationToken cancellationToken)
         {
-            var result = await this.roleService.FindAsync(searchParameters, cancellationToken);
+            var result = await this.roleService.FindAsync(roleSearchParameters, cancellationToken);
 
             if (result.IsSuccessful())
             {
@@ -92,10 +94,7 @@ namespace web.Controllers
         /// <summary>
         /// Изменяет данные роли.
         /// </summary>
-        /// <remarks>
-        /// Тип роли <see cref="RoleDto.Type"/> изменять нельзя.
-        /// </remarks>
-        /// <param name="roleDto">Изменная компания.</param>
+        /// <param name="storeRoleDto">Изменная компания.</param>
         /// <param name="cancellationToken">Токен для отмены операции.</param>
         /// <response code="204">Данные роли успешно изменены.</response>
         /// <response code="404">Роль не найдена.</response>
@@ -105,9 +104,9 @@ namespace web.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> Update(RoleDto roleDto, CancellationToken cancellationToken)
+        public async Task<ActionResult> UpdateRoleAsync(StoreRoleDto storeRoleDto, CancellationToken cancellationToken)
         {
-            var result = await this.roleService.UpdateAsync(roleDto, cancellationToken);
+            var result = await this.roleService.UpdateAsync(storeRoleDto, cancellationToken);
 
             if (result.IsSucessful())
             {

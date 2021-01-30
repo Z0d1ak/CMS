@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 using web.Services;
 
 namespace web.Controllers
@@ -36,7 +37,7 @@ namespace web.Controllers
         /// <summary>
         /// Авторизация в системе.
         /// </summary>
-        /// <param name="authDto">Почта и пароль.</param>
+        /// <param name="loginRequestDto">Почта и пароль.</param>
         /// <param name="cancellationToken">Токен для отмены операции.</param>
         /// <returns>JWT токен и информация о пользователе.</returns>
         /// <response code="200">Авторизация прошла успешно.</response>
@@ -45,9 +46,9 @@ namespace web.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<LoginResponseDto>> LoginAsync([FromBody] LoginRequestDto authDto, CancellationToken cancellationToken)
+        public async Task<ActionResult<LoginResponseDto>> LoginAsync([FromBody] LoginRequestDto loginRequestDto, CancellationToken cancellationToken)
         {
-            var serviceResult = await this.authService.LoginAsync(authDto, cancellationToken);
+            var serviceResult = await this.authService.LoginAsync(loginRequestDto, cancellationToken);
 
             if(serviceResult.IsSuccessful())
             {

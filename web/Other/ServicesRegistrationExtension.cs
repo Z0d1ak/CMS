@@ -12,6 +12,7 @@ namespace web.Other
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<ICompanyService, CompanyService>();
             serviceCollection.AddScoped<IRoleService, RoleService>();
+            serviceCollection.AddScoped<IPasswordService, PasswordService>();
         }
 
         public static void AddRepositories(this IServiceCollection serviceCollection)
@@ -19,6 +20,7 @@ namespace web.Other
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
             serviceCollection.AddScoped<ICompanyRepository, CompanyRepository>();
             serviceCollection.AddScoped<IRoleRepository, RoleRepository>();
+            serviceCollection.AddScoped<IAuthRepository, AuthRepository>();
         }
     }
 }

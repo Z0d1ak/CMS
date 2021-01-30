@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 using web.Options;
 using web.Other.SearchParameters;
 using web.Services;
@@ -53,13 +55,13 @@ namespace web.Controllers
         [Authorize(Roles = AccessRoles.SuperAdmin)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<CompanyDto>> Create(CreateCompanyDto createCompanyDto, CancellationToken cancellationToken)
+        public async Task<ActionResult<ResponseCompanyDto>> CreateCompanyAsync(CreateCompanyDto createCompanyDto, CancellationToken cancellationToken)
         {
             var result = await this.companyService.CreateAsync(createCompanyDto, cancellationToken);
 
             if (result.IsSuccessful())
             {
-                return this.CreatedAtAction(nameof(CompanyController.GetCompany), result.Value.Id, result.Value);
+                return this.CreatedAtAction(nameof(CompanyController.GetCompanyAsync), result.Value.Id, result.Value);
             }
             else
             {
@@ -75,11 +77,11 @@ namespace web.Controllers
         /// <returns>Компания.</returns>
         /// <response code="200">Компания найдена.</response>
         /// <response code="404">Компания не найдена.</response>
-        [HttpGet("{id}", Name = nameof(CompanyController.GetCompany))]
+        [HttpGet("{id}", Name = nameof(CompanyController.GetCompanyAsync))]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CompanyDto>> GetCompany([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult<ResponseCompanyDto>> GetCompanyAsync([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await this.companyService.GetByIdAsync(id, cancellationToken);
 
@@ -96,16 +98,16 @@ namespace web.Controllers
         /// <summary>
         /// Возвращает список компаний, удовлитворяющий параметрам фильтрации.
         /// </summary>
-        /// <param name="searchParameters">Параметры фильтрации.</param>
+        /// <param name="companySearchParameters">Параметры фильтрации.</param>
         /// <param name="cancellationToken">Токен для отмены операции.</param>
         /// <returns>Список компаний.</returns>
         /// <response code="200">Запрос успешный.</response>
         [HttpGet]
         [Authorize(Roles = AccessRoles.SuperAdmin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<SearchResponseDto<CompanyDto>>> Find([FromQuery] CompanySearchParameters searchParameters, CancellationToken cancellationToken)
+        public async Task<ActionResult<SearchResponseDto<ResponseCompanyDto>>> FindCompaniesAsync([FromQuery] CompanySearchParameters companySearchParameters, CancellationToken cancellationToken)
         {
-            var result = await this.companyService.FindAsync(searchParameters, cancellationToken);
+            var result = await this.companyService.FindAsync(companySearchParameters, cancellationToken);
 
             if (result.IsSuccessful())
             {
@@ -120,7 +122,7 @@ namespace web.Controllers
         /// <summary>
         /// Изменяет данные компании.
         /// </summary>
-        /// <param name="companyDto">Изменная компания.</param>
+        /// <param name="storeCompanyDto">Изменная компания.</param>
         /// <param name="cancellationToken">Токен для отмены операции.</param>
         /// <response code="204">Данные компании успешно изменены.</response>
         /// <response code="404">Компания не найдена.</response>
@@ -130,9 +132,9 @@ namespace web.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> Update(CompanyDto companyDto, CancellationToken cancellationToken)
+        public async Task<ActionResult> UpdateCompanyAsync(StoreCompanyDto storeCompanyDto, CancellationToken cancellationToken)
         {
-            var result = await this.companyService.UpdateAsync(companyDto, cancellationToken);
+            var result = await this.companyService.UpdateAsync(storeCompanyDto, cancellationToken);
 
             if (result.IsSucessful())
             {
@@ -155,7 +157,7 @@ namespace web.Controllers
         [Authorize(Roles = AccessRoles.SuperAdmin)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult> DeleteCompanyAsync([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await this.companyService.DeleteAsync(id, cancellationToken);
 

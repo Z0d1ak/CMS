@@ -8,6 +8,8 @@ using web.Db;
 using web.Dto;
 using web.Entities;
 using web.Other.SearchParameters;
+using web.Dto.Request;
+using web.Dto.Response;
 
 namespace web.Repositories
 {
@@ -20,7 +22,7 @@ namespace web.Repositories
             this.dataContext = dataContext;
         }
 
-        public async Task<SearchResponseDto<RoleDto>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<SearchResponseDto<ResponseRoleDto>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var roles = await this.dataContext.Roles
                 .Where(x =>
@@ -30,16 +32,16 @@ namespace web.Repositories
                 .Where(x =>
                    (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith)))
                 .CountAsync(cancellationToken);
-            return new SearchResponseDto<RoleDto>(count, roles.Select(x => x.ToDto()));
+            return new SearchResponseDto<ResponseRoleDto>(count, roles.Select(x => x.ToDto()));
         }
 
-        public async ValueTask<RoleDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async ValueTask<ResponseRoleDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var role = await this.dataContext.Roles.FindAsync(new object[] { id }, cancellationToken);
             return role?.ToDto();
         }
 
-        public async Task<bool> UpdateAsync(RoleDto roleDto, CancellationToken cancellationToken = default)
+        public async Task<bool> UpdateAsync(StoreRoleDto roleDto, CancellationToken cancellationToken = default)
         {
             var role = new Role
             {

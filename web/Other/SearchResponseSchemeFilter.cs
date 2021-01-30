@@ -6,6 +6,8 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using web.Dto;
 using Pluralize.NET.Core;
+using web.Dto.Request;
+using web.Dto.Response;
 
 namespace web.Other
 {
@@ -18,8 +20,17 @@ namespace web.Other
                 return;
             }
 
-            var keyType = context.Type.GetGenericArguments()[0];
-            var entityName = new Pluralizer().Pluralize(keyType.Name[0..^3]);
+            var keyType = context.Type.GetGenericArguments()[0].Name;
+            if (keyType.EndsWith("Dto"))
+            {
+                keyType = keyType[0..^3];
+            }
+            if (keyType.StartsWith("Response"))
+            {
+                keyType = keyType[8..];
+            }
+
+            var entityName = new Pluralizer().Pluralize(keyType);
             schema.Title = entityName + "SearchResponseDto";
         }
     }

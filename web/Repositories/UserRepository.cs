@@ -11,6 +11,8 @@ using web.Dto;
 using web.Entities;
 using web.Other.SearchParameters;
 using web.Services;
+using web.Dto.Request;
+using web.Dto.Response;
 
 namespace web.Repositories
 {
@@ -28,7 +30,7 @@ namespace web.Repositories
             this.userInfoProvider = userInfoProvider;
         }
 
-        public async Task<UserDto?> CreateAsync(CreateUserDto createUserDto, CancellationToken cancellationToken = default)
+        public async Task<ResponseUserDto?> CreateAsync(CreateUserDto createUserDto, CancellationToken cancellationToken = default)
         {
             using var hmac = new HMACSHA512();
             var user = new User
@@ -85,7 +87,7 @@ namespace web.Repositories
             }
         }
 
-        public async Task<SearchResponseDto<UserDto>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<SearchResponseDto<ResponseUserDto>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var users = await this.dataContext.Users
                 .Include(x => x.Roles)
@@ -101,19 +103,10 @@ namespace web.Repositories
                     && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
                     && (searchParameters.Role == null || x.Roles.Any(x => x.Type == searchParameters.Role)))
                 .CountAsync(cancellationToken);
-            return new SearchResponseDto<UserDto>(count, users.Select(x => x.ToDto()));
+            return new SearchResponseDto<ResponseUserDto>(count, users.Select(x => x.ToDto()));
         }
 
-        public Task<User> LoginAsync(string email, CancellationToken cancellationToken = default)
-        {
-            return this.dataContext.Users
-                .IgnoreQueryFilters()
-                .AsNoTracking()
-                .Include(x => x.Roles)
-                .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
-        }
-
-        public async ValueTask<UserDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async ValueTask<ResponseUserDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var user = await this.dataContext.Users
                     .Include(x => x.Roles)

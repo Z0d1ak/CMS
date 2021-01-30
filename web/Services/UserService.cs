@@ -8,6 +8,8 @@ using web.Options;
 using web.Other;
 using web.Other.SearchParameters;
 using web.Repositories;
+using web.Dto.Request;
+using web.Dto.Response;
 
 namespace web.Services
 {
@@ -25,16 +27,16 @@ namespace web.Services
         }
 
 
-        public async Task<ServiceResult<UserDto>> CreateAsync(CreateUserDto createUserDto, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<ResponseUserDto>> CreateAsync(CreateUserDto createUserDto, CancellationToken cancellationToken = default)
         {
             var userDto = await this.userRepository.CreateAsync(createUserDto, cancellationToken);
 
             if (userDto is null)
             {
-                return new ServiceResult<UserDto>(StatusCodes.Status409Conflict);
+                return new ServiceResult<ResponseUserDto>(StatusCodes.Status409Conflict);
             }
 
-            return new ServiceResult<UserDto>(userDto);
+            return new ServiceResult<ResponseUserDto>(userDto);
         }
 
         public async Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -49,22 +51,22 @@ namespace web.Services
             return ServiceResult.Successfull;
         }
 
-        public async Task<ServiceResult<SearchResponseDto<UserDto>>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<SearchResponseDto<ResponseUserDto>>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var userDtos = await this.userRepository.FindAsync(searchParameters, cancellationToken);
 
-            return new ServiceResult<SearchResponseDto<UserDto>>(userDtos);
+            return new ServiceResult<SearchResponseDto<ResponseUserDto>>(userDtos);
         }
 
-        public async Task<ServiceResult<UserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<ResponseUserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var userDto = await this.userRepository.GetByIdAsync(id, cancellationToken);
             if (userDto is null)
             {
-                return new ServiceResult<UserDto>(StatusCodes.Status404NotFound);
+                return new ServiceResult<ResponseUserDto>(StatusCodes.Status404NotFound);
             }
 
-            return new ServiceResult<UserDto>(userDto);
+            return new ServiceResult<ResponseUserDto>(userDto);
         }
 
         public async Task<ServiceResult> UpdateAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken = default)

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web.Dto;
+using web.Dto.Request;
+using web.Dto.Response;
 using web.Options;
 using web.Other.SearchParameters;
 using web.Services;
@@ -50,13 +52,13 @@ namespace web.Controllers
         [Authorize(Roles = AccessRoles.CompanyAdmin)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<UserDto>> Create(CreateUserDto createUserDto, CancellationToken cancellationToken)
+        public async Task<ActionResult<ResponseUserDto>> CreateUserAsync(CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             var result = await this.userService.CreateAsync(createUserDto, cancellationToken);
 
             if (result.IsSuccessful())
             {
-                return this.CreatedAtAction(nameof(UserController.GetUser), result.Value);
+                return this.CreatedAtAction(nameof(UserController.GetUserAsync), result.Value);
             }
             else
             {
@@ -72,11 +74,11 @@ namespace web.Controllers
         /// <returns>Пользователь.</returns>
         /// <response code="200">Пользователь найден.</response>
         /// <response code="404">Пользователь не найден.</response>
-        [HttpGet("{id}", Name = nameof(UserController.GetUser))]
+        [HttpGet("{id}", Name = nameof(UserController.GetUserAsync))]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> GetUser([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult<ResponseUserDto>> GetUserAsync([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await this.userService.GetByIdAsync(id, cancellationToken);
 
@@ -100,7 +102,7 @@ namespace web.Controllers
         [HttpGet]
         [Authorize(Roles = AccessRoles.AnyAdmin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<SearchResponseDto<UserDto>>> Find([FromQuery] UserSearchParameters searchParameters, CancellationToken cancellationToken)
+        public async Task<ActionResult<SearchResponseDto<ResponseUserDto>>> FindUsersAsync([FromQuery] UserSearchParameters searchParameters, CancellationToken cancellationToken)
         {
             var result = await this.userService.FindAsync(searchParameters, cancellationToken);
 
@@ -129,7 +131,7 @@ namespace web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> Update(StoreUserDto storeUserDto, CancellationToken cancellationToken)
+        public async Task<ActionResult> UpdateUserAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken)
         {
             var result = await this.userService.UpdateAsync(storeUserDto, cancellationToken);
 
@@ -154,7 +156,7 @@ namespace web.Controllers
         [Authorize(Roles = AccessRoles.AnyAdmin)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult> DeleteUserAsync([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await this.userService.DeleteAsync(id, cancellationToken);
 

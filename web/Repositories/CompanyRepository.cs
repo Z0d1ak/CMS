@@ -10,6 +10,8 @@ using web.Db;
 using web.Dto;
 using web.Entities;
 using web.Other.SearchParameters;
+using web.Dto.Request;
+using web.Dto.Response;
 
 namespace web.Repositories
 {
@@ -22,7 +24,7 @@ namespace web.Repositories
             this.dataContext = dataContext;
         }
 
-        public async Task<CompanyDto?> CreateAsync(CreateCompanyDto createCompanyDto, CancellationToken cancellationToken = default)
+        public async Task<ResponseCompanyDto?> CreateAsync(CreateCompanyDto createCompanyDto, CancellationToken cancellationToken = default)
         {
             await using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
             try
@@ -128,7 +130,7 @@ namespace web.Repositories
             }
         }
 
-        public async Task<SearchResponseDto<CompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<SearchResponseDto<ResponseCompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var companies = await this.dataContext.Companies
                 .Where(x =>
@@ -140,18 +142,22 @@ namespace web.Repositories
                    (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith))
                    && (searchParameters.QuickSearch == null || x.Name.StartsWith(searchParameters.QuickSearch)))
                 .CountAsync(cancellationToken);
-            return new SearchResponseDto<CompanyDto>(count, companies.Select(x => x.ToDto()));
+            return new SearchResponseDto<ResponseCompanyDto>(count, companies.Select(x => x.ToDto()));
         }
 
-        public async ValueTask<CompanyDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async ValueTask<ResponseCompanyDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var company = await this.dataContext.Companies.FindAsync(new object[] { id }, cancellationToken);
             return company?.ToDto();
         }
 
-        public async Task<bool> UpdateAsync(CompanyDto companyDto, CancellationToken cancellationToken = default)
+        public async Task<bool> UpdateAsync(StoreCompanyDto companyDto, CancellationToken cancellationToken = default)
         {
-            var company = companyDto.ToEntity();
+            var company = new Company
+            {
+                Id = companyDto.Id,
+                Name = companyDto.Name
+            };
 
             try
             {

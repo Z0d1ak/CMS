@@ -13,8 +13,14 @@ namespace web.Services
 {
     public class UserService : IUserService
     {
+        #region Private Fields
+
         private readonly IUserRepository userRepository;
         private readonly IUserInfoProvider userInfoProvider;
+
+        #endregion
+
+        #region Constructor
 
         public UserService(
             IUserRepository userRepository,
@@ -24,47 +30,28 @@ namespace web.Services
             this.userInfoProvider = userInfoProvider;
         }
 
+        #endregion
+
+        #region Public Methods
 
         public async Task<ServiceResult<ResponseUserDto>> CreateAsync(CreateUserDto createUserDto, CancellationToken cancellationToken = default)
         {
-            var userDto = await this.userRepository.CreateAsync(createUserDto, cancellationToken);
-
-            if (userDto is null)
-            {
-                return new ServiceResult<ResponseUserDto>(StatusCodes.Status409Conflict);
-            }
-
-            return new ServiceResult<ResponseUserDto>(userDto);
+            return await this.userRepository.CreateAsync(createUserDto, cancellationToken);
         }
 
         public async Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var isDeleted = await this.userRepository.DeleteAsync(id, cancellationToken);
-
-            if (!isDeleted)
-            {
-                return new ServiceResult(StatusCodes.Status404NotFound);
-            }
-
-            return ServiceResult.Successfull;
+            return await this.userRepository.DeleteAsync(id, cancellationToken);
         }
 
         public async Task<ServiceResult<SearchResponseDto<ResponseUserDto>>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
-            var userDtos = await this.userRepository.FindAsync(searchParameters, cancellationToken);
-
-            return new ServiceResult<SearchResponseDto<ResponseUserDto>>(userDtos);
+            return await this.userRepository.FindAsync(searchParameters, cancellationToken);
         }
 
         public async Task<ServiceResult<ResponseUserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var userDto = await this.userRepository.GetByIdAsync(id, cancellationToken);
-            if (userDto is null)
-            {
-                return new ServiceResult<ResponseUserDto>(StatusCodes.Status404NotFound);
-            }
-
-            return new ServiceResult<ResponseUserDto>(userDto);
+            return await this.userRepository.GetByIdAsync(id, cancellationToken);
         }
 
         public async Task<ServiceResult> UpdateAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken = default)
@@ -83,14 +70,9 @@ namespace web.Services
                 return new ServiceResult(StatusCodes.Status403Forbidden);
             }
 
-            bool isUpdated = await this.userRepository.UpdateAsync(storeUserDto, cancellationToken);
-
-            if (!isUpdated)
-            {
-                return new ServiceResult(StatusCodes.Status404NotFound);
-            }
-
-            return ServiceResult.Successfull;
+            return await this.userRepository.UpdateAsync(storeUserDto, cancellationToken);
         }
+
+        #endregion
     }
 }

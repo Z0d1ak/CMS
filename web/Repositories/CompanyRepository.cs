@@ -4,25 +4,37 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
 using web.Db;
 using web.Entities;
+using web.Other;
 
 namespace web.Repositories
 {
     public class CompanyRepository : ICompanyRepository
     {
+        #region Private Fields
+
         private readonly DataContext dataContext;
+
+        #endregion
+
+        #region Constructor
 
         public CompanyRepository(DataContext dataContext)
         {
             this.dataContext = dataContext;
         }
 
-        public async Task<ResponseCompanyDto?> CreateAsync(CreateCompanyDto createCompanyDto, CancellationToken cancellationToken = default)
+        #endregion
+
+        #region Public Methods
+
+        public async Task<ServiceResult<ResponseCompanyDto>> CreateAsync(CreateCompanyDto createCompanyDto, CancellationToken cancellationToken = default)
         {
             await using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
             try
@@ -95,15 +107,15 @@ namespace web.Repositories
                 await this.dataContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
-                return company.ToDto();
+                return new ServiceResult<ResponseCompanyDto>(company.ToDto());
             }
             catch (DbUpdateException)
             {
-                return null;
+                return new ServiceResult<ResponseCompanyDto>(StatusCodes.Status409Conflict);
             }
         }
 
-        public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -118,17 +130,17 @@ namespace web.Repositories
 
                 if (changes == 0)
                 {
-                    return false;
+                    return new ServiceResult(StatusCodes.Status404NotFound);
                 }
-                return true;
+                return ServiceResult.Successfull;
             }
             catch (DbUpdateException)
             {
-                return false;
+                return new ServiceResult(StatusCodes.Status404NotFound);
             }
         }
 
-        public async Task<SearchResponseDto<ResponseCompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<SearchResponseDto<ResponseCompanyDto>>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var companies = await this.dataContext.Companies
                 .Where(x =>
@@ -140,16 +152,21 @@ namespace web.Repositories
                    (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith))
                    && (searchParameters.QuickSearch == null || x.Name.StartsWith(searchParameters.QuickSearch)))
                 .CountAsync(cancellationToken);
-            return new SearchResponseDto<ResponseCompanyDto>(count, companies.Select(x => x.ToDto()));
+            var searchResponse = new SearchResponseDto<ResponseCompanyDto>(count, companies.Select(x => x.ToDto()));
+            return new ServiceResult<SearchResponseDto<ResponseCompanyDto>>(searchResponse);
         }
 
-        public async ValueTask<ResponseCompanyDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async ValueTask<ServiceResult<ResponseCompanyDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var company = await this.dataContext.Companies.FindAsync(new object[] { id }, cancellationToken);
-            return company?.ToDto();
+            if(company is null)
+            {
+                return new ServiceResult<ResponseCompanyDto>(StatusCodes.Status404NotFound);
+            }
+            return new ServiceResult<ResponseCompanyDto>(company.ToDto());
         }
 
-        public async Task<bool> UpdateAsync(StoreCompanyDto companyDto, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult> UpdateAsync(StoreCompanyDto companyDto, CancellationToken cancellationToken = default)
         {
             var company = new Company
             {
@@ -166,14 +183,16 @@ namespace web.Repositories
 
                 if (changes == 0)
                 {
-                    return false;
+                    return new ServiceResult(StatusCodes.Status404NotFound);
                 }
-                return true;
+                return ServiceResult.Successfull;
             }
             catch(DbUpdateException)
             {
-                return false;
+                return new ServiceResult(StatusCodes.Status404NotFound);
             }
         }
+
+        #endregion
     }
 }

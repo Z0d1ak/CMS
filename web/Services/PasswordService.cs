@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,8 +17,8 @@ namespace web.Services
             using var hmac = new HMACSHA512();
             return new ValueTask<(byte[], byte[])>(
                 (
-                    hmac.Key,
-                    hmac.ComputeHash(Encoding.UTF8.GetBytes(password))
+                    hmac.ComputeHash(Encoding.UTF8.GetBytes(password)),
+                    hmac.Key                
                 ));
         }
 

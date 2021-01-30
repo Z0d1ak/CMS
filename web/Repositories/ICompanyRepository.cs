@@ -4,19 +4,20 @@ using System.Threading.Tasks;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
+using web.Other;
 
 namespace web.Repositories
 {
     public interface ICompanyRepository
     {
-        Task<ResponseCompanyDto?> CreateAsync(CreateCompanyDto companyDto, CancellationToken cancellationToken = default);
+        Task<ServiceResult<ResponseCompanyDto>> CreateAsync(CreateCompanyDto companyDto, CancellationToken cancellationToken = default);
 
-        ValueTask<ResponseCompanyDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        ValueTask<ServiceResult<ResponseCompanyDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<SearchResponseDto<ResponseCompanyDto>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default);
+        Task<ServiceResult<SearchResponseDto<ResponseCompanyDto>>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default);
 
-        Task<bool> UpdateAsync(StoreCompanyDto companyDto, CancellationToken cancellationToken = default);
+        Task<ServiceResult> UpdateAsync(StoreCompanyDto companyDto, CancellationToken cancellationToken = default);
 
-        Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

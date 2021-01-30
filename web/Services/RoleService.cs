@@ -12,41 +12,38 @@ namespace web.Services
 {
     public class RoleService : IRoleService
     {
+        #region Private Fields
+
         private readonly IRoleRepository roleRepository;
+
+        #endregion
+
+        #region Constructor
 
         public RoleService(IRoleRepository roleRepository)
         {
             this.roleRepository = roleRepository;
         }
 
+        #endregion
+
+        #region Public Methods
+
         public async Task<ServiceResult<SearchResponseDto<ResponseRoleDto>>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
-            var companyDtos = await this.roleRepository.FindAsync(searchParameters, cancellationToken);
-
-            return new ServiceResult<SearchResponseDto<ResponseRoleDto>>(companyDtos);
+            return await this.roleRepository.FindAsync(searchParameters, cancellationToken);
         }
 
         public async Task<ServiceResult<ResponseRoleDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var roleDto = await this.roleRepository.GetByIdAsync(id, cancellationToken);
-            if (roleDto is null)
-            {
-                return new ServiceResult<ResponseRoleDto>(StatusCodes.Status404NotFound);
-            }
-
-            return new ServiceResult<ResponseRoleDto>(roleDto);
+            return await this.roleRepository.GetByIdAsync(id, cancellationToken);
         }
 
         public async Task<ServiceResult> UpdateAsync(StoreRoleDto roleDto, CancellationToken cancellationToken = default)
         {
-            bool isUpdated = await this.roleRepository.UpdateAsync(roleDto, cancellationToken);
-
-            if (!isUpdated)
-            {
-                return new ServiceResult(StatusCodes.Status404NotFound);
-            }
-
-            return ServiceResult.Successfull;
+            return await this.roleRepository.UpdateAsync(roleDto, cancellationToken);
         }
+
+        #endregion
     }
 }

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
 using web.Db;
 using web.Entities;
+using web.Other;
 using web.Services;
 
 namespace web.Repositories
@@ -17,50 +17,69 @@ namespace web.Repositories
     public class UserRepository
         : IUserRepository
     {
+        #region Private Fields
+
         private readonly DataContext dataContext;
         private readonly IUserInfoProvider userInfoProvider;
+        private readonly IPasswordService passwordService;
+
+        #endregion
+
+        #region Constructor
 
         public UserRepository(
             DataContext dataContext,
-            IUserInfoProvider userInfoProvider)
+            IUserInfoProvider userInfoProvider,
+            IPasswordService passwordService)
         {
             this.dataContext = dataContext;
             this.userInfoProvider = userInfoProvider;
+            this.passwordService = passwordService;
         }
 
-        public async Task<ResponseUserDto?> CreateAsync(CreateUserDto createUserDto, CancellationToken cancellationToken = default)
+        #endregion
+
+        #region Public Methods
+
+        public async Task<ServiceResult<ResponseUserDto>> CreateAsync(CreateUserDto createUserDto, CancellationToken cancellationToken = default)
         {
-            using var hmac = new HMACSHA512();
-            var user = new User
+            try
             {
-                Id = createUserDto.Id,
-                FirstName = createUserDto.FirstName,
-                LastName = createUserDto.LastName,
-                Email = createUserDto.Email,
-                CompanyId = this.userInfoProvider.CompanyId,
-                PasswordSalt = hmac.Key,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(createUserDto.Password))
-            };
+                var user = new User
+                {
+                    Id = createUserDto.Id,
+                    FirstName = createUserDto.FirstName,
+                    LastName = createUserDto.LastName,
+                    Email = createUserDto.Email,
+                    CompanyId = this.userInfoProvider.CompanyId
+                };
+                (user.PasswordHash, user.PasswordSalt) =
+                    await this.passwordService.CreatePasswordHashAsync(createUserDto.Password, cancellationToken);
 
-            if (createUserDto.Roles is not null)
-            {
-                user.Roles = await this.dataContext.Roles.Where(x => createUserDto.Roles.Contains(x.Type)).ToListAsync(cancellationToken);
+                if (createUserDto.Roles is not null)
+                {
+                    user.Roles = await this.dataContext.Roles.Where(x => createUserDto.Roles.Contains(x.Type)).ToListAsync(cancellationToken);
+                }
+
+                this.dataContext.Users.Add(user);
+
+                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
+
+                if (changes == 0)
+                {
+                    return new ServiceResult<ResponseUserDto>(StatusCodes.Status409Conflict);
+                }
+
+                return new ServiceResult<ResponseUserDto>(user.ToDto());
             }
-
-            this.dataContext.Users.Add(user);
-
-            var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
-
-            if(changes == 0)
+            catch (DbUpdateException)
             {
-                return null;
+                return new ServiceResult<ResponseUserDto>(StatusCodes.Status409Conflict);
             }
-
-            return user.ToDto();
 
         }
 
-        public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -75,17 +94,17 @@ namespace web.Repositories
 
                 if (changes == 0)
                 {
-                    return false;
+                    return new ServiceResult(StatusCodes.Status404NotFound);
                 }
-                return true;
+                return ServiceResult.Successfull;
             }
             catch (DbUpdateException)
             {
-                return false;
+                return new ServiceResult(StatusCodes.Status404NotFound);
             }
         }
 
-        public async Task<SearchResponseDto<ResponseUserDto>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<SearchResponseDto<ResponseUserDto>>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var users = await this.dataContext.Users
                 .Include(x => x.Roles)
@@ -101,18 +120,24 @@ namespace web.Repositories
                     && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
                     && (searchParameters.Role == null || x.Roles.Any(x => x.Type == searchParameters.Role)))
                 .CountAsync(cancellationToken);
-            return new SearchResponseDto<ResponseUserDto>(count, users.Select(x => x.ToDto()));
+            var searchResponse = new SearchResponseDto<ResponseUserDto>(count, users.Select(x => x.ToDto()));
+
+            return new ServiceResult<SearchResponseDto<ResponseUserDto>>(searchResponse);
         }
 
-        public async ValueTask<ResponseUserDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async ValueTask<ServiceResult<ResponseUserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var user = await this.dataContext.Users
                     .Include(x => x.Roles)
                     .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-            return user?.ToDto();
+            if(user is null)
+            {
+                return new ServiceResult<ResponseUserDto>(StatusCodes.Status404NotFound);
+            }
+            return new ServiceResult<ResponseUserDto>(user.ToDto());
         }
 
-        public async Task<bool> UpdateAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult> UpdateAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -121,7 +146,7 @@ namespace web.Repositories
                     .FirstOrDefaultAsync(x => x.Id == storeUserDto.Id, cancellationToken);
                 if(user is null)
                 {
-                    return false;
+                    return new ServiceResult(StatusCodes.Status404NotFound);
                 }
 
                 user.Email = storeUserDto.Email;
@@ -130,10 +155,8 @@ namespace web.Repositories
 
                 if (storeUserDto.Password is not null)
                 {
-                    using var hmac = new HMACSHA512();
-                    user.PasswordSalt = hmac.Key;
-                    user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(storeUserDto.Password));
-
+                    (user.PasswordHash, user.PasswordSalt) =
+                        await this.passwordService.CreatePasswordHashAsync(storeUserDto.Password, cancellationToken);
                 }
 
                 if (storeUserDto.Roles is not null)
@@ -147,14 +170,16 @@ namespace web.Repositories
 
                 if (changes == 0)
                 {
-                    return false;
+                    return new ServiceResult(StatusCodes.Status404NotFound);
                 }
-                return true;
+                return ServiceResult.Successfull;
             }
             catch (DbUpdateException)
             {
-                return false;
+                return new ServiceResult(StatusCodes.Status404NotFound);
             }
         }
+
+        #endregion
     }
 }

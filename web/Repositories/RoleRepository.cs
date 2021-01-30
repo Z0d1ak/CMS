@@ -2,25 +2,37 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
 using web.Db;
 using web.Entities;
+using web.Other;
 
 namespace web.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
+        #region Private Methods
+
         private readonly DataContext dataContext;
+
+        #endregion
+
+        #region Constructor
 
         public RoleRepository(DataContext dataContext)
         {
             this.dataContext = dataContext;
         }
 
-        public async Task<SearchResponseDto<ResponseRoleDto>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
+        #endregion
+
+        #region Public Methods
+
+        public async Task<ServiceResult<SearchResponseDto<ResponseRoleDto>>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
             var roles = await this.dataContext.Roles
                 .Where(x =>
@@ -30,16 +42,22 @@ namespace web.Repositories
                 .Where(x =>
                    (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith)))
                 .CountAsync(cancellationToken);
-            return new SearchResponseDto<ResponseRoleDto>(count, roles.Select(x => x.ToDto()));
+            var searchResponse = new SearchResponseDto<ResponseRoleDto>(count, roles.Select(x => x.ToDto()));
+            return new ServiceResult<SearchResponseDto<ResponseRoleDto>>(searchResponse);
         }
 
-        public async ValueTask<ResponseRoleDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async ValueTask<ServiceResult<ResponseRoleDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var role = await this.dataContext.Roles.FindAsync(new object[] { id }, cancellationToken);
-            return role?.ToDto();
+
+            if(role is null)
+            {
+                return new ServiceResult<ResponseRoleDto>(StatusCodes.Status404NotFound);
+            }
+            return new ServiceResult<ResponseRoleDto>(role.ToDto());
         }
 
-        public async Task<bool> UpdateAsync(StoreRoleDto roleDto, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult> UpdateAsync(StoreRoleDto roleDto, CancellationToken cancellationToken = default)
         {
             var role = new Role
             {
@@ -56,14 +74,16 @@ namespace web.Repositories
 
                 if (changes == 0)
                 {
-                    return false;
+                    return new ServiceResult(StatusCodes.Status404NotFound);
                 }
-                return true;
+                return ServiceResult.Successfull;
             }
             catch (DbUpdateException)
             {
-                return false;
+                return new ServiceResult(StatusCodes.Status404NotFound);
             }
         }
+
+        #endregion
     }
 }

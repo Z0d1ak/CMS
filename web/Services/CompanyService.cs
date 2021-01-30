@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
@@ -12,65 +11,48 @@ namespace web.Services
 {
     public class CompanyService : ICompanyService
     {
+        #region Private Fields
+
         private readonly ICompanyRepository companyRepository;
+
+        #endregion
+
+        #region Constructor
 
         public CompanyService(ICompanyRepository companyRepository)
         {
             this.companyRepository = companyRepository;
         }
 
+        #endregion
+
+        #region Public Methods
+
         public async Task<ServiceResult<ResponseCompanyDto>> CreateAsync(CreateCompanyDto createCompanyDto, CancellationToken cancellationToken = default)
         {
-            var company = await this.companyRepository.CreateAsync(createCompanyDto, cancellationToken);
-
-            if(company is null)
-            {
-                return new ServiceResult<ResponseCompanyDto>(StatusCodes.Status409Conflict);
-            }
-
-            return new ServiceResult<ResponseCompanyDto>(company);
+            return  await this.companyRepository.CreateAsync(createCompanyDto, cancellationToken);
         }
 
         public async Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var isDeleted = await this.companyRepository.DeleteAsync(id, cancellationToken);
-
-            if (!isDeleted)
-            {
-                return new ServiceResult(StatusCodes.Status404NotFound);
-            }
-
-            return ServiceResult.Successfull;
+            return  await this.companyRepository.DeleteAsync(id, cancellationToken);
         }
 
         public async Task<ServiceResult<SearchResponseDto<ResponseCompanyDto>>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
-            var companyDtos = await this.companyRepository.FindAsync(searchParameters, cancellationToken);
-
-            return new ServiceResult<SearchResponseDto<ResponseCompanyDto>>(companyDtos);
+            return await this.companyRepository.FindAsync(searchParameters, cancellationToken);
         }
 
         public async Task<ServiceResult<ResponseCompanyDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var companyDto = await this.companyRepository.GetByIdAsync(id, cancellationToken);
-            if(companyDto is null)
-            {
-                return new ServiceResult<ResponseCompanyDto>(StatusCodes.Status404NotFound);
-            }
-
-            return new ServiceResult<ResponseCompanyDto>(companyDto);
+            return await this.companyRepository.GetByIdAsync(id, cancellationToken);
         }
 
         public async Task<ServiceResult> UpdateAsync(StoreCompanyDto storeCompanyDto, CancellationToken cancellationToken = default)
         {
-            bool isUpdated = await this.companyRepository.UpdateAsync(storeCompanyDto, cancellationToken);
-
-            if (!isUpdated)
-            {
-                return new ServiceResult(StatusCodes.Status404NotFound);
-            }
-
-            return ServiceResult.Successfull;
+            return await this.companyRepository.UpdateAsync(storeCompanyDto, cancellationToken);
         }
+
+        #endregion
     }
 }

@@ -1,11 +1,14 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Db;
+using web.Entities;
 using web.Other;
+using web.Repositories.Helpers;
 using web.Services;
 
 namespace web.Repositories
@@ -39,7 +42,17 @@ namespace web.Repositories
             var user = await this.dataContext.Users
                 .IgnoreQueryFilters()
                 .AsNoTracking()
-                .Include(x => x.Roles)
+                .Select(x => new User
+                {
+                    Id = x.Id,
+                    CompanyId = x.CompanyId,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    PasswordHash = x.PasswordHash,
+                    PasswordSalt = x.PasswordSalt,
+                    Roles = x.Roles.Select(r => new Role { Type = r.Type}).ToList()
+                })
                 .FirstOrDefaultAsync(x => x.Email == loginRequestDto.Email, cancellationToken);
             if(user is null)
             {
@@ -49,7 +62,7 @@ namespace web.Repositories
             {
                 return new ServiceResult<ResponseUserDto>(StatusCodes.Status401Unauthorized);
             }
-            return new ServiceResult<ResponseUserDto>(user.ToDto());
+            return new ServiceResult<ResponseUserDto>(user.ToResponseDto());
         }
 
         #endregion

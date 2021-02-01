@@ -18,13 +18,12 @@ namespace web.Contracts.SearchParameters
         /// <summary>
         /// Имя колонки для сортировки.
         /// </summary>
-        [MaxLength(32)]
         public RoleSortingColumn? SortingColumn { get; set; }
 
         /// <summary>
-        /// Направление сортировки.
+        /// Направление сортировки. По умолчанию сортирует по возрастанию.
         /// </summary>
-        public ListSortDirection? SortDirection { get; set; }
+        public ListSortDirection SortDirection { get; set; }
 
         public override void ToParametersList(List<string> parameters)
         {
@@ -36,7 +35,7 @@ namespace web.Contracts.SearchParameters
             {
                 parameters.Add($"{HttpUtility.UrlEncode(nameof(this.SortingColumn))}={HttpUtility.UrlEncode(this.SortingColumn.ToString())}");
             }
-            if (this.SortDirection is not null)
+            if (this.SortDirection != default)
             {
                 parameters.Add($"{HttpUtility.UrlEncode(nameof(this.SortDirection))}={HttpUtility.UrlEncode(this.SortDirection.ToString())}");
             }

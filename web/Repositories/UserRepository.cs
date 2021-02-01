@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
+using web.Contracts.SearchParameters.SortingColumns;
 using web.Db;
 using web.Entities;
 using web.Other;
+using web.Repositories.Helpers;
 using web.Services;
 
 namespace web.Repositories
@@ -70,7 +73,7 @@ namespace web.Repositories
                     return new ServiceResult<ResponseUserDto>(StatusCodes.Status409Conflict);
                 }
 
-                return new ServiceResult<ResponseUserDto>(user.ToDto());
+                return new ServiceResult<ResponseUserDto>(user.ToResponseDto());
             }
             catch (DbUpdateException)
             {
@@ -106,35 +109,88 @@ namespace web.Repositories
 
         public async Task<ServiceResult<SearchResponseDto<ResponseUserDto>>> FindAsync(UserSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
-            var users = await this.dataContext.Users
-                .Include(x => x.Roles)
-                .Where(x =>
-                    (searchParameters.EmailStartsWith == null || x.Email.StartsWith(searchParameters.EmailStartsWith))
-                    && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
-                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type == searchParameters.Role)))
-                .ToListAsync(cancellationToken);
-            var count = await this.dataContext.Users
-                .Include(x => x.Roles)
-                .Where(x =>
-                    (searchParameters.EmailStartsWith == null || x.Email.StartsWith(searchParameters.EmailStartsWith))
-                    && (searchParameters.NameStartsWith == null || (x.FirstName + x.LastName).StartsWith(searchParameters.NameStartsWith))
-                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type == searchParameters.Role)))
-                .CountAsync(cancellationToken);
-            var searchResponse = new SearchResponseDto<ResponseUserDto>(count, users.Select(x => x.ToDto()));
+            var selectQuery = this.dataContext.Users
+                .AsNoTracking();
 
+            if (searchParameters.QuickSearch != null)
+            {
+                selectQuery = selectQuery.Where(x => 
+                    x.Email.StartsWith(searchParameters.QuickSearch)
+                    || x.FirstName.StartsWith(searchParameters.QuickSearch)
+                    || x.LastName.StartsWith(searchParameters.QuickSearch)
+                    );
+            }
+            else
+            {
+                selectQuery = selectQuery.Where(x =>
+                    (searchParameters.FirstNameStartsWith == null || x.FirstName.StartsWith(searchParameters.FirstNameStartsWith))
+                    && (searchParameters.LastNameStartsWith == null || x.LastName.StartsWith(searchParameters.LastNameStartsWith))
+                    && (searchParameters.EmailStartsWith == null || x.Email.StartsWith(searchParameters.EmailStartsWith))
+                    && (searchParameters.Role == null || x.Roles.Any(x => x.Type == searchParameters.Role))
+                    );
+            }
+
+            if (searchParameters.SortingColumn is not null)
+            {
+                switch (searchParameters.SortDirection)
+                {
+                    case ListSortDirection.Ascending:
+                        switch (searchParameters.SortingColumn)
+                        {
+                            case UserSortingColumn.FirstName:
+                                selectQuery = selectQuery.OrderBy(x => x.FirstName);
+                                break;
+                            case UserSortingColumn.LastName:
+                                selectQuery = selectQuery.OrderBy(x => x.LastName);
+                                break;
+                            case UserSortingColumn.Email:
+                                selectQuery = selectQuery.OrderBy(x => x.Email);
+                                break;
+                        }
+                        break;
+                    case ListSortDirection.Descending:
+                        switch (searchParameters.SortingColumn)
+                        {
+                            case UserSortingColumn.FirstName:
+                                selectQuery = selectQuery.OrderByDescending(x => x.FirstName);
+                                break;
+                            case UserSortingColumn.LastName:
+                                selectQuery = selectQuery.OrderByDescending(x => x.LastName);
+                                break;
+                            case UserSortingColumn.Email:
+                                selectQuery = selectQuery.OrderByDescending(x => x.Email);
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            selectQuery = selectQuery
+                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
+                .Take(searchParameters.PageLimit);
+
+            var users = await selectQuery
+                .Select(Converters.ToResponseUserDtoExpression)
+                .ToListAsync(cancellationToken);
+            var count = await selectQuery.CountAsync(cancellationToken);
+
+            var searchResponse = new SearchResponseDto<ResponseUserDto>(count, users);
             return new ServiceResult<SearchResponseDto<ResponseUserDto>>(searchResponse);
         }
 
-        public async ValueTask<ServiceResult<ResponseUserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<ServiceResult<ResponseUserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var user = await this.dataContext.Users
                     .Include(x => x.Roles)
-                    .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-            if(user is null)
+                    .Where(x => x.Id == id)
+                    .Select(Converters.ToResponseUserDtoExpression)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+            if (user is null)
             {
                 return new ServiceResult<ResponseUserDto>(StatusCodes.Status404NotFound);
             }
-            return new ServiceResult<ResponseUserDto>(user.ToDto());
+            return new ServiceResult<ResponseUserDto>(user);
         }
 
         public async Task<ServiceResult> UpdateAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken = default)

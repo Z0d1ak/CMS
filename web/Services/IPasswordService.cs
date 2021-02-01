@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace web.Services
@@ -13,9 +10,9 @@ namespace web.Services
         /// </summary>
         /// <param name="password">Пароль.</param>
         /// <param name="passwordHash">Хэш пароля.</param>
-        /// <param name="passwordSalt">Соль./param>
+        /// <param name="passwordSalt">Соль.</param>
         /// <param name="cancellationToken">Токен для отмены операции.</param>
-        /// <returns>Признак корректности парооя.</returns>
+        /// <returns>Признак корректности пароля.</returns>
         ValueTask<bool> VerifyPasswordAsync(
             string password,
             byte[] passwordHash,

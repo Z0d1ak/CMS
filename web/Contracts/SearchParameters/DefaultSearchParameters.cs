@@ -20,7 +20,7 @@ namespace web.Contracts.SearchParameters
         /// <summary>
         /// Количество элементов на станице. По умолчанию 20.
         /// </summary>
-        public int? PageLimit
+        public int PageLimit
         {
             get
             {
@@ -28,17 +28,14 @@ namespace web.Contracts.SearchParameters
             }
             set
             {
-                if (value is not null)
-                {
-                    pageLimit = value.Value;
-                }
+                pageLimit = value;
             }
         }
 
         /// <summary>
         /// Номер страницы. По умолчанию 1.
         /// </summary>
-        public int? PageNumber
+        public int PageNumber
         {
             get
             {
@@ -46,10 +43,7 @@ namespace web.Contracts.SearchParameters
             }
             set
             {
-                if (value is not null)
-                {
-                    pageNumber = value.Value;
-                }
+                pageNumber = value;
             }
         }
 
@@ -62,12 +56,12 @@ namespace web.Contracts.SearchParameters
 
             if (this.PageLimit != 20)
             {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.PageLimit))}={this.PageLimit!.Value}");
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.PageLimit))}={this.PageLimit}");
             }
 
             if (this.PageNumber != 1)
             {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.PageNumber))}={this.PageNumber!.Value}");
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.PageNumber))}={this.PageNumber}");
             }
         }
     }

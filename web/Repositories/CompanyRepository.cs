@@ -1,7 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -9,9 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
+using web.Contracts.SearchParameters.SortingColumns;
 using web.Db;
 using web.Entities;
 using web.Other;
+using web.Repositories.Helpers;
+using web.Services;
 
 namespace web.Repositories
 {
@@ -20,14 +22,18 @@ namespace web.Repositories
         #region Private Fields
 
         private readonly DataContext dataContext;
+        private readonly IPasswordService passwordService;
 
         #endregion
 
         #region Constructor
 
-        public CompanyRepository(DataContext dataContext)
+        public CompanyRepository(
+            DataContext dataContext,
+            IPasswordService passwordService)
         {
             this.dataContext = dataContext;
+            this.passwordService = passwordService;
         }
 
         #endregion
@@ -90,16 +96,15 @@ namespace web.Repositories
                     chiefRedactorRole
                     );
 
-                using var hmac = new HMACSHA512();
                 var user = new User()
                 {
                     Id = createCompanyDto.Admin.Id,
                     Email = createCompanyDto.Admin.Email,
                     FirstName = createCompanyDto.Admin.FirstName,
-                    CompanyId = company.Id,
-                    PasswordSalt = hmac.Key,
-                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(createCompanyDto.Admin.Password))
+                    CompanyId = company.Id
                 };
+                (user.PasswordHash, user.PasswordSalt) = 
+                    await this.passwordService.CreatePasswordHashAsync(createCompanyDto.Admin.Password, cancellationToken);
 
                 user.Roles.Add(adminRole);
                 this.dataContext.Users.Add(user);
@@ -107,7 +112,7 @@ namespace web.Repositories
                 await this.dataContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
-                return new ServiceResult<ResponseCompanyDto>(company.ToDto());
+                return new ServiceResult<ResponseCompanyDto>(company.ToResponseDto());
             }
             catch (DbUpdateException)
             {
@@ -142,17 +147,51 @@ namespace web.Repositories
 
         public async Task<ServiceResult<SearchResponseDto<ResponseCompanyDto>>> FindAsync(CompanySearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
-            var companies = await this.dataContext.Companies
-                .Where(x =>
-                   (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith))
-                   && (searchParameters.QuickSearch == null || x.Name.StartsWith(searchParameters.QuickSearch)))
+            var selectQuery = this.dataContext.Companies
+                .AsNoTracking();
+
+            if(searchParameters.QuickSearch != null)
+            {
+                selectQuery = selectQuery.Where(x => x.Name.StartsWith(searchParameters.QuickSearch));
+            }
+            else
+            {
+                selectQuery = selectQuery.Where(x =>
+                    (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith)));
+            }
+
+            if(searchParameters.SortingColumn is not null)
+            {
+                switch (searchParameters.SortDirection)
+                {
+                    case ListSortDirection.Ascending:
+                        switch (searchParameters.SortingColumn)
+                        {
+                            case CompanySortingColumn.Name:
+                                selectQuery = selectQuery.OrderBy(x => x.Name);
+                                break;
+                        }
+                        break;
+                    case ListSortDirection.Descending:
+                        switch (searchParameters.SortingColumn)
+                        {
+                            case CompanySortingColumn.Name:
+                                selectQuery = selectQuery.OrderByDescending(x => x.Name);
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            selectQuery = selectQuery
+                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
+                .Take(searchParameters.PageLimit);
+
+            var companies = await selectQuery
+                .Select(Converters.ToResponseCompanyDtoExpression)
                 .ToListAsync(cancellationToken);
-            var count = await this.dataContext.Companies
-                .Where(x =>
-                   (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith))
-                   && (searchParameters.QuickSearch == null || x.Name.StartsWith(searchParameters.QuickSearch)))
-                .CountAsync(cancellationToken);
-            var searchResponse = new SearchResponseDto<ResponseCompanyDto>(count, companies.Select(x => x.ToDto()));
+            var count = await selectQuery.CountAsync(cancellationToken);
+            var searchResponse = new SearchResponseDto<ResponseCompanyDto>(count, companies);
             return new ServiceResult<SearchResponseDto<ResponseCompanyDto>>(searchResponse);
         }
 
@@ -163,7 +202,7 @@ namespace web.Repositories
             {
                 return new ServiceResult<ResponseCompanyDto>(StatusCodes.Status404NotFound);
             }
-            return new ServiceResult<ResponseCompanyDto>(company.ToDto());
+            return new ServiceResult<ResponseCompanyDto>(company.ToResponseDto());
         }
 
         public async Task<ServiceResult> UpdateAsync(StoreCompanyDto companyDto, CancellationToken cancellationToken = default)

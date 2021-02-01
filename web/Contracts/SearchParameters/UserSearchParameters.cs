@@ -20,7 +20,13 @@ namespace web.Contracts.SearchParameters
         /// Имя пользователя начинается с...
         /// </summary>
         [MaxLength(32)]
-        public string? NameStartsWith { get; set; }
+        public string? FirstNameStartsWith { get; set; }
+
+        /// <summary>
+        /// Фамилия пользователя начинается с...
+        /// </summary>
+        [MaxLength(32)]
+        public string? LastNameStartsWith { get; set; }
 
         /// <summary>
         /// Пользователь входит в роль.
@@ -30,13 +36,12 @@ namespace web.Contracts.SearchParameters
         /// <summary>
         /// Имя колонки для сортировки.
         /// </summary>
-        [MaxLength(32)]
         public UserSortingColumn? SortingColumn { get; set; }
 
         /// <summary>
-        /// Направление сортировки.
+        /// Направление сортировки.  По умолчанию сортирует по возрастанию.
         /// </summary>
-        public ListSortDirection? SortDirection { get; set; }
+        public ListSortDirection SortDirection { get; set; }
 
         public override void ToParametersList(List<string> parameters)
         {
@@ -46,9 +51,13 @@ namespace web.Contracts.SearchParameters
             {
                 parameters.Add($"{HttpUtility.UrlEncode(nameof(this.EmailStartsWith))}={HttpUtility.UrlEncode(this.EmailStartsWith)}");
             }
-            if (this.NameStartsWith is not null)
+            if (this.FirstNameStartsWith is not null)
             {
-                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.NameStartsWith))}={HttpUtility.UrlEncode(this.NameStartsWith)}");
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.FirstNameStartsWith))}={HttpUtility.UrlEncode(this.FirstNameStartsWith)}");
+            }
+            if (this.LastNameStartsWith is not null)
+            {
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.LastNameStartsWith))}={HttpUtility.UrlEncode(this.LastNameStartsWith)}");
             }
             if (this.Role is not null)
             {
@@ -57,6 +66,10 @@ namespace web.Contracts.SearchParameters
             if (this.SortingColumn is not null)
             {
                 parameters.Add($"{HttpUtility.UrlEncode(nameof(this.SortingColumn))}={HttpUtility.UrlEncode(this.SortingColumn.ToString())}");
+            }
+            if (this.SortDirection != default)
+            {
+                parameters.Add($"{HttpUtility.UrlEncode(nameof(this.SortDirection))}={HttpUtility.UrlEncode(this.SortDirection.ToString())}");
             }
         }
     }

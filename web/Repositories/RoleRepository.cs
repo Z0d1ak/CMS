@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
+using web.Contracts.SearchParameters.SortingColumns;
 using web.Db;
 using web.Entities;
 using web.Other;
+using web.Repositories.Helpers;
 
 namespace web.Repositories
 {
@@ -34,15 +37,59 @@ namespace web.Repositories
 
         public async Task<ServiceResult<SearchResponseDto<ResponseRoleDto>>> FindAsync(RoleSearchParameters searchParameters, CancellationToken cancellationToken = default)
         {
-            var roles = await this.dataContext.Roles
-                .Where(x =>
-                   (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith)))
+            var selectQuery = this.dataContext.Roles
+                .AsNoTracking();
+
+            if (searchParameters.QuickSearch != null)
+            {
+                selectQuery = selectQuery.Where(x =>
+                    x.Name.StartsWith(searchParameters.QuickSearch));
+            }
+            else
+            {
+                selectQuery = selectQuery.Where(x =>
+                    searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith));
+            }
+
+            if (searchParameters.SortingColumn is not null)
+            {
+                switch (searchParameters.SortDirection)
+                {
+                    case ListSortDirection.Ascending:
+                        switch (searchParameters.SortingColumn)
+                        {
+                            case RoleSortingColumn.Name:
+                                selectQuery = selectQuery.OrderBy(x => x.Name);
+                                break;
+                            case RoleSortingColumn.Type:
+                                selectQuery = selectQuery.OrderBy(x => x.Type);
+                                break;
+                        }
+                        break;
+                    case ListSortDirection.Descending:
+                        switch (searchParameters.SortingColumn)
+                        {
+                            case RoleSortingColumn.Name:
+                                selectQuery = selectQuery.OrderByDescending(x => x.Name);
+                                break;
+                            case RoleSortingColumn.Type:
+                                selectQuery = selectQuery.OrderByDescending(x => x.Type);
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            selectQuery = selectQuery
+                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
+                .Take(searchParameters.PageLimit);
+
+            var roles = await selectQuery
+                .Select(Converters.ToResponseRoleDtoExpression)
                 .ToListAsync(cancellationToken);
-            var count = await this.dataContext.Roles
-                .Where(x =>
-                   (searchParameters.NameStartsWith == null || x.Name.StartsWith(searchParameters.NameStartsWith)))
-                .CountAsync(cancellationToken);
-            var searchResponse = new SearchResponseDto<ResponseRoleDto>(count, roles.Select(x => x.ToDto()));
+            var count = await selectQuery.CountAsync(cancellationToken);
+
+            var searchResponse = new SearchResponseDto<ResponseRoleDto>(count, roles);
             return new ServiceResult<SearchResponseDto<ResponseRoleDto>>(searchResponse);
         }
 
@@ -54,7 +101,7 @@ namespace web.Repositories
             {
                 return new ServiceResult<ResponseRoleDto>(StatusCodes.Status404NotFound);
             }
-            return new ServiceResult<ResponseRoleDto>(role.ToDto());
+            return new ServiceResult<ResponseRoleDto>(role.ToResponseDto());
         }
 
         public async Task<ServiceResult> UpdateAsync(StoreRoleDto roleDto, CancellationToken cancellationToken = default)

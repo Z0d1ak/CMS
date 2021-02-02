@@ -6,7 +6,7 @@ using web.Entities;
 
 namespace web.Repositories.Helpers
 {
-    public static class Converters
+    public static class Mappers
     {
         public static Expression<Func<User, ResponseUserDto>> ToResponseUserDtoExpression { get; } = user =>
             new ResponseUserDto

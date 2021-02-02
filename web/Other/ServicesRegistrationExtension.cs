@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using web.Db;
 using web.Repositories;
 using web.Services;
 
@@ -13,6 +14,12 @@ namespace web.Other
             serviceCollection.AddScoped<ICompanyService, CompanyService>();
             serviceCollection.AddScoped<IRoleService, RoleService>();
             serviceCollection.AddScoped<IPasswordService, PasswordService>();
+        }
+
+        public static void AddInfrastructure(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IUserInfoProvider, UserInfoProvider>();
+            serviceCollection.AddScoped<ISqlExceptionConverter, NpgSqlExceptionConverter>();
         }
 
         public static void AddRepositories(this IServiceCollection serviceCollection)

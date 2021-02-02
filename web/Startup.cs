@@ -53,7 +53,7 @@ namespace web
             var swaggerConfig = new SwaggerConfig();
             this.configuration.GetSection(SwaggerConfig.Swagger).Bind(swaggerConfig);
             services.AddControllers().AddJsonOptions(options =>
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = swaggerConfig.Title, Version = swaggerConfig.Version, Description = swaggerConfig.Description});
@@ -85,8 +85,8 @@ namespace web
                     new List<string>()}
                 });
             });
-            services.AddScoped<IUserInfoProvider, UserInfoProvider>();
             services.AddServices();
+            services.AddInfrastructure();
             services.AddRepositories();
             services.AddHttpContextAccessor();
 

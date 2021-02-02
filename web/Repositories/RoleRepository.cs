@@ -21,14 +21,18 @@ namespace web.Repositories
         #region Private Methods
 
         private readonly DataContext dataContext;
+        private readonly ISqlExceptionConverter sqlExceptionConverter;
 
         #endregion
 
         #region Constructor
 
-        public RoleRepository(DataContext dataContext)
+        public RoleRepository(
+            DataContext dataContext,
+            ISqlExceptionConverter sqlExceptionConverter)
         {
             this.dataContext = dataContext;
+            this.sqlExceptionConverter = sqlExceptionConverter;
         }
 
         #endregion
@@ -85,7 +89,7 @@ namespace web.Repositories
                 .Take(searchParameters.PageLimit);
 
             var roles = await selectQuery
-                .Select(Converters.ToResponseRoleDtoExpression)
+                .Select(Mappers.ToResponseRoleDtoExpression)
                 .ToListAsync(cancellationToken);
             var count = await selectQuery.CountAsync(cancellationToken);
 
@@ -111,23 +115,22 @@ namespace web.Repositories
                 Id = roleDto.Id,
                 Name = roleDto.Name
             };
+            this.dataContext.Attach(role);
+            this.dataContext.Entry(role).Property(x => x.Name).IsModified = true;
 
             try
             {
-                this.dataContext.Attach(role);
-                this.dataContext.Entry(role).Property(x => x.Name).IsModified = true;
-
-                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
-
-                if (changes == 0)
-                {
-                    return new ServiceResult(StatusCodes.Status404NotFound);
-                }
+                await this.dataContext.SaveChangesAsync(cancellationToken);
                 return ServiceResult.Successfull;
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException dbUpdateException)
             {
-                return new ServiceResult(StatusCodes.Status404NotFound);
+                var errorCode = this.sqlExceptionConverter.Convert(dbUpdateException);
+                if (errorCode is null)
+                {
+                    throw;
+                }
+                return new ServiceResult(errorCode.Value);
             }
         }
 

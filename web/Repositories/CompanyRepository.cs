@@ -23,6 +23,7 @@ namespace web.Repositories
 
         private readonly DataContext dataContext;
         private readonly IPasswordService passwordService;
+        private readonly ISqlExceptionConverter sqlExceptionConverter;
 
         #endregion
 
@@ -30,10 +31,12 @@ namespace web.Repositories
 
         public CompanyRepository(
             DataContext dataContext,
-            IPasswordService passwordService)
+            IPasswordService passwordService,
+            ISqlExceptionConverter sqlExceptionConverter)
         {
             this.dataContext = dataContext;
             this.passwordService = passwordService;
+            this.sqlExceptionConverter = sqlExceptionConverter;
         }
 
         #endregion
@@ -42,106 +45,107 @@ namespace web.Repositories
 
         public async Task<ServiceResult<ResponseCompanyDto>> CreateAsync(CreateCompanyDto createCompanyDto, CancellationToken cancellationToken = default)
         {
-            await using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
+            var company = new Company()
+            {
+                Id = createCompanyDto.Company.Id,
+                Name = createCompanyDto.Company.Name
+            };
+            this.dataContext.Companies.Add(company);
+
+            var adminRole = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = RoleType.CompanyAdmin.ToString(),
+                Type = RoleType.CompanyAdmin,
+                CompanyId = company.Id
+            };
+            var correctorRole = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = RoleType.Corrector.ToString(),
+                Type = RoleType.Corrector,
+                CompanyId = company.Id
+            };
+            var authorRole = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = RoleType.Author.ToString(),
+                Type = RoleType.Author,
+                CompanyId = company.Id
+            };
+            var redactorRole = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = RoleType.Redactor.ToString(),
+                Type = RoleType.Redactor,
+                CompanyId = company.Id
+            };
+            var chiefRedactorRole = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = RoleType.ChiefRedactor.ToString(),
+                Type = RoleType.ChiefRedactor,
+                CompanyId = company.Id
+            };
+
+            this.dataContext.Roles.AddRange(
+                adminRole,
+                correctorRole,
+                authorRole,
+                redactorRole,
+                chiefRedactorRole
+                );
+
+            var user = new User()
+            {
+                Id = createCompanyDto.Admin.Id,
+                Email = createCompanyDto.Admin.Email,
+                FirstName = createCompanyDto.Admin.FirstName,
+                CompanyId = company.Id
+            };
+            (user.PasswordHash, user.PasswordSalt) =
+                await this.passwordService.CreatePasswordHashAsync(createCompanyDto.Admin.Password, cancellationToken);
+
+            user.Roles.Add(adminRole);
+            this.dataContext.Users.Add(user);
+
             try
             {
-                var company = new Company()
-                {
-                    Id = createCompanyDto.Company.Id,
-                    Name = createCompanyDto.Company.Name
-                };
-                this.dataContext.Companies.Add(company);
-
-                var adminRole = new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = RoleType.CompanyAdmin.ToString(),
-                    Type = RoleType.CompanyAdmin,
-                    CompanyId = company.Id
-                };
-                var correctorRole = new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = RoleType.Corrector.ToString(),
-                    Type = RoleType.Corrector,
-                    CompanyId = company.Id
-                };
-                var authorRole = new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = RoleType.Author.ToString(),
-                    Type = RoleType.Author,
-                    CompanyId = company.Id
-                };
-                var redactorRole = new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = RoleType.Redactor.ToString(),
-                    Type = RoleType.Redactor,
-                    CompanyId = company.Id
-                };
-                var chiefRedactorRole = new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = RoleType.ChiefRedactor.ToString(),
-                    Type = RoleType.ChiefRedactor,
-                    CompanyId = company.Id
-                };
-
-                this.dataContext.Roles.AddRange(
-                    adminRole,
-                    correctorRole,
-                    authorRole,
-                    redactorRole,
-                    chiefRedactorRole
-                    );
-
-                var user = new User()
-                {
-                    Id = createCompanyDto.Admin.Id,
-                    Email = createCompanyDto.Admin.Email,
-                    FirstName = createCompanyDto.Admin.FirstName,
-                    CompanyId = company.Id
-                };
-                (user.PasswordHash, user.PasswordSalt) = 
-                    await this.passwordService.CreatePasswordHashAsync(createCompanyDto.Admin.Password, cancellationToken);
-
-                user.Roles.Add(adminRole);
-                this.dataContext.Users.Add(user);
-
                 await this.dataContext.SaveChangesAsync(cancellationToken);
-                await transaction.CommitAsync(cancellationToken);
-
                 return new ServiceResult<ResponseCompanyDto>(company.ToResponseDto());
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException dbUpdateException)
             {
-                return new ServiceResult<ResponseCompanyDto>(StatusCodes.Status409Conflict);
+                var errorCode = this.sqlExceptionConverter.Convert(dbUpdateException);
+                if(errorCode is null)
+                {
+                    throw;
+                }
+                return new ServiceResult<ResponseCompanyDto>(errorCode.Value);
             }
         }
 
         public async Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            var company = new Company()
+            {
+                Id = id
+            };
+            this.dataContext.Entry(company).State = EntityState.Deleted;
+
             try
             {
-                var company = new Company()
-                {
-                    Id = id
-                };
-
-                this.dataContext.Entry(company).State = EntityState.Deleted;
-
-                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
-
-                if (changes == 0)
-                {
-                    return new ServiceResult(StatusCodes.Status404NotFound);
-                }
+                await this.dataContext.SaveChangesAsync(cancellationToken);
                 return ServiceResult.Successfull;
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException dbUpdateException)
             {
-                return new ServiceResult(StatusCodes.Status404NotFound);
+                var errorCode = this.sqlExceptionConverter.Convert(dbUpdateException);
+                if (errorCode is null)
+                {
+                    throw;
+                }
+                return new ServiceResult(errorCode.Value);
             }
         }
 
@@ -188,7 +192,7 @@ namespace web.Repositories
                 .Take(searchParameters.PageLimit);
 
             var companies = await selectQuery
-                .Select(Converters.ToResponseCompanyDtoExpression)
+                .Select(Mappers.ToResponseCompanyDtoExpression)
                 .ToListAsync(cancellationToken);
             var count = await selectQuery.CountAsync(cancellationToken);
             var searchResponse = new SearchResponseDto<ResponseCompanyDto>(count, companies);
@@ -212,23 +216,22 @@ namespace web.Repositories
                 Id = companyDto.Id,
                 Name = companyDto.Name
             };
+            this.dataContext.Attach(company);
+            this.dataContext.Entry(company).Property(x => x.Name).IsModified = true;
 
             try
             {
-                this.dataContext.Attach(company);
-                this.dataContext.Entry(company).Property(x => x.Name).IsModified = true;
-
-                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
-
-                if (changes == 0)
-                {
-                    return new ServiceResult(StatusCodes.Status404NotFound);
-                }
+                await this.dataContext.SaveChangesAsync(cancellationToken);
                 return ServiceResult.Successfull;
             }
-            catch(DbUpdateException)
+            catch(DbUpdateException dbUpdateException)
             {
-                return new ServiceResult(StatusCodes.Status404NotFound);
+                var errorCode = this.sqlExceptionConverter.Convert(dbUpdateException);
+                if (errorCode is null)
+                {
+                    throw;
+                }
+                return new ServiceResult(errorCode.Value);
             }
         }
 

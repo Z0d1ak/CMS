@@ -25,6 +25,7 @@ namespace web.Repositories
         private readonly DataContext dataContext;
         private readonly IUserInfoProvider userInfoProvider;
         private readonly IPasswordService passwordService;
+        private readonly ISqlExceptionConverter sqlExceptionConverter;
 
         #endregion
 
@@ -33,11 +34,13 @@ namespace web.Repositories
         public UserRepository(
             DataContext dataContext,
             IUserInfoProvider userInfoProvider,
-            IPasswordService passwordService)
+            IPasswordService passwordService,
+            ISqlExceptionConverter sqlExceptionConverter)
         {
             this.dataContext = dataContext;
             this.userInfoProvider = userInfoProvider;
             this.passwordService = passwordService;
+            this.sqlExceptionConverter = sqlExceptionConverter;
         }
 
         #endregion
@@ -46,64 +49,62 @@ namespace web.Repositories
 
         public async Task<ServiceResult<ResponseUserDto>> CreateAsync(CreateUserDto createUserDto, CancellationToken cancellationToken = default)
         {
+            var user = new User
+            {
+                Id = createUserDto.Id,
+                FirstName = createUserDto.FirstName,
+                LastName = createUserDto.LastName,
+                Email = createUserDto.Email,
+                CompanyId = this.userInfoProvider.CompanyId
+            };
+            (user.PasswordHash, user.PasswordSalt) =
+                await this.passwordService.CreatePasswordHashAsync(createUserDto.Password, cancellationToken);
+
+            if (createUserDto.Roles is not null)
+            {
+                user.Roles = await this.dataContext.Roles.Where(x => createUserDto.Roles.Contains(x.Type)).ToListAsync(cancellationToken);
+            }
+
+            this.dataContext.Users.Add(user);
+
             try
             {
-                var user = new User
-                {
-                    Id = createUserDto.Id,
-                    FirstName = createUserDto.FirstName,
-                    LastName = createUserDto.LastName,
-                    Email = createUserDto.Email,
-                    CompanyId = this.userInfoProvider.CompanyId
-                };
-                (user.PasswordHash, user.PasswordSalt) =
-                    await this.passwordService.CreatePasswordHashAsync(createUserDto.Password, cancellationToken);
-
-                if (createUserDto.Roles is not null)
-                {
-                    user.Roles = await this.dataContext.Roles.Where(x => createUserDto.Roles.Contains(x.Type)).ToListAsync(cancellationToken);
-                }
-
-                this.dataContext.Users.Add(user);
-
-                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
-
-                if (changes == 0)
-                {
-                    return new ServiceResult<ResponseUserDto>(StatusCodes.Status409Conflict);
-                }
-
+                await this.dataContext.SaveChangesAsync(cancellationToken);
                 return new ServiceResult<ResponseUserDto>(user.ToResponseDto());
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException dbUpdateException)
             {
-                return new ServiceResult<ResponseUserDto>(StatusCodes.Status409Conflict);
+                var errorCode = this.sqlExceptionConverter.Convert(dbUpdateException);
+                if (errorCode is null)
+                {
+                    throw;
+                }
+                return new ServiceResult<ResponseUserDto>(errorCode.Value);
             }
 
         }
 
         public async Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            var user = new User()
+            {
+                Id = id
+            };
+            this.dataContext.Entry(user).State = EntityState.Deleted;
+
             try
             {
-                var user = new User()
-                {
-                    Id = id
-                };
-
-                this.dataContext.Entry(user).State = EntityState.Deleted;
-
-                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
-
-                if (changes == 0)
-                {
-                    return new ServiceResult(StatusCodes.Status404NotFound);
-                }
+                await this.dataContext.SaveChangesAsync(cancellationToken);
                 return ServiceResult.Successfull;
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException dbUpdateException)
             {
-                return new ServiceResult(StatusCodes.Status404NotFound);
+                var errorCode = this.sqlExceptionConverter.Convert(dbUpdateException);
+                if (errorCode is null)
+                {
+                    throw;
+                }
+                return new ServiceResult(errorCode.Value);
             }
         }
 
@@ -170,7 +171,7 @@ namespace web.Repositories
                 .Take(searchParameters.PageLimit);
 
             var users = await selectQuery
-                .Select(Converters.ToResponseUserDtoExpression)
+                .Select(Mappers.ToResponseUserDtoExpression)
                 .ToListAsync(cancellationToken);
             var count = await selectQuery.CountAsync(cancellationToken);
 
@@ -183,7 +184,7 @@ namespace web.Repositories
             var user = await this.dataContext.Users
                     .Include(x => x.Roles)
                     .Where(x => x.Id == id)
-                    .Select(Converters.ToResponseUserDtoExpression)
+                    .Select(Mappers.ToResponseUserDtoExpression)
                     .FirstOrDefaultAsync(cancellationToken);
 
             if (user is null)
@@ -195,44 +196,44 @@ namespace web.Repositories
 
         public async Task<ServiceResult> UpdateAsync(StoreUserDto storeUserDto, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                var user = await this.dataContext.Users
+            var user = await this.dataContext.Users
                     .Include(x => x.Roles)
                     .FirstOrDefaultAsync(x => x.Id == storeUserDto.Id, cancellationToken);
-                if(user is null)
-                {
-                    return new ServiceResult(StatusCodes.Status404NotFound);
-                }
-
-                user.Email = storeUserDto.Email;
-                user.FirstName = storeUserDto.FirstName;
-                user.LastName = storeUserDto.LastName;
-
-                if (storeUserDto.Password is not null)
-                {
-                    (user.PasswordHash, user.PasswordSalt) =
-                        await this.passwordService.CreatePasswordHashAsync(storeUserDto.Password, cancellationToken);
-                }
-
-                if (storeUserDto.Roles is not null)
-                {
-                    user.Roles = await this.dataContext.Roles
-                        .Where(x => storeUserDto.Roles.Contains(x.Type))
-                        .ToListAsync(cancellationToken);
-                }
-
-                var changes = await this.dataContext.SaveChangesAsync(cancellationToken);
-
-                if (changes == 0)
-                {
-                    return new ServiceResult(StatusCodes.Status404NotFound);
-                }
-                return ServiceResult.Successfull;
-            }
-            catch (DbUpdateException)
+            if (user is null)
             {
                 return new ServiceResult(StatusCodes.Status404NotFound);
+            }
+
+            user.Email = storeUserDto.Email;
+            user.FirstName = storeUserDto.FirstName;
+            user.LastName = storeUserDto.LastName;
+
+            if (storeUserDto.Password is not null)
+            {
+                (user.PasswordHash, user.PasswordSalt) =
+                    await this.passwordService.CreatePasswordHashAsync(storeUserDto.Password, cancellationToken);
+            }
+
+            if (storeUserDto.Roles is not null)
+            {
+                user.Roles = await this.dataContext.Roles
+                    .Where(x => storeUserDto.Roles.Contains(x.Type))
+                    .ToListAsync(cancellationToken);
+            }
+
+            try
+            {
+                await this.dataContext.SaveChangesAsync(cancellationToken);
+                return ServiceResult.Successfull;
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var errorCode = this.sqlExceptionConverter.Convert(dbUpdateException);
+                if (errorCode is null)
+                {
+                    throw;
+                }
+                return new ServiceResult(errorCode.Value);
             }
         }
 

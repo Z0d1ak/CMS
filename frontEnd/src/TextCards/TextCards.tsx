@@ -167,14 +167,43 @@ export function GenerateCustomCardList({},{}) {
 
 export function GetArticlesList(): Article[] {
     let art: Article = new Article();
-    art.ID = '123';
-    art.initiatorID = '456';
-    art.companyID = 'rcfrc';
-    art.creationDate = 'rfcr';
-    art.statusArt= 'rfc';
-    art.contest = '34drc';
-    art.title = 'testArt rfcrfcrfc    rfcrfcr  rfc';
-    return  [art]
+    art.ID = '2134512341243';
+    art.initiatorID = '0000001-12342134-3432342-2134234';
+    art.companyID = '2342134234-234234234-234234-2341243';
+    art.creationDate = '28.11.2021';
+    art.statusArt= 'done';
+    art.contest = 'conten0t';
+    art.title = 'testArt 33333333333333333333333333rrrrrrr';
+
+    let art1: Article = new Article();
+    art.ID = '21345123434341243';
+    art.initiatorID = '0000001-12342133454-3432342-2134234';
+    art.companyID = '2342134234-23423434234-234234-2341243';
+    art.creationDate = '28.10.2121';
+    art.statusArt= 'done';
+    art.contest = 'conten1t';
+    art.title = '125335 rfc';
+
+
+    let art2: Article = new Article();
+    art.ID = '213451234221243';
+    art.initiatorID = '0000001-12342134-3432342-213423434';
+    art.companyID = '234213423664-234234234-234234-2341243';
+    art.creationDate = '23.10.2021';
+    art.statusArt= 'done';
+    art.contest = 'content2';
+    art.title = 'testArt rfcrf443214234   rfcrfcr  rfc';
+
+    let art3: Article = new Article();
+    art.ID = '2134512356641243';
+    art.initiatorID = '000340001-12342134-3432342-2134234';
+    art.companyID = '2342134234-2364234234-234234-2341243';
+    art.creationDate = '20.10.2021';
+    art.statusArt= 'done';
+    art.contest = 'content3';
+    art.title = 'testArt r444';
+
+    return  [art,art1,art2,art3]
 }
 
 export default GenerateCustomCardList;

@@ -29,9 +29,6 @@ export class Employees extends React.Component<{},{}> {
             </Row>
             <GenerateCustomCardList/>
             {this.generatePagination()}
-            <BackTop>
-                <div className="BackUp">Вверх</div>
-            </BackTop>
 
         </div>);
     }

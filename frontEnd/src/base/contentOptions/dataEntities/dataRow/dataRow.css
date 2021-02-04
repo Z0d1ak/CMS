@@ -1,0 +1,29 @@
+.DataRowTitle {
+  display: inline-flex;
+}
+
+.DataRowData {
+  display: inline-flex;
+  width: 100%;
+}
+
+.DataRow{
+  margin-top: 20px;
+}
+
+.DataRowList{
+  display: inline-flex;
+
+}
+
+.DeleteIcon{
+
+}
+
+.AddIcon{
+
+}
+
+.test{
+  background-color: green;
+}

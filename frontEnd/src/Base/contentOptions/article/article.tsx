@@ -1,11 +1,13 @@
 import React from 'react';
-import './Employees.css';
+import './article.css';
 import 'antd/dist/antd.css';
-import {CustomCard, GenerateCustomCardList} from "../Cards/Cards";
 import {BackTop, Col, Pagination, Row} from "antd";
-import SearchBox from "../Filters/Filters";
+import SearchBox from "../dataEntities/filters/filters";
+import {GenerateCustomCardList} from "../dataEntities/articleCard/articleCard";
 
-export class Employees extends React.Component<{},{}> {
+
+export class AllTexts extends React.Component<{},{}> {
+
     generatePagination() {
         return (
             <Row>
@@ -29,10 +31,13 @@ export class Employees extends React.Component<{},{}> {
             </Row>
             <GenerateCustomCardList/>
             {this.generatePagination()}
+            <BackTop>
+                <div className="BackUp">Вверх</div>
+            </BackTop>
 
         </div>);
     }
 }
 
-export default Employees;
+export default AllTexts;
 

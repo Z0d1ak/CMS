@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './TextCards.css';
+import './articleCard.css';
 import {
     SettingOutlined,
     DeleteOutlined,
@@ -13,7 +13,7 @@ import { Typography,Divider } from 'antd';
 import {Avatar,Dropdown,Card,Popconfirm, message,Menu } from 'antd';
 import { Row, Col } from 'antd';
 
-import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../DataRow/DataRow";
+import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRow/dataRow";
 
 
 const { Meta } = Card;

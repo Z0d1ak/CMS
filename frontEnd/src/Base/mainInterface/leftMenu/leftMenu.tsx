@@ -16,10 +16,10 @@ import {
   } from "react-router-dom";
 
 
-import Employees from "../../../Employees/Employees"
-import AllTexts from "../../../AllTexts/AllTexts"
-import Infographic from "../../../Infographic/Infographic"
-import InWork from "../../../InWork/InWork"
+import Employees from "../../contentOptions/employee/employee"
+import AllTexts from "../../contentOptions/article/article"
+import Infographic from "../../contentOptions/infographics/infographics"
+import InWork from "../../contentOptions/task/task"
 
 
 const {  Sider } = Layout;

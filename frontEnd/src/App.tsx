@@ -1,9 +1,8 @@
 import React from 'react';
 import './App.css';
-import './Cards/Cards.tsx';
-import {Login} from "./Login/Login";
-import {Register} from "./Register/Register";
-import MainPart from "./Base/mainInterface/mainPart/mainPart"
+import {Login} from "./loginAndRegister/login/login";
+import {Register} from "./loginAndRegister/register/register";
+import MainPart from "./base/mainInterface/mainPart/mainPart"
 import {
     BrowserRouter as Router,
     Switch,
@@ -12,7 +11,6 @@ import {
 
 
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
-import AllTexts from "./AllTexts/AllTexts";
 
 
 export class App extends React.Component<{},{}> {

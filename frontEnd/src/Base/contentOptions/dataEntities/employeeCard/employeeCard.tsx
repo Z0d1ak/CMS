@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './Cards.css';
+import './employeeCard.css';
 import {
     SettingOutlined,
     DeleteOutlined,
@@ -13,7 +13,7 @@ import { Typography,Divider } from 'antd';
 import {Avatar,Dropdown,Card,Popconfirm, message,Menu } from 'antd';
 import { Row, Col } from 'antd';
 
-import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../DataRow/DataRow";
+import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRow/dataRow";
 
 
 const { Meta } = Card;
@@ -29,7 +29,7 @@ class User{
 
 
 
-export class CustomCard extends React.Component<{testUser:User},{}> {
+export class EmployeeCard extends React.Component<{testUser:User},{}> {
 
     state = {
         status:'narrow',
@@ -162,7 +162,7 @@ export function GenerateCustomCardList({},{}) {
             <Col span={1}></Col>
             <Col span={22}>
             {usersList.map((u, i) => {
-                return (<CustomCard testUser={u}/>)
+                return (<EmployeeCard testUser={u}/>)
             })}
             </Col>
             <Col span={1}></Col>

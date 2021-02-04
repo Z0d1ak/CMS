@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Divider } from 'antd';
 import 'antd/dist/antd.css';
-import './DataRow.css';
+import './dataRow.css';
 import {
     CloseOutlined,
     EditOutlined,

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Infographic.css';
+import './infographics.css';
 import 'antd/dist/antd.css';
 
 export class Infographic extends React.Component<{},{}> {

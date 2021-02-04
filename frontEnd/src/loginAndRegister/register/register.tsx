@@ -1,8 +1,7 @@
 import React from 'react';
-import './Register.css';
+import './register.css';
 import 'antd/dist/antd.css';
 import {Form, Input, Button, Checkbox, Col, Row} from 'antd';
-import {CustomCard} from "../Cards/Cards";
 
 const layout = {
     labelCol: {

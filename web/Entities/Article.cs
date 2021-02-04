@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace web.Entities
 {
+    #nullable disable
+
+    /// <summary>
+    /// Объект, описывающий сущность статьи.
+    /// </summary>
     public class Article
     {
         public Guid Id { get; set; }
 
-        public Guid InitiatorID { get; set; }
+        public Guid InitiatorId { get; set; }
         public User Initiator { get; set; }
 
-        public Guid CompanyID { get; set; }
+        public Guid CompanyId { get; set; }
         public Company Company { get; set; }
 
         public DateTime CreationDate { get; set; }

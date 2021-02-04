@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+
+#nullable disable
 
 namespace web.Entities
 {
     /// <summary>
-    /// Роль рользователя в системе.
+    /// Объект, описывающий сущность роли пользователя в системе.
     /// </summary>
     public sealed class Role
     {
         public Guid Id { get; set; }
 
-        public Guid CompanyID { get; set; }
+        public Guid CompanyId { get; set; }
         public Company Company { get; set; }
 
         public RoleType Type { get; set; }
 
         public string Name { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<User> Users { get; set; } = new List<User>();
     }
 }

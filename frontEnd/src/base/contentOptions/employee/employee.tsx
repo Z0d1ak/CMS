@@ -1,8 +1,8 @@
 import React from 'react';
 import './employee.css';
 import 'antd/dist/antd.css';
-import {EmployeeCard, GenerateCustomCardList} from "../dataEntities/employeeCard/employeeCard";
-import {BackTop, Col, Pagination, Row} from "antd";
+import { GenerateCustomCardList} from "../dataEntities/employeeCard/employeeCard";
+import { Col, Pagination, Row} from "antd";
 import SearchBox from "../dataEntities/filters/filters";
 
 export class Employees extends React.Component<{},{}> {

@@ -9,11 +9,11 @@ import {
     CheckOutlined,
 
 } from '@ant-design/icons';
-import { Typography,Divider } from 'antd';
-import {Avatar,Dropdown,Card,Popconfirm, message,Menu } from 'antd';
+import { Divider } from 'antd';
+import {Card,Popconfirm, message } from 'antd';
 import { Row, Col } from 'antd';
 
-import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRow/dataRow";
+import {DataRow} from "../dataRow/dataRow";
 
 
 const { Meta } = Card;

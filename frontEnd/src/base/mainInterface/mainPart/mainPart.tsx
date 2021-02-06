@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './mainPart.css';
-import {Col, Layout, Menu, Row} from 'antd';
+import {Layout} from 'antd';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined
@@ -14,7 +14,7 @@ import {
 import {LeftMenu,getLinksLeftMenu} from "../leftMenu/leftMenu"
 import {getLinksAvatarMenu,AvatarMenu} from "../avatarMenu/avatarMenu"
 import {BackTop} from "antd";
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 
 

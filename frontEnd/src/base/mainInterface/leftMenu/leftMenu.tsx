@@ -10,7 +10,6 @@ import {
 } from '@ant-design/icons';
 
 import {
-    BrowserRouter as Router,
     Link,
     Route
   } from "react-router-dom";
@@ -52,10 +51,10 @@ export function getLinksLeftMenu() {
 };
 
 function generateMenu() {
-    return (<Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+    return (<Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
         {leftMenuContent.map((r, i) => {
             return (
-                <Menu.Item key={i} icon={r.icon}>
+                <Menu.Item key={i+"lm"} icon={r.icon}>
                     <Link to={r.link}>{r.text}</Link>
                 </Menu.Item>
             )

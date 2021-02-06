@@ -1,9 +1,9 @@
 import React from 'react';
-import { Row, Col, Divider } from 'antd';
+import { Row, Col, } from 'antd';
 import 'antd/dist/antd.css';
 import './filters.css';
 
-import {Dropdown, Menu, message, Typography} from "antd";
+import { Typography} from "antd";
 
 
 import { Input } from 'antd';

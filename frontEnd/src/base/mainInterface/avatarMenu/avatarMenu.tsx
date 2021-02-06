@@ -1,9 +1,8 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './avatarMenu.css';
-import {Layout, Menu} from 'antd';
+import { Menu} from 'antd';
 import {
-    BrowserRouter as Router,
     Link,
     Route
   } from "react-router-dom";
@@ -41,7 +40,7 @@ function generateMenu() {
     return (
         avatarMenuContent.map((r, i) => {
             return (
-                <Menu.Item key={i}>
+                <Menu.Item key={i+"am"}>
                     <Link to={r.link}>{r.text}</Link>
                 </Menu.Item>
             )

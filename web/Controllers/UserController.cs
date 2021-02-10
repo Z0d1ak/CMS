@@ -47,7 +47,7 @@ namespace web.Controllers
         /// <response code="201">Пользователь успешно создан.</response>
         /// <response code="409">Конфликт данных создаваемого пользователя и существующих данных в БД.</response>
         [HttpPost]
-        [Authorize(Roles = AccessRoles.CompanyAdmin)]
+        [Authorize(Roles = AccessRoles.AnyAdmin)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult<ResponseUserDto>> CreateUserAsync(CreateUserDto createUserDto, CancellationToken cancellationToken)

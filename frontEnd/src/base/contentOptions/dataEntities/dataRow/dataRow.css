@@ -1,5 +1,6 @@
 .DataRowTitle {
   display: inline-flex;
+  
 }
 
 .DataRowData {
@@ -24,6 +25,7 @@
 
 }
 
-.test{
-  background-color: green;
+.title{
+  text-align: right;
+  padding-right: 1%;
 }

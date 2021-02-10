@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import { GenerateCustomCardList} from "../dataEntities/employeeCard/employeeCard";
 import { Col, Pagination, Row} from "antd";
 import SearchBox from "../dataEntities/filters/filters";
+import AddEmployeeCard from "../dataEntities/addEmployeeCard/addEmployeeCard"
 
 export class Employees extends React.Component<{},{}> {
     generatePagination() {
@@ -27,6 +28,7 @@ export class Employees extends React.Component<{},{}> {
                 </Col>
                 <Col span={1}></Col>
             </Row>
+            <AddEmployeeCard/>
             <GenerateCustomCardList/>
             {this.generatePagination()}
 

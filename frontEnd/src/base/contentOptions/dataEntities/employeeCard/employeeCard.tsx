@@ -15,8 +15,19 @@ import { Row, Col } from 'antd';
 
 import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRow/dataRow";
 
+import {paths,/*components,operations*/ } from "../../../../swaggerCode/swaggerCode"
+
+import axios from 'axios'
+import { idText } from 'typescript';
+
 
 const { Meta } = Card;
+
+
+const pathBase:string ="https://hse-cms.herokuapp.com";
+
+type userData = paths["/api/User"]["get"]["responses"]["200"]["content"]["application/json"]["items"][0];
+type userDataSearch = paths["/api/User"]["get"]["parameters"]["query"]
 
 class User{
     public firstname!: string;
@@ -28,25 +39,24 @@ class User{
 }
 
 
-
-export class EmployeeCard extends React.Component<{testUser:User},{}> {
+export class EmployeeCard extends React.Component<{user:userData},{}> {
 
     state = {
         status:'narrow',
-        firstname:'',
-        lastname:'',
+        firstName:'',
+        lastName:'',
         email:'',
         id:'0',
         roles:['']
     };
 
-    constructor(props:{testUser:User}) {
+    constructor(props:{user:userData}) {
         super(props);
-        this.state.firstname = this.props.testUser.firstname;
-        this.state.lastname = this.props.testUser.lastname;
-        this.state.email = this.props.testUser.email;
-        this.state.roles = this.props.testUser.roles;
-        this.state.id = this.props.testUser.id;
+        this.state.firstName = this.props.user.firstName;
+        this.state.lastName = this.props.user.lastName||"null";
+        this.state.email = this.props.user.email;
+        this.state.roles = this.props.user.roles;
+        this.state.id = this.props.user.id;
     };
 
 
@@ -90,11 +100,11 @@ export class EmployeeCard extends React.Component<{testUser:User},{}> {
         return (
             [
                 <Divider />,
-                <DataRow dataStr={this.state.firstname} titleStr="Имя :"/>,
-                <DataRow dataStr={this.state.lastname} titleStr="Фамилия :"/>,
-                <DataRow dataStr={this.state.email} titleStr="Почта :"/>,
+                <DataRow dataStr={this.state.firstName} titleStr="Имя : "/>,
+                <DataRow dataStr={this.state.lastName} titleStr="Фамилия : "/>,
+                <DataRow dataStr={this.state.email} titleStr="Почта : "/>,
                 <Divider />,
-                <DataRowList dataList={this.state.roles} titleStr="Роли :"/>
+                <DataRowList dataList={this.state.roles} titleStr="Роли : "/>
             ]
         )
     }
@@ -103,11 +113,11 @@ export class EmployeeCard extends React.Component<{testUser:User},{}> {
         return (
             [
                 <Divider />,
-                <DataRowEditable dataStr={this.state.firstname} titleStr="Имя :" typeName="firstname" editFieldCallback={this.updateDataFieldCallBack}/>,
-                <DataRowEditable dataStr={this.state.lastname} titleStr="Фамилия :" typeName="lastname" editFieldCallback={this.updateDataFieldCallBack}/>,
-                <DataRowEditable dataStr={this.state.email} titleStr="Почта :" typeName="email" editFieldCallback={this.updateDataFieldCallBack}/>,
+                <DataRowEditable dataStr={this.state.firstName} titleStr="Имя : " typeName="firstName" editFieldCallback={this.updateDataFieldCallBack}/>,
+                <DataRowEditable dataStr={this.state.lastName} titleStr="Фамилия : " typeName="lastName" editFieldCallback={this.updateDataFieldCallBack}/>,
+                <DataRowEditable dataStr={this.state.email} titleStr="Почта : " typeName="email" editFieldCallback={this.updateDataFieldCallBack}/>,
                 <Divider />,
-                <DataRowListEditable dataList={this.state.roles} titleStr="Роли :" typeName="roles"  editListCallback={this.updateListFieldCallBack}/>
+                <DataRowListEditable dataList={this.state.roles} titleStr="Роли : " typeName="roles"  editListCallback={this.updateListFieldCallBack}/>
             ]
         )
     }
@@ -140,7 +150,7 @@ export class EmployeeCard extends React.Component<{testUser:User},{}> {
             >
                 <Meta
                     avatar={<Avatar size={50}  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                    title={<div className="titleCard">{this.state.firstname} {this.state.lastname}</div>}
+                    title={<div className="titleCard">{this.state.firstName} {this.state.lastName}</div>}
                     description={<div className="titleDescriptionCard">{this.state.id}</div>}
                 />
                 {this.state.status=="narrow"?<div/>:this.state.status=="expand"?this.DataRows():this.DataRowsEditable()}
@@ -156,13 +166,15 @@ export class EmployeeCard extends React.Component<{testUser:User},{}> {
 
 
 export function GenerateCustomCardList({},{}) {
-    let usersList:User[] =GetUserList();
+    
+    let usersList:userData[] =[];
+    console.log(search());
     return (
         <Row>
             <Col span={1}></Col>
             <Col span={22}>
             {usersList.map((u, i) => {
-                return (<EmployeeCard testUser={u}/>)
+                return (<EmployeeCard user={u}/>)
             })}
             </Col>
             <Col span={1}></Col>
@@ -170,131 +182,32 @@ export function GenerateCustomCardList({},{}) {
     )
 }
 
-export function GetUserList(): User[] {
-    let userOne: User = new User();
-    userOne.email="bbelov@edu.hse.ru"
-    userOne.firstname="Борис"
-    userOne.lastname="Белов"
-    userOne.id="1312313";
-    userOne.roles=
-        [
-            "Дизайнер",
-            "Студент"
-        ];
-    userOne.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
 
-    let userTwo: User = new User();
-    userTwo.email="doFilonenko@mail.ru"
-    userTwo.firstname="Иван"
-    userTwo.lastname="Филоненко"
-    userTwo.id="131345353";
-    userTwo.roles=
-        [
-            "Студент"
-        ];
-    userTwo.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
+function search() {
+            
+    let data:userDataSearch={PageLimit:20,PageNumber:1}
+    axios.get(pathBase+"/api/User",
+    {
+        headers: {
+        "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
+        ,"query":data
+      }
+      
+      
+      
+    }
+    )
+    .then(res => {
+        console.log(res);
+        return [res.data.items[0]];
+        //history.push("/home");
+    })
+    .catch(err => {  
+        console.log(err); 
+      })
+};
 
-    let userThree: User = new User();
-    userThree.email="ggwp@gmail.com"
-    userThree.firstname="Дмитрий"
-    userThree.lastname="Дубина"
-    userThree.id="131212341313";
-    userThree.roles=
-        [
-            "Разработчик",
-            "Верстальщик",
-            "Студент"
-        ];
-    userThree.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
 
-    let userFour: User = new User();
-    userFour.email="13123123oofofo33@yandex.ru"
-    userFour.firstname="Чечен"
-    userFour.lastname="Арбузов"
-    userFour.id="erg3434";
-    userFour.roles=
-        [
-            "Дизайнер",
-            "Разработчик",
-            "Верстальщик",
-            "Студент",
-            "бекэндер",
-            "Водитель"
-        ];
-    userFour.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
-
-    let userFive: User = new User();
-    userFive.email="hh@gmail.com"
-    userFive.firstname="Генадий"
-    userFive.lastname="Глухов"
-    userFive.id="0000234";
-    userFive.roles=
-        [
-        ];
-    userFive.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
-    let userOneq: User = new User();
-    userOneq.email="bbelov@edu.hse.ru"
-    userOneq.firstname="Борис"
-    userOneq.lastname="Белов"
-    userOneq.id="1312313";
-    userOneq.roles=
-        [
-            "Дизайнер",
-            "Студент"
-        ];
-    userOne.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
-
-    let userTwoq: User = new User();
-    userTwoq.email="doFilonenko@mail.ru"
-    userTwoq.firstname="Иван"
-    userTwoq.lastname="Филоненко"
-    userTwoq.id="131345353";
-    userTwoq.roles=
-        [
-            "Студент"
-        ];
-    userTwo.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
-
-    let userThreeq: User = new User();
-    userThreeq.email="ggwp@gmail.com"
-    userThreeq.firstname="Дмитрий"
-    userThreeq.lastname="Дубина"
-    userThreeq.id="131212341313";
-    userThreeq.roles=
-        [
-            "Разработчик",
-            "Верстальщик",
-            "Студент"
-        ];
-    userThree.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
-
-    let userFourq: User = new User();
-    userFourq.email="13123123oofofo33@yandex.ru"
-    userFourq.firstname="Чечен"
-    userFourq.lastname="Арбузов"
-    userFourq.id="erg3434";
-    userFourq.roles=
-        [
-            "Дизайнер",
-            "Разработчик",
-            "Верстальщик",
-            "Студент",
-            "бекэндер",
-            "Водитель"
-        ];
-    userFour.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
-
-    let userFiveq: User = new User();
-    userFiveq.email="hh@gmail.com"
-    userFiveq.firstname="Генадий"
-    userFiveq.lastname="Глухов"
-    userFiveq.id="0000234";
-    userFiveq.roles=
-        [
-        ];
-    userFiveq.foto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fproforientator.ru%2Fpublications%2Farticles%2Fprofessiya-programmist.html&psig=AOvVaw1XWvaroqESYDscMlBEuqzx&ust=1610547806934000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjAzqHMlu4CFQAAAAAdAAAAABAD";
-
-    return [userOne,userTwo,userThree,userFour,userFive,userOneq,userTwoq,userThreeq,userFourq,userFiveq];
-}
+    
 
 export default GenerateCustomCardList;

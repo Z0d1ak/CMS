@@ -39,7 +39,7 @@ export function DataRowEditable({dataStr, titleStr,typeName,editFieldCallback}: 
     const [editableStr, setEditableStr] = React.useState(dataStr);
     return (
         <Row className="DataRow">
-            <Col span={4} >
+            <Col span={2} className='title' >
                 <Paragraph className='DataRowTitle'>{titleStr}</Paragraph>
             </Col>
             <Col span={20}>
@@ -59,8 +59,8 @@ export function DataRowEditable({dataStr, titleStr,typeName,editFieldCallback}: 
 export function DataRow({dataStr, titleStr}: IDataRow) {
     return (
         <Row className="DataRow">
-            <Col span={4}><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
-            <Col span={4}><Paragraph className='DataRowData'>{dataStr}</Paragraph></Col>
+            <Col span={2} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
+            <Col span={2} ><Paragraph className='DataRowData'>{dataStr}</Paragraph></Col>
         </Row>
     )
 }
@@ -68,8 +68,8 @@ export function DataRow({dataStr, titleStr}: IDataRow) {
 export function DataRowList({dataList, titleStr}: IDataRowList) {
     return (
         <Row className="DataRow">
-            <Col span={4}><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
-            <Col span={6}><Paragraph className='DataRowList'>
+            <Col span={2} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
+            <Col span={2} ><Paragraph className='DataRowList'>
                 <ul>
                     {dataList.map((r, i) => {
                         return (<li>{r}</li> )
@@ -114,8 +114,8 @@ export function DataRowListEditable({dataList, titleStr,typeName,editListCallbac
 
     return (
         <Row className="DataRow">
-            <Col span={4}><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
-            <Col span={6}><Paragraph className='DataRowList'>
+            <Col span={2} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
+            <Col span={2} ><Paragraph className='DataRowList'>
                 <ul>
                     {editableList.map((r, i) => {
                         return (

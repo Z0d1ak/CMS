@@ -165,26 +165,30 @@ export class EmployeeCard extends React.Component<{user:userData},{}> {
 
 
 
-export function GenerateCustomCardList({},{}) {
+
+export class GenerateCustomCardList extends React.Component<{},{usersList:userData[]}> {
+
+    state = {
+        usersList:[]
+    };
+
+    render(){
     
-    let usersList:userData[] =[];
-    console.log(search());
     return (
         <Row>
             <Col span={1}></Col>
             <Col span={22}>
-            {usersList.map((u, i) => {
+            {this.state.usersList.map((u, i) => {
                 return (<EmployeeCard user={u}/>)
             })}
             </Col>
             <Col span={1}></Col>
         </Row>
     )
+        
 }
 
-
-function search() {
-            
+async componentDidMount() {
     let data:userDataSearch={PageLimit:20,PageNumber:1}
     axios.get(pathBase+"/api/User",
     {
@@ -199,13 +203,15 @@ function search() {
     )
     .then(res => {
         console.log(res);
-        return [res.data.items[0]];
-        //history.push("/home");
+        this.setState({usersList:res.data.items});
     })
     .catch(err => {  
         console.log(err); 
       })
-};
+  }
+}
+
+
 
 
     

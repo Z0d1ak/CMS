@@ -15,6 +15,10 @@ import { Row, Col } from 'antd';
 
 import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRow/dataRow";
 import {Form, Input, Button, Checkbox,} from 'antd';
+import {useHistory} from "react-router-dom";
+import axios from 'axios'
+import {paths,/*components,operations*/ } from "../../../../swaggerCode/swaggerCode"
+import { v4 as uuidv4 } from 'uuid';
 
 const { Meta } = Card;
 
@@ -32,56 +36,144 @@ const layout = {
   wrapperCol: { span: 0 },
 };
 
+const pathBase:string ="https://hse-cms.herokuapp.com";
 
-export class AddEmployeeForm extends React.Component<{},{}> {
+type userData = paths["/api/User"]["post"]["requestBody"]["content"]["text/json"]
 
-    
-  
-    onFinish = (values: any) => {
-        console.log(values);
-      };
-    
-      onReset = () => {
-        
-      };
-    
-      onFill = () => {
-        
-      };
+type field=
+    {
+        name: string[];
+        value: string,
+    };
 
-  
+export class AddEmployeeForm extends React.Component<{},{fields:field[]}> {
+
+    constructor(props:{}) {
+        super(props);
+        this.state = {
+            fields:[
+            {
+                name: ['name'],
+                value: 'Дмитрий',
+            },
+            {
+                name: ['surname'],
+                value: 'Дубина',
+            },
+            {
+                name: ['email'],
+                value: 'dodubina.spam@gmail.com',
+            },
+            {
+                name: ['password'],
+                value: '71400444443',
+            },
+            {
+                name: ['roles'],
+                value: 'SuperAdmin',
+            }
+            ]
+        };
+      }
+    
+      setFields (newFields:any) {
+        this.setState({ fields:newFields });
+    }
 
     render() {
         return (
             
-            <Row>
+            <NewUserForm  fields={this.state.fields} onChangeFields={(newFields:field[]) => {this.setFields(newFields);}}/> 
+        );
+    }
+
+}
+
+
+const NewUserForm = (props:{fields:field[],onChangeFields:(newFields:any)=>void })=> {
+
+    const history = useHistory();
+
+    const onFinish = () => {
+        
+        console.log('Sucsess:', "0");
+        let guis:string=uuidv4();
+        console.log(guis);
+        let data:userData={id:guis,
+                           firstName:props.fields[0].value,
+                           lastName:props.fields[1].value,
+                           email:props.fields[2].value,
+                           password:props.fields[3].value,
+                           roles:["SuperAdmin"],
+                        }
+            axios.post(pathBase+"/api/User",data,
+            {
+                headers: {
+                "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
+              }
+            })
+            .then(res => {
+                console.log(res);
+                //history.push("/home");
+            })
+            .catch(err => {  
+                console.log(err); 
+              })
+
+    };
+
+    const onFinishFailed = () => {
+        console.log('Failed:', "1");
+    };
+
+
+    return (
+        <div>
+          
+           <Row>
             <Col span={0}></Col>
             <Col span={22}>
-        <Form {...layout}  name="control-ref">
-            <Form.Item name="Name" label="Имя" rules={[{ required: true }]}>
+        <Form {...layout}
+              name="authentication"
+              initialValues={{
+                  remember: true,
+              }}
+              onFinish={onFinish}
+              fields={props.fields}
+              onFieldsChange={(_, allFields) => {
+                props.onChangeFields(allFields);
+              }}
+              onFinishFailed={onFinishFailed}
+          >
+            <Form.Item name="name" label="Имя" rules={[{ required: true }]}>
                 <Input />
             </Form.Item>
-            <Form.Item name="Surname" label="Фамилия" rules={[{ required: true }]}>
+            <Form.Item name="surname" label="Фамилия" rules={[{ required: true }]}>
                 <Input />
             </Form.Item>
-            <Form.Item name="Email" label="Почта" rules={[{ required: true }]}>
+            <Form.Item name="email" label="Почта" rules={[{ required: true }]}>
                 <Input />
             </Form.Item>
-            <Form.Item name="Password" label="Пароль" rules={[{ required: true }]}>
+            <Form.Item name="password" label="Пароль" rules={[{ required: true }]}>
                 <Input />
             </Form.Item>
-            <Form.Item name="Role" label="Роль" rules={[{ required: true }]}>
+            <Form.Item name="roles" label="Роль" rules={[{ required: true }]}>
                 <Input />
             </Form.Item>
+            <Form.Item>
+                      <Button className="buttonLogin" type="primary" htmlType="submit">
+                          Войти
+                      </Button>
+                  </Form.Item>
 
         </Form>
         </Col>
         <Col span={1}></Col>
         </Row>
-        );
-    }
+        </div>
+    );
+  };
 
-}
 
 
 export default AddEmployeeForm;

@@ -40,6 +40,8 @@ const pathBase:string ="https://hse-cms.herokuapp.com";
 
 type userData = paths["/api/User"]["post"]["requestBody"]["content"]["text/json"]
 
+
+
 type field=
     {
         name: string[];

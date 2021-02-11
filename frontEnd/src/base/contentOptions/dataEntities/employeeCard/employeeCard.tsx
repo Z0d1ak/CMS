@@ -20,6 +20,8 @@ import {paths,/*components,operations*/ } from "../../../../swaggerCode/swaggerC
 import axios from 'axios'
 import { idText } from 'typescript';
 
+import {useHistory} from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 const { Meta } = Card;
 
@@ -38,6 +40,9 @@ class User{
     public roles!: string[];
 }
 
+
+type userid = paths["/api/User/{id}"]["delete"]["parameters"]["path"]
+    
 
 export class EmployeeCard extends React.Component<{user:userData},{}> {
 
@@ -78,9 +83,31 @@ export class EmployeeCard extends React.Component<{user:userData},{}> {
         }
     };
 
+    
+    
+
+
     deleteCard = () => {
         message.info('Успешно удалено');
+    
+        
+             
+                console.log('Sucsess:', "0");
+                    axios.delete(pathBase+"/api/User/"+this.state.id,
+                    {
+                        headers: {
+                        "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
+                      }
+                    })
+                    .then(res => {
+                        console.log(res);
 
+                    })
+                    .catch(err => {  
+                        console.log(err); 
+                      })
+        
+         
     };
 
     updateCard = (val:string) => {

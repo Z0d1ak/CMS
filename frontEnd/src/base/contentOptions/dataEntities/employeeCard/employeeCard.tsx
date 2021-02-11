@@ -231,12 +231,11 @@ export class GenerateCustomCardList extends React.Component<{},{usersList:userDa
 }
 
 async componentDidMount() {
-    let data:userDataSearch={PageLimit:20,PageNumber:1}
-    axios.get(pathBase+"/api/User",
+    let data:userDataSearch={PageLimit:5,PageNumber:1}
+    axios.get(pathBase+"/api/User"+"?PageLimit="+data.PageLimit+"&PageNumber="+data.PageNumber,
     {
         headers: {
         "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
-        ,"query":data
       } 
     }
     )

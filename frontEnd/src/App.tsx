@@ -8,9 +8,12 @@ import {
     Route,
   } from "react-router-dom";
 
+  import {useHistory} from "react-router-dom";
 
+  
 export class App extends React.Component<{},{}> {
 
+  
     render() {
         return(
         <Switch>

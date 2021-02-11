@@ -1,19 +1,8 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './addEmployeeForm.css';
-import {
-    SettingOutlined,
-    DeleteOutlined,
-    EllipsisOutlined,
-    UpOutlined,
-    CheckOutlined,
-
-} from '@ant-design/icons';
-import { Divider } from 'antd';
-import {Avatar,Card,Popconfirm, message } from 'antd';
+import {Card } from 'antd';
 import { Row, Col } from 'antd';
-
-import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRow/dataRow";
 import {Form, Input, Button, Checkbox,} from 'antd';
 import {useHistory} from "react-router-dom";
 import axios from 'axios'

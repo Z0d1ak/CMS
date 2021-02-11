@@ -42,7 +42,7 @@ export function getLinksLeftMenu() {
     return (
         leftMenuContent.map((r, i) => {
             return (
-                <Route path={r.link} >
+                <Route path={r.link}  key={"ll"+i} >
                     {r.component}
                 </Route>
             )

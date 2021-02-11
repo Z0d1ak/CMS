@@ -63,9 +63,9 @@ export class MainPart extends React.Component<{},{}> {
                             minHeight: 280,
                         }}
                     >
-                        <Switch>
+           
                         {this.getLinks()}
-                        </Switch>
+
                         <BackTop>
                             <div className="BackUp">Вверх</div>
                         </BackTop>

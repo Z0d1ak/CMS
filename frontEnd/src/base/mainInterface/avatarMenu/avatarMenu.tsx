@@ -28,7 +28,7 @@ export function getLinksAvatarMenu() {
     return (
         avatarMenuContent.map((r, i) => {
             return (
-                <Route path={r.link} >
+                <Route path={r.link} key={"al"+i}>
 
                 </Route>
             )

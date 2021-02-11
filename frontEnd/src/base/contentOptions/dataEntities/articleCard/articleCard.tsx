@@ -59,14 +59,14 @@ export class CustomCard extends React.Component<{art:Article},{}> {
 
 
     expandCardChange = () => {
-        if(this.state.status=='narrow')
+        if(this.state.status==='narrow')
             this.setState({ status: 'expand'});
         else
             this.setState({ status: 'narrow'});
     };
 
     makeEditableCardChange = () => {
-        if(this.state.status=='expand')
+        if(this.state.status==='expand')
             this.setState({ status: 'editable'});
         else
         {
@@ -131,14 +131,14 @@ export class CustomCard extends React.Component<{art:Article},{}> {
             <Card className="userCard wide"
                 hoverable={true}
                 actions={
-                    this.state.status=="narrow"?this.optionsNarrow():this.state.status=="expand"?this.optionsExpand():this.optionsExpandEditable()
+                    this.state.status==="narrow"?this.optionsNarrow():this.state.status==="expand"?this.optionsExpand():this.optionsExpandEditable()
                 }
             >
                 <Meta
                     title={<div className="titleCard">{this.state.title}</div>}
                     description={<div className="titleDescriptionCard">{this.state.ID}</div>}
                 />
-                {this.state.status=="narrow"?<div/>:this.state.status=="expand"?this.DataRows():this.DataRowsEditable()}
+                {this.state.status==="narrow"?<div/>:this.state.status==="expand"?this.DataRows():this.DataRowsEditable()}
             </Card>
         );
     }

@@ -206,21 +206,15 @@ export class EmployeeCard extends React.Component<{user:userData},{userOfCard:us
 
 
 
-export class GenerateCustomCardList extends React.Component<{},{usersList:userData[]}> {
+export class GenerateCustomCardList extends React.Component<{curPage:number, maxItemsOnPage:number,
+    countItems:number,searchAllOptText:string,SetCountItems:(val:number)=>void,GetUserData:()=>void,usersList:userData[]},{usersList:userData[]}> {
 
-    state = {
-        usersList:[]
-    };
-
- 
-
-    render(){
-    
+    render(){    
     return (
         <Row>
             <Col span={1}></Col>
             <Col span={22}>
-            {this.state.usersList.map((u, i) => {
+            {this.props.usersList.map((u, i) => {
                 return (<EmployeeCard user={u} key={"ec"+i}/>)
             })}
             </Col>
@@ -229,24 +223,6 @@ export class GenerateCustomCardList extends React.Component<{},{usersList:userDa
     )
         
 }
-
-async componentDidMount() {
-    let data:userDataSearch={PageLimit:5,PageNumber:1}
-    axios.get(pathBase+"/api/User"+"?PageLimit="+data.PageLimit+"&PageNumber="+data.PageNumber,
-    {
-        headers: {
-        "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
-      } 
     }
-    )
-    .then(res => {
-        console.log(res);
-        this.setState({usersList:res.data.items});
-    })
-    .catch(err => {  
-        console.log(err); 
-      })
-  }
-}
 
 export default GenerateCustomCardList;

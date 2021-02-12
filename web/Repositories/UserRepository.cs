@@ -166,14 +166,12 @@ namespace web.Repositories
                 }
             }
 
-            selectQuery = selectQuery
-                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
-                .Take(searchParameters.PageLimit);
-
+            var count = await selectQuery.CountAsync(cancellationToken);
             var users = await selectQuery
+                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
+                .Take(searchParameters.PageLimit)
                 .Select(Mappers.ToResponseUserDtoExpression)
                 .ToListAsync(cancellationToken);
-            var count = await selectQuery.CountAsync(cancellationToken);
 
             var searchResponse = new SearchResponseDto<ResponseUserDto>(count, users);
             return new ServiceResult<SearchResponseDto<ResponseUserDto>>(searchResponse);

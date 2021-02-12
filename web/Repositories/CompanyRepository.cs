@@ -187,14 +187,13 @@ namespace web.Repositories
                 }
             }
 
-            selectQuery = selectQuery
-                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
-                .Take(searchParameters.PageLimit);
-
+            var count = await selectQuery.CountAsync(cancellationToken);
             var companies = await selectQuery
+                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
+                .Take(searchParameters.PageLimit)
                 .Select(Mappers.ToResponseCompanyDtoExpression)
                 .ToListAsync(cancellationToken);
-            var count = await selectQuery.CountAsync(cancellationToken);
+
             var searchResponse = new SearchResponseDto<ResponseCompanyDto>(count, companies);
             return new ServiceResult<SearchResponseDto<ResponseCompanyDto>>(searchResponse);
         }

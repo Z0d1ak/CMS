@@ -206,8 +206,7 @@ export class EmployeeCard extends React.Component<{user:userData},{userOfCard:us
 
 
 
-export class GenerateCustomCardList extends React.Component<{curPage:number, maxItemsOnPage:number,
-    countItems:number,searchAllOptText:string,SetCountItems:(val:number)=>void,GetUserData:()=>void,usersList:userData[]},{usersList:userData[]}> {
+export class GenerateCustomCardList extends React.Component<{usersList:userData[]},{}> {
 
     render(){    
     return (

@@ -26,8 +26,12 @@ state={
 }
   
 
+ClearArray = () => {
+    this.setState({ usersList: [] });
+};
+
 SetCurPage=(val:number)=>{
-    this.setState({curPage:val})
+    this.setState({curPage:val},()=>this.GetUserData(val))
 }
 
 SetMaxItemsOnPage=(val:number)=>{
@@ -37,32 +41,17 @@ SetMaxItemsOnPage=(val:number)=>{
 SetCountItems=(val:number)=>{
     this.setState({countItems:val})
 }
+
+SetItemsList=(val:userData[])=>{
+    this.ClearArray();
+    this.setState({usersList:val},()=>{console.log(val)})
+    console.log("set")
+    console.log(this.state.usersList)
+}
  
 
-           
-
-/*
-async componentDidMount() {
-    let data:userDataSearch={PageLimit:20,PageNumber:1}
-    axios.get(pathBase+"/api/User",
-    {
-        headers: {
-        "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
-        ,"query":data
-      } 
-    }
-    )
-    .then(res => {
-        console.log(res);
-       
-    })
-    .catch(err => {  
-        console.log(err); 
-      })
-  }
-*/
-async GetUserData() {
-    let data:userDataSearch={PageLimit:this.state.maxItemsOnPage,PageNumber:this.state.curPage}
+async GetUserData(page:number) {
+    let data:userDataSearch={PageLimit:this.state.maxItemsOnPage,PageNumber:page}
     axios.get(pathBase+"/api/User"+"?PageLimit="+this.state.maxItemsOnPage+"&PageNumber="+this.state.curPage,
     {
         headers: {
@@ -72,7 +61,7 @@ async GetUserData() {
     )
     .then(res => {
         console.log(res);
-        this.setState({usersList:res.data.items});
+        this.SetItemsList(res.data.items);
         this.SetCountItems(40)//res.data.count)
     })
     .catch(err => {  
@@ -83,18 +72,11 @@ async GetUserData() {
 
 OnPageChange=(page:number, pageSize?: number | undefined)=>{
     this.SetCurPage(page);
-    console.log("pg:"+this.state.curPage)
-    console.log("cur:"+page)
-    this.GetUserData()
 }
 
 OnMaxItemsChange=(current: number, size: number)=>{
     this.SetCurPage(current);
     this.SetMaxItemsOnPage(size);
-    console.log("maxitems"+this.state.maxItemsOnPage)
-    console.log("pg:"+this.state.curPage)
-    console.log("cur:"+current)
-    //this.GetUserData()
 }
 
     generatePagination() {
@@ -121,8 +103,7 @@ OnMaxItemsChange=(current: number, size: number)=>{
                 <Col span={1}></Col>
             </Row>
             <AddEmployeeCard/>
-            <GenerateCustomCardList curPage={this.state.curPage} maxItemsOnPage={this.state.maxItemsOnPage} countItems={this.state.countItems} 
-            searchAllOptText={this.state.searchAllOptText} SetCountItems={this.SetCountItems} GetUserData={this.GetUserData} usersList={this.state.usersList}/>
+            <GenerateCustomCardList  usersList={this.state.usersList}/>
             {this.generatePagination()}
 
         </div>);
@@ -130,7 +111,7 @@ OnMaxItemsChange=(current: number, size: number)=>{
 
     
 async componentDidMount() {
-    this.GetUserData();
+    this.GetUserData(1);
   }
 
 }

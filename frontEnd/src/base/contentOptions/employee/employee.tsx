@@ -9,6 +9,7 @@ import AddEmployeeCard from "../dataEntities/addEmployeeCard/addEmployeeCard"
 import {paths,/*components,operations*/ } from "../../../swaggerCode/swaggerCode"
 import axios from 'axios'
 import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
+import { throws } from 'assert';
 
 const pathBase:string ="https://hse-cms.herokuapp.com";
 
@@ -22,9 +23,28 @@ state={
     maxItemsOnPage:10,
     countItems:40,
     searchAllOptText:"",
-    usersList:[]
+    usersList:[],
+    searcgOptValue:"всему",
+    sortOptValue:"имя",
+    dirOptValue:"возрастанию"
 }
-  
+
+setsearcgOptValue = (val:string) => {
+    this.setState({ searcgOptValue: val });
+};
+
+setsortOptValue = (val:string) => {
+    this.setState({ sortOptValue: val  });
+};
+
+setdirOptValue = (val:string) => {
+    this.setState({ dirOptValue: val  });
+};
+
+initSearch = (val:string) => {
+    this.setState({searchAllOptText:val},()=>this.GetUserData(1))
+    
+};
 
 ClearArray = () => {
     this.setState({ usersList: [] });
@@ -51,8 +71,67 @@ SetItemsList=(val:userData[])=>{
  
 
 async GetUserData(page:number) {
-    let data:userDataSearch={PageLimit:this.state.maxItemsOnPage,PageNumber:page}
-    axios.get(pathBase+"/api/User"+"?PageLimit="+this.state.maxItemsOnPage+"&PageNumber="+this.state.curPage,
+    let Search="";
+    let sortingColumn;
+    let sortDirect;
+    let role;
+    switch (this.state.searcgOptValue){
+        case "всему":
+            {
+                Search="&QuickSearch="+this.state.searchAllOptText;
+                break;
+            }
+        case "имени":
+            {
+                Search="&FirstNameStartsWith="+this.state.searchAllOptText;
+                break;
+            }
+        case "фамилии":
+            {
+                Search="&LastNameStartsWith="+this.state.searchAllOptText;
+                break;
+            }
+        case "email":
+            {
+                Search="&EmailStartsWith="+this.state.searchAllOptText;
+                break;
+            }
+
+    }
+
+    switch (this.state.sortOptValue){
+        case "имя":
+            {
+                sortingColumn="&SortingColumn="+"FirstName";
+                break;
+            }
+        case "фамилия":
+            {
+                sortingColumn="&SortingColumn="+"LastName";
+                break;
+            }
+        case "email":
+            {
+                sortingColumn="&SortingColumn="+"Email";
+                break;
+            }
+
+    }
+
+    switch (this.state.dirOptValue){
+        case "возрастанию":
+            {
+                sortDirect="&SortDirection="+"Ascending";
+                break;
+            }
+        case "убыванию":
+            {
+                sortDirect="&SortDirection="+"Descending";
+                break;
+            }
+    }
+
+    axios.get(pathBase+"/api/User"+"?PageLimit="+this.state.maxItemsOnPage+"&PageNumber="+this.state.curPage+sortDirect+sortingColumn+Search,
     {
         headers: {
         "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
@@ -99,7 +178,14 @@ OnMaxItemsChange=(current: number, size: number)=>{
             <Row>
                 <Col span={1}></Col>
                 <Col span={22}>
-                    <SearchBox/>
+                    <SearchBox 
+                    searcgOptValue={this.state.searcgOptValue} 
+                    sortOptValue={this.state.sortOptValue}
+                    dirOptValue={this.state.dirOptValue} 
+                    setsearcgOptValue={this.setsearcgOptValue} 
+                    setsortOptValue={this.setsortOptValue} 
+                    setdirOptValue={this.setdirOptValue} 
+                    initSearch={this.initSearch}/>
                 </Col>
                 <Col span={1}></Col>
             </Row>

@@ -25,7 +25,7 @@ export class AllTexts extends React.Component<{},{}> {
             <Row>
                 <Col span={1}></Col>
                 <Col span={22}>
-                    <SearchBox/>
+
                 </Col>
                 <Col span={1}></Col>
             </Row>

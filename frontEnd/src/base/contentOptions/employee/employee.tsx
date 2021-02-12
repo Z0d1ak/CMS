@@ -62,7 +62,7 @@ async GetUserData(page:number) {
     .then(res => {
         console.log(res);
         this.SetItemsList(res.data.items);
-        this.SetCountItems(40)//res.data.count)
+        this.SetCountItems(res.data.count)//res.data.count)
     })
     .catch(err => {  
         console.log(err); 
@@ -86,7 +86,8 @@ OnMaxItemsChange=(current: number, size: number)=>{
                 <Col span={22}>
                     <Pagination className="pagination" defaultCurrent={1} defaultPageSize={10}
                      total={this.state.countItems} onChange={this.OnPageChange}
-                     onShowSizeChange={this.OnMaxItemsChange} showSizeChanger/>
+                     onShowSizeChange={this.OnMaxItemsChange} showSizeChanger
+                     showTotal={total => `Total ${total} items`}/>
                 </Col>
                 <Col span={1}></Col>
             </Row>

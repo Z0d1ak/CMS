@@ -11,8 +11,8 @@ const { Paragraph } = Typography;
 
 
 
-    export class SearchBox extends React.Component<{searcgOptValue:string,sortOptValue:string,dirOptValue:string,setsearcgOptValue:any,setsortOptValue:any,
-        setdirOptValue:any, initSearch:any},{}> {
+    export class SearchBox extends React.Component<{roleValue:string,searcgOptValue:string,sortOptValue:string,dirOptValue:string,setsearcgOptValue:any,setsortOptValue:any,
+        setdirOptValue:any, initSearch:any,setRoleValue:any},{}> {
 
     
 
@@ -76,6 +76,46 @@ const { Paragraph } = Typography;
         </Menu>
       );
 
+      roleOpt = (
+        <Menu>
+          <Menu.Item onClick={()=>this.props.setRoleValue("Любая")}>
+            <Paragraph>
+            Любая
+            </Paragraph>
+          </Menu.Item>
+          <Menu.Item onClick={()=>this.props.setRoleValue("SuperAdmin")}>
+            <Paragraph>
+            SuperAdmin
+            </Paragraph>
+          </Menu.Item>
+          <Menu.Item onClick={()=>this.props.setRoleValue("CompanyAdmin")}>
+            <Paragraph>
+            CompanyAdmin
+            </Paragraph>
+          </Menu.Item>
+          <Menu.Item onClick={()=>this.props.setRoleValue("ChiefRedactor")}>
+            <Paragraph>
+            ChiefRedactor
+            </Paragraph>
+          </Menu.Item>
+          <Menu.Item onClick={()=>this.props.setRoleValue("Redactor")}>
+            <Paragraph>
+            Redactor
+            </Paragraph>
+          </Menu.Item>
+          <Menu.Item onClick={()=>this.props.setRoleValue("Author")}>
+            <Paragraph>
+            Author
+            </Paragraph>
+          </Menu.Item>
+          <Menu.Item onClick={()=>this.props.setRoleValue("Corrector")}>
+            <Paragraph>
+            Corrector
+            </Paragraph>
+          </Menu.Item>
+        </Menu>
+      );
+
 render(){
 
     return (
@@ -101,6 +141,14 @@ render(){
             <Paragraph className="text">по</Paragraph>
             <Dropdown overlay={this.dirOpt} placement="bottomLeft">
                 <Button>{this.props.dirOptValue}</Button>
+            </Dropdown>
+        </Space>
+        </Row>
+        <Row className="rowSearchBar">
+        <Space size={5}>
+            <Paragraph className="text"> Роль </Paragraph> 
+            <Dropdown overlay={this.roleOpt} placement="bottomLeft">
+                <Button>{this.props.roleValue}</Button>
             </Dropdown>
         </Space>
         </Row>

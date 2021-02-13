@@ -26,8 +26,13 @@ state={
     usersList:[],
     searcgOptValue:"всему",
     sortOptValue:"имя",
-    dirOptValue:"возрастанию"
+    dirOptValue:"возрастанию",
+    roleValue:"любая"
 }
+
+setRoleValue = (val:string) => {
+    this.setState({ roleValue: val });
+};
 
 setsearcgOptValue = (val:string) => {
     this.setState({ searcgOptValue: val });
@@ -74,7 +79,7 @@ async GetUserData(page:number) {
     let Search="";
     let sortingColumn;
     let sortDirect;
-    let role;
+    let role="Любая";
     switch (this.state.searcgOptValue){
         case "всему":
             {
@@ -131,7 +136,45 @@ async GetUserData(page:number) {
             }
     }
 
-    axios.get(pathBase+"/api/User"+"?PageLimit="+this.state.maxItemsOnPage+"&PageNumber="+this.state.curPage+sortDirect+sortingColumn+Search,
+    switch (this.state.roleValue){
+        case "любая":
+            {
+                role="";
+                break;
+            }
+        case "SuperAdmin":
+            {
+                role="&Role="+"SuperAdmin";
+                break;
+            }
+        case "CompanyAdmin":
+            {
+                role="&Role="+"CompanyAdmin";
+                break;
+            }
+        case "ChiefRedactor":
+            {
+                role="&Role="+"ChiefRedactor";
+                break;
+            }
+            case "Redactor":
+            {
+                role="&Role="+"Redactor";
+                break;
+            }
+            case "Author":
+            {
+                role="&Role="+"Author";
+                break;
+            }
+            case "Corrector":
+            {
+                role="&Role="+"Corrector";
+                break;
+            }
+    }
+
+    axios.get(pathBase+"/api/User"+"?PageLimit="+this.state.maxItemsOnPage+"&PageNumber="+this.state.curPage+role+sortDirect+sortingColumn+Search,
     {
         headers: {
         "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
@@ -179,13 +222,15 @@ OnMaxItemsChange=(current: number, size: number)=>{
                 <Col span={1}></Col>
                 <Col span={22}>
                     <SearchBox 
+                    roleValue={this.state.roleValue}
                     searcgOptValue={this.state.searcgOptValue} 
                     sortOptValue={this.state.sortOptValue}
                     dirOptValue={this.state.dirOptValue} 
                     setsearcgOptValue={this.setsearcgOptValue} 
                     setsortOptValue={this.setsortOptValue} 
                     setdirOptValue={this.setdirOptValue} 
-                    initSearch={this.initSearch}/>
+                    initSearch={this.initSearch}
+                    setRoleValue={this.setRoleValue}/>
                 </Col>
                 <Col span={1}></Col>
             </Row>

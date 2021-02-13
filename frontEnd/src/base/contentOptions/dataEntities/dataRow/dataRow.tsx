@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col,Button } from 'antd';
 import 'antd/dist/antd.css';
 import './dataRow.css';
 import {
@@ -7,7 +7,7 @@ import {
     EditOutlined,
     PlusOutlined
 } from '@ant-design/icons';
-import {Dropdown, Menu, message, Typography} from "antd";
+import {Dropdown, Menu, message, Typography,Space} from "antd";
 const { Paragraph } = Typography;
 
 
@@ -39,10 +39,10 @@ export function DataRowEditable({dataStr, titleStr,typeName,editFieldCallback}: 
     const [editableStr, setEditableStr] = React.useState(dataStr);
     return (
         <Row className="DataRow">
-            <Col span={2} className='title' >
+            <Col span={3} className='title' >
                 <Paragraph className='DataRowTitle'>{titleStr}</Paragraph>
             </Col>
-            <Col span={20}>
+            <Col span={19}>
                 <Paragraph className='DataRowData'editable={{
                 maxLength: 40,
                 icon: <EditOutlined />,
@@ -59,8 +59,8 @@ export function DataRowEditable({dataStr, titleStr,typeName,editFieldCallback}: 
 export function DataRow({dataStr, titleStr}: IDataRow) {
     return (
         <Row className="DataRow">
-            <Col span={2} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
-            <Col span={2} ><Paragraph className='DataRowData'>{dataStr}</Paragraph></Col>
+            <Col span={3} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
+            <Col span={20} ><Paragraph className='DataRowData'>{dataStr}</Paragraph></Col>
         </Row>
     )
 }
@@ -68,14 +68,19 @@ export function DataRow({dataStr, titleStr}: IDataRow) {
 export function DataRowList({dataList, titleStr}: IDataRowList) {
     return (
         <Row className="DataRow">
-            <Col span={2} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
-            <Col span={2} ><Paragraph className='DataRowList'>
-                <ul>
+            <Col span={3} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
+            <Col span={4} className="DataRowList">
+                
                     {dataList.map((r, i) => {
-                        return (<li>{r}</li> )
+                        return (
+                            <Row>
+                            <Col span={1}></Col>
+                        <Col span={22} className="optionText">{r}</Col>
+                        <Col span={1}></Col>
+                        </Row> )
                     })}
-                </ul>
-            </Paragraph></Col>
+                
+            </Col>
         </Row>
     )
 }
@@ -100,7 +105,7 @@ export function DataRowListEditable({dataList, titleStr,typeName,editListCallbac
     }
 
     function updateOptionsMenuCallBack():JSX.Element {
-        let optList:string[]=["Конструктор","Дизайнер","Корова","Собака"]
+        let optList:string[]=["SuperAdmin","CompanyAdmin","ChiefRedactor","Redactor","Author","Corrector"]
         return <Menu>
             {optList.map((r, i) => {
                 return (
@@ -112,21 +117,37 @@ export function DataRowListEditable({dataList, titleStr,typeName,editListCallbac
         </Menu>
     }
 
+
     return (
         <Row className="DataRow">
-            <Col span={2} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
-            <Col span={2} ><Paragraph className='DataRowList'>
+            <Col span={3} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
+            <Col span={4} ><Paragraph className='DataRowList'>
                 <ul>
                     {editableList.map((r, i) => {
                         return (
-                            <li>
-                                {r} <CloseOutlined className='DeleteIcon' onClick={()=>setEditableList(deleteUl(i,dataList))}/>
-                            </li>
+                            
+                                <Button className="deleteButton" danger
+                                    type="dashed"
+                                    onClick={()=>setEditableList(deleteUl(i,dataList))}
+                                    
+                                >
+                                     {r} <CloseOutlined />
+                                </Button>
+                           
+                            
                         )
                     })}
+                    
                     <div>
+                    
                         <Dropdown overlay={updateOptionsMenuCallBack()}>
-                            <PlusOutlined className='AddIcon'/>
+                            <Button
+                type="dashed"
+                onClick={() => {}}
+                style={{ width: '100%' }}
+                >
+                Добавить роль <PlusOutlined />
+              </Button>
                         </Dropdown>
                     </div>
                 </ul>

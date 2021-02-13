@@ -18,6 +18,7 @@ export class AddEmployeeCard extends React.Component<{},{}> {
 
     state = {
         status:'hide',
+        submit:false
     };
 
     openAddForm = () => {
@@ -32,13 +33,19 @@ export class AddEmployeeCard extends React.Component<{},{}> {
     };
 
 
-    sendFormData = () => {
-
+    submitSet = (val:boolean) => {
+            let form = document.getElementById("AddForm");
+            var event = new Event('submit', {
+                'bubbles'    : true, // Whether the event will bubble up through the DOM or not
+                'cancelable' : true  // Whether the event may be canceled or not
+            });
+            form?.dispatchEvent(event);
+        
     };
 
     options=():JSX.Element[]=>{
         return (
-            [<CheckOutlined onClick={()=>{this.sendFormData()}}/>,<UpOutlined onClick={()=>{this.closeAddForm()}}/>]
+            [<CheckOutlined onClick={()=>{this.submitSet(true);}}></CheckOutlined>,<UpOutlined onClick={()=>{this.closeAddForm()}}/>]
         )
     }
     
@@ -56,7 +63,7 @@ export class AddEmployeeCard extends React.Component<{},{}> {
                         this.state.status==="expand"?this.options():[]
                     }
                     >
-                    {this.state.status==="hide"?<PlusOutlined />:<AddEmployeeForm/>}
+                    {this.state.status==="hide"?<PlusOutlined />:<AddEmployeeForm  closeAddForm={this.closeAddForm}/>}
                     </Card>
                 </Col>
                 <Col span={1}></Col>

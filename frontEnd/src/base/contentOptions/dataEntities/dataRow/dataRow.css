@@ -13,19 +13,27 @@
 }
 
 .DataRowList{
-  display: inline-flex;
-
+  width: 100%;
+  margin-top: -5px;
 }
 
-.DeleteIcon{
-
-}
-
-.AddIcon{
-
-}
 
 .title{
   text-align: right;
-  padding-right: 1%;
+  padding-right: 2%;
+}
+
+.deleteButton
+{
+  width: 100%;
+  text-align: left;
+}
+
+.optionText
+{
+  align-content: center;
+  height: 32px;
+  width: 100%;
+  padding-top: 6px;
+  font-size: 14px;
 }

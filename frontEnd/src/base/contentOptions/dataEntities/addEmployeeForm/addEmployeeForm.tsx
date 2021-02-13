@@ -21,7 +21,7 @@ class User{
 }
 
 const layout = {
-  labelCol: { span: 2 },
+  labelCol: { span: 3 },
   wrapperCol: { span: 0 },
 };
 
@@ -37,10 +37,11 @@ type field=
         value: string,
     };
 
-export class AddEmployeeForm extends React.Component<{},{fields:field[]}> {
+export class AddEmployeeForm extends React.Component<{closeAddForm:()=>void},{fields:field[]}> {
 
-    constructor(props:{}) {
+    constructor(props:{closeAddForm:()=>void}) {
         super(props);
+
         this.state = {
             fields:[
             {
@@ -74,14 +75,18 @@ export class AddEmployeeForm extends React.Component<{},{fields:field[]}> {
     render() {
         return (
             
-            <NewUserForm  fields={this.state.fields} onChangeFields={(newFields:field[]) => {this.setFields(newFields);}}/> 
+            <NewUserForm  fields={this.state.fields} onChangeFields={(newFields:field[]) => {this.setFields(newFields);}} closeAddForm={this.props.closeAddForm}/> 
         );
     }
+
+    componentDidUpdate() {
+        
+      }
 
 }
 
 
-const NewUserForm = (props:{fields:field[],onChangeFields:(newFields:any)=>void })=> {
+const NewUserForm = (props:{fields:field[],onChangeFields:(newFields:any)=>void,closeAddForm:()=>void })=> {
 
     const history = useHistory();
 
@@ -105,6 +110,7 @@ const NewUserForm = (props:{fields:field[],onChangeFields:(newFields:any)=>void 
             })
             .then(res => {
                 console.log(res);
+                props.closeAddForm();
                 //history.push("/home");
             })
             .catch(err => {  
@@ -124,7 +130,7 @@ const NewUserForm = (props:{fields:field[],onChangeFields:(newFields:any)=>void 
            <Row>
             <Col span={0}></Col>
             <Col span={22}>
-        <Form {...layout}
+        <Form id="AddForm" {...layout}
               name="authentication"
               initialValues={{
                   remember: true,
@@ -151,11 +157,7 @@ const NewUserForm = (props:{fields:field[],onChangeFields:(newFields:any)=>void 
             <Form.Item name="roles" label="Роль" rules={[{ required: true }]}>
                 <Input />
             </Form.Item>
-            <Form.Item>
-                      <Button className="buttonLogin" type="primary" htmlType="submit">
-                          Войти
-                      </Button>
-                  </Form.Item>
+            
 
         </Form>
         </Col>
@@ -163,6 +165,8 @@ const NewUserForm = (props:{fields:field[],onChangeFields:(newFields:any)=>void 
         </Row>
         </div>
     );
+
+    
   };
 
 

@@ -191,11 +191,7 @@ export class EmployeeCard extends React.Component<{user:userData},{userOfCard:us
 
     updateListFieldCallBack = (val:("SuperAdmin" | "CompanyAdmin" | "ChiefRedactor" | "Redactor" | "Author" | "Corrector")[],param:string) => {
         let buf:userData=this.state.userOfCard;
-        switch(param)
-        {
-            case "roles":
                 buf.roles=val;
-        }
     };
 
     render(){

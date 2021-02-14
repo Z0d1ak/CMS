@@ -87,7 +87,6 @@ export function DataRowList({dataList, titleStr}: IDataRowList) {
 
 
 export function DataRowListEditable({dataList, titleStr,typeName,editListCallback}: IDataRowListE) {
-    const [editableList, setEditableList] = React.useState(dataList);
 
     function deleteUl(id:number,list:string[]):string[] {
         let updateArray = [...list];
@@ -109,7 +108,7 @@ export function DataRowListEditable({dataList, titleStr,typeName,editListCallbac
         return <Menu>
             {optList.map((r, i) => {
                 return (
-                    <Menu.Item onClick={()=>setEditableList(addUl(r,dataList))}>
+                    <Menu.Item onClick={()=>editListCallback(addUl(r,dataList),typeName)}>
                         {r}
                     </Menu.Item>
                 )
@@ -123,12 +122,12 @@ export function DataRowListEditable({dataList, titleStr,typeName,editListCallbac
             <Col span={3} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
             <Col span={4} ><Paragraph className='DataRowList'>
                 <ul>
-                    {editableList.map((r, i) => {
+                    {dataList.map((r, i) => {
                         return (
                             
                                 <Button className="deleteButton" danger
                                     type="dashed"
-                                    onClick={()=>setEditableList(deleteUl(i,dataList))}
+                                    onClick={()=>editListCallback(deleteUl(i,dataList),typeName)}
                                     
                                 >
                                      {r} <CloseOutlined />

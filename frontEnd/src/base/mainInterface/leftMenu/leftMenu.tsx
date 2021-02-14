@@ -7,6 +7,7 @@ import {
     SnippetsOutlined,
     IdcardOutlined,
     AreaChartOutlined,
+    BankOutlined
 } from '@ant-design/icons';
 
 import {
@@ -16,6 +17,7 @@ import {
 
 
 import Employees from "../../contentOptions/employee/employee"
+import Company from "../../contentOptions/company/company"
 import AllTexts from "../../contentOptions/article/article"
 import Infographic from "../../contentOptions/infographics/infographics"
 import InWork from "../../contentOptions/task/task"
@@ -33,6 +35,7 @@ interface menuOpt {
 
 const leftMenuContent: Array<menuOpt> = [ 
     {text:"В работе",link:"/home/inwork", icon:<UsbOutlined/>,component: <InWork/>},
+    {text:"Компании",link:"/home/company", icon:<BankOutlined />,component: <Company/>},
     {text:"Все статьи",link:"/home/alltexts", icon:<SnippetsOutlined />,component:< AllTexts/>},
     {text:"Сотрудник",link:"/home/emplo", icon:<IdcardOutlined />,component:<Employees/>},
     {text:"Инфографика",link:"/home/info", icon:<AreaChartOutlined />,component:<Infographic/>}

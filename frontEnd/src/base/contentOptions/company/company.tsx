@@ -3,24 +3,46 @@ import './company.css';
 import 'antd/dist/antd.css';
 import { paths } from '../../../swaggerCode/swaggerCode';
 import axios from 'axios'
-import { Menu, Dropdown, Button, Space,Input,Typography,Row, Col } from 'antd';
-const { Search } = Input;
-const { Paragraph } = Typography;
+import {Row, Col} from 'antd';
+import AddEntity from "../companyEntities/addEntity/addEntity"
+import DataEntity from "../companyEntities/dataEntity/dataEntity"
+import FilterEntity from "../companyEntities/filterEntity/filterEntity"
+import PaginationEntity from "../companyEntities/paginationEntity/paginationEntity"
 
-type getCompany = paths["/api/Company"]["get"]["parameters"]["query"];
+type getCompanies=paths["/api/Company"]["get"]["responses"]["200"]["content"]["application/json"]
 
 export class Company extends React.Component<{},{}> {
+
+  
 
     state={
         requestUrl:"https://hse-cms.herokuapp.com",
         requestPath:"/api/Company",
         NameStartsWith: "",
+
         SortingColumn: "Name",
+        SortingColumnOptions:["Name"],
+
         SortDirection: "Ascending",
+        SortDirectionOptions:["Ascending","Descending"],
+
         QuickSearch: "",
-        PageLimit: 20,
+        PageLimit: 10,
         PageNumber: 1,
-        SearchBy:"All"
+
+        SearchBy:"All",
+
+        optionName:["SearchBy"],
+        optionList:[["Ascending","Descending","All"]],
+        text:["Искать по"],
+
+        count: 0,
+        items: [
+            {
+                id: "",
+                name: ""
+            }
+        ]
     }
 
     isNull=(val:string):boolean=>{
@@ -42,10 +64,17 @@ export class Company extends React.Component<{},{}> {
         request+=this.isNull(this.state.SortDirection)?"":"&SortDirection="+this.state.SortDirection;
         request+=this.isNull(this.state.QuickSearch)?"":"&QuickSearch="+this.state.QuickSearch;
         axios.get(
-            this.state.requestUrl+this.state.requestPath+request
+            this.state.requestUrl+this.state.requestPath+request,
+            {
+                headers: {
+                "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
+              }
+            }
         )
         .then(res => {
             console.log(res);
+            this.setState({count:res.data.count})
+            this.setState({items:res.data.items})
         })
         .catch(err => {  
             switch(err.response.status)
@@ -61,35 +90,47 @@ export class Company extends React.Component<{},{}> {
             }
         })
     }
+
+ 
+
+    
+    setCountItems=(val:number)=>{
+        this.setState({count:val})
+    }
+
+    onPageChange=(page:number, pageSize?: number | undefined)=>{
+        this.setState({PageNumber:page},()=>this.update());
+    }
+    
+    onMaxItemsChange=(current: number, size: number)=>{
+        this.setState({PageNumber:current});
+        this.setState({PageLimit:size},()=>this.update());
+    }
+
     
     render(){
         return(
-            <Row>
-                <Col span={1}></Col>
-                <Col span={22}>
-                    <SearchBox 
-                        updateCallback={this.update}
-                        changeValueCallback={this.changeValue}
-                    />
-                    <SortBox 
-                        SortDirection={this.state.SortDirection}
-                        SortDirectionOptions={["Ascending","Descending"]}
-                        SortingColumn={this.state.SortingColumn}
-                        SortingColumnOptions={["Name"]}
-                        updateCallback={this.update}
-                        changeValueCallback={this.changeValue}
-                    />
-                    <ChooseBox 
-                        option={this.state.SearchBy}
-                        optionName={"SearchBy"}
-                        optionList={["Ascending","Descending","All"]}
-                        text={"Искать по"}
-                        updateCallback={this.update}
-                        changeValueCallback={this.changeValue}
-                    />
-                </Col>
-                <Col span={1}></Col>
-            </Row>
+            <div>
+                <FilterEntity
+                updateCallback={this.update}
+                changeValueCallback={this.changeValue}
+                SortDirection={this.state.SortDirection}
+                SortDirectionOptions={this.state.SortDirectionOptions}
+                SortingColumn={this.state.SortingColumn}
+                SortingColumnOptions={this.state.SortingColumnOptions}
+                option={[this.state.SearchBy]}
+                optionName={this.state.optionName}
+                optionList={this.state.optionList}
+                text={this.state.text}
+                />
+                <AddEntity/> 
+                <DataEntity items={this.state.items}/>  
+                <PaginationEntity 
+                countItems={this.state.count}
+                onPageChange={this.onPageChange}
+                onMaxItemsChange={this.onMaxItemsChange}/> 
+            </div>
+            
         );
     }
         
@@ -101,121 +142,5 @@ export class Company extends React.Component<{},{}> {
 
 
 
-export class SearchBox extends React.Component<{
-        updateCallback:()=>void,
-        changeValueCallback:(val:any,type:string,callback:()=>void)=>void
-    },{}> {
-    
-
-    render(){
-        return (
-            <Row>
-                    <Col span={24}>
-                        <Search 
-                            placeholder="Искать"  
-                            onSearch={(value: string)=>this.props.changeValueCallback(value,"QuickSearch",this.props.updateCallback)}
-                        />
-                        
-                    </Col>
-            </Row>
-        );
-    }
-}
-
-
-export class SortBox extends React.Component<{
-    SortDirection:string,
-    SortDirectionOptions:string[],
-    SortingColumn:string,
-    SortingColumnOptions:string[],
-    updateCallback:()=>void,
-    changeValueCallback:(val:any,type:string,callback:()=>void)=>void
-},{}> {
-
-    SortDirectionGenerate=():JSX.Element=>{
-        return <Menu>
-         {this.props.SortDirectionOptions.map((u, i) => {
-                if (u!==this.props.SortDirection) return (
-                    <Menu.Item onClick={()=>this.props.changeValueCallback(u,"SortDirection",this.props.updateCallback)} key={"SortDirection"+i}>
-                        <Paragraph>
-                        {u}
-                        </Paragraph>
-                    </Menu.Item>
-                )
-            })}
-        </Menu>
-    }
-
-    SortingColumnGenerate=():JSX.Element=>{
-        return <Menu>
-         {this.props.SortingColumnOptions.map((u, i) => {
-                 if (u!==this.props.SortingColumn) return (
-                    <Menu.Item onClick={()=>this.props.changeValueCallback(u,"SortingColumn",this.props.updateCallback)} key={"SortingColumn"+i}>
-                        <Paragraph>
-                        {u}
-                        </Paragraph>
-                    </Menu.Item>
-                )
-            })}
-        </Menu>
-    }
-    
-  
-    render(){
-        return (
-            <Row>
-                <Space size={5}>
-                    <Paragraph className="text"> Сортировать</Paragraph> 
-                    <Dropdown overlay={this.SortingColumnGenerate} placement="bottomLeft">
-                        <Button>{this.props.SortingColumn}</Button>
-                    </Dropdown>
-                    <Paragraph className="text">по</Paragraph>
-                    <Dropdown overlay={this.SortDirectionGenerate} placement="bottomLeft">
-                        <Button>{this.props.SortDirection}</Button>
-                    </Dropdown>
-                </Space>
-            </Row>
-        );
-    }
-}
-
-
-export class ChooseBox extends React.Component<{
-    option:string,
-    optionName:string,
-    optionList:string[],
-    text:string,
-    updateCallback:()=>void,
-    changeValueCallback:(val:any,type:string,callback:()=>void)=>void
-},{}> {
-
-    optionGenerate=():JSX.Element=>{
-        return <Menu>
-         {this.props.optionList.map((u, i) => {
-                 if (u!==this.props.option) return (
-                    <Menu.Item onClick={()=>this.props.changeValueCallback(u,this.props.optionName,this.props.updateCallback)} key={this.props.optionName+i}>
-                        <Paragraph>
-                        {u}
-                        </Paragraph>
-                    </Menu.Item>
-                )
-            })}
-        </Menu>
-    }
-    
-  
-    render(){
-        return (
-            <Row>
-                <Space size={5}>
-                    <Paragraph> {this.props.text}</Paragraph> 
-                    <Dropdown overlay={this.optionGenerate} placement="bottomLeft">
-                        <Button>{this.props.option}</Button>
-                    </Dropdown>
-                </Space>
-            </Row>
-        );
-    }
-}
 
 export default Company;

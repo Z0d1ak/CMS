@@ -16,6 +16,7 @@ import {
 import Switch from 'react-bootstrap/esm/Switch';
 import { spawn } from 'child_process';
 import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../../dataEntities/dataRow/dataRow";
+import {DataCard} from "../dataSubEntities/dataCard/dataCard";
 const { Search } = Input;
 const { Paragraph } = Typography;
 const { Meta } = Card;
@@ -44,113 +45,6 @@ export class DataEntity extends React.Component<{
     componentDidMount() {
        
     }
-
-}
-
-export class DataCard extends React.Component<{
-    data: {
-        id: string;
-        name: string;
-    }},{}> {
-
-        state = {
-            status:'narrow',
-        };
-
-        updateDataFieldCallBack = (val:string,param:string) => {
-            let buf:{ id: string, name: string}=this.props.data;
-            switch(param)
-            {
-                case "id":
-                    buf.id=val;
-                    break;
-                case "name":
-                    buf.name=val;
-                    break;
-            }
-        };
-    
-        expandCardChange = () => {
-            if(this.state.status==='narrow')
-                this.setState({ status: 'expand'});
-            else
-                this.setState({ status: 'narrow'});
-        };
-    
-        makeEditableCardChange = () => {
-            if(this.state.status==='expand')
-                this.setState({ status: 'editable'});
-            else
-            {
-                this.setState({ status: 'expand'});
-            }
-        };
-    
-        deleteCard = () => {
-         
-        };
-    
-        updateCard = () => {
-            
-        };
-    
-    
-        DataRows= ():JSX.Element[] =>{
-            return (
-                [
-                    <Divider />,
-                        <DataRow dataStr={this.props.data.name} titleStr="Название : "/>,
-                    <Divider />,
-                         <DataRow dataStr={this.props.data.id} titleStr="id : "/>,
-                ]
-            )
-        }
-    
-        DataRowsEditable=():JSX.Element[]=>{
-            return (
-                [
-                    <Divider />,
-                        <DataRowEditable dataStr={this.props.data.name} titleStr="Название : " typeName="firstName" editFieldCallback={this.updateDataFieldCallBack}/>,
-                    <Divider />,
-                    <DataRow dataStr={this.props.data.id} titleStr="id : "/>
-                ]
-            )
-        }
-    
-        optionsNarrow=():JSX.Element[]=>{
-            return (
-                [<EllipsisOutlined onClick={()=>this.expandCardChange()}/>]
-            )
-        }
-    
-        optionsExpand=():JSX.Element[]=>{
-            return (
-                [<SettingOutlined onClick={()=>this.makeEditableCardChange()}/>,<UpOutlined onClick={()=>this.expandCardChange()}/>]
-            )
-        }
-    
-        optionsExpandEditable=():JSX.Element[]=>{
-            return (
-                [<Popconfirm placement="rightTop" title={"Вы точно хотите удалить этот объект?"} onConfirm={()=>this.deleteCard()} okText="Yes" cancelText="No"><DeleteOutlined/></Popconfirm>,<CheckOutlined onClick={()=>{this.makeEditableCardChange();this.updateCard();}}/>]
-            )
-        }
-    
-        render() {
-            return (
-                <Card className="userCard wide"
-                    hoverable={true}
-                    actions={
-                        this.state.status==="narrow"?this.optionsNarrow():this.state.status==="expand"?this.optionsExpand():this.optionsExpandEditable()
-                    }
-                >
-                    <Meta
-                        title={<div className="titleCard">{this.props.data.name}</div>}
-                        description={<div className="titleDescriptionCard">{this.props.data.id}</div>}
-                    />
-                    {this.state.status==="narrow"?<div/>:this.state.status==="expand"?this.DataRows():this.DataRowsEditable()}
-                </Card>
-            );
-        }
 
 }
 

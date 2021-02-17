@@ -12,6 +12,7 @@ import PaginationEntity from "../companyEntities/paginationEntity/paginationEnti
 type getCompanies=paths["/api/Company"]["get"]["responses"]["200"]["content"]["application/json"]
 type deleteCompany=paths["/api/Company/{id}"]["delete"]["parameters"]["path"]
 type updateCompany=paths["/api/Company"]["put"]["requestBody"]["content"]["text/json"]
+type addCompany=paths["/api/Company"]["post"]["requestBody"]["content"]["text/json"]
 
 export class Company extends React.Component<{},{}> {
 
@@ -43,8 +44,45 @@ export class Company extends React.Component<{},{}> {
             {
                 id: "",
                 name: ""
-            }
-        ]
+            },
+            {
+                id: "",
+                name: ""
+            },
+            {
+                id: "",
+                name: ""
+            },
+            {
+                id: "",
+                name: ""
+            },
+            {
+                id: "",
+                name: ""
+            },
+            {
+                id: "",
+                name: ""
+            },
+            {
+                id: "",
+                name: ""
+            },
+            {
+                id: "",
+                name: ""
+            },
+            {
+                id: "",
+                name: ""
+            },
+            {
+                id: "",
+                name: ""
+            },
+        ],
+        loading:false
     }
 
     isNull=(val:string):boolean=>{
@@ -89,7 +127,7 @@ export class Company extends React.Component<{},{}> {
         })
     }
 
-    create=(val:string)=>{
+    create=(val:addCompany)=>{
         axios.post(this.state.requestUrl+this.state.requestPath,val,
         {
             headers: {
@@ -98,9 +136,25 @@ export class Company extends React.Component<{},{}> {
         })
         .then(res => {
             console.log(res);
+            this.update();
         })
         .catch(err => {  
             console.log(err); 
+            switch(err.response.status)
+            {
+                case 401:{
+                    console.log("401"); 
+                    break;
+                }
+                case 409:{
+                    console.log("404"); 
+                    break;
+                }
+                default:{
+                    console.log("Undefined error"); 
+                    break;
+                }
+            }
         })
     }
 
@@ -136,9 +190,11 @@ export class Company extends React.Component<{},{}> {
                 }
             }
         })
+        
     }
 
     update(){ 
+        this.setState({loading:true});
         let request:string="?";
         request+="&PageLimit="+this.state.PageLimit;
         request+="&PageNumber="+this.state.PageNumber;
@@ -158,6 +214,7 @@ export class Company extends React.Component<{},{}> {
             console.log(res);
             this.setState({count:res.data.count})
             this.setState({items:res.data.items})
+            this.setState({loading:false});
         })
         .catch(err => {  
             switch(err.response.status)
@@ -182,12 +239,25 @@ export class Company extends React.Component<{},{}> {
     }
 
     onPageChange=(page:number, pageSize?: number | undefined)=>{
-        this.setState({PageNumber:page},()=>this.update());
+        if (page===0){
+            this.setState({PageNumber:1},()=>this.update());
+        }
+        else{
+            this.setState({PageNumber:page},()=>this.update());
+        }
     }
     
     onMaxItemsChange=(current: number, size: number)=>{
-        this.setState({PageNumber:current});
-        this.setState({PageLimit:size},()=>this.update());
+        console.log(current);
+        if (current===0){
+            console.log(current);
+            this.setState({PageLimit:size,PageNumber:1},()=>this.update());
+        }
+        else{
+            console.log(current);
+            this.setState({PageLimit:size,PageNumber:current},()=>this.update());
+        }
+        
     }
 
     
@@ -206,8 +276,11 @@ export class Company extends React.Component<{},{}> {
                 optionList={this.state.optionList}
                 text={this.state.text}
                 />
-                <AddEntity/> 
-                <DataEntity     
+                <AddEntity
+                createCallback={this.create}
+                /> 
+                <DataEntity 
+                loading={this.state.loading}    
                 updateDataCallback={this.updateData} 
                 deleteCallback={this.delete} 
                 updateCallback={this.update} 

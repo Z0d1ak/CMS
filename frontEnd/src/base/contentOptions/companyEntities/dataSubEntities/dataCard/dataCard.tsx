@@ -3,7 +3,7 @@ import './dataCard.css';
 import 'antd/dist/antd.css';
 import { paths } from '../../../../../swaggerCode/swaggerCode';
 import axios from 'axios'
-import { Menu, Dropdown, Button, Space,Input,Typography,Row, Col,Card,Form,Cascader,Select,message,Divider,Popconfirm,Avatar } from 'antd';
+import {Skeleton, Menu, Dropdown, Button, Space,Input,Typography,Row, Col,Card,Form,Cascader,Select,message,Divider,Popconfirm,Avatar } from 'antd';
 import {
     UpOutlined,
     CheckOutlined,
@@ -30,11 +30,12 @@ export class DataCard extends React.Component<{
         data: {
             id: string;
             name: string;
-        }
+        },
+        loading:boolean
     },{}> {
 
         state = {
-            status:'narrow',
+            status:'narrow'
         };
 
 
@@ -83,9 +84,13 @@ export class DataCard extends React.Component<{
             return (
                 [
                     <Divider />,
-                        <DataRow dataStr={this.props.data.name} titleStr="Название : "/>,
+                    <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                        <DataRow dataStr={this.props.data.name} titleStr="Название : "/>
+                        </Skeleton>,
                     <Divider />,
-                         <DataRow dataStr={this.props.data.id} titleStr="id : "/>,
+                    <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                         <DataRow dataStr={this.props.data.id} titleStr="id : "/>
+                         </Skeleton>
                 ]
             )
         }
@@ -94,9 +99,13 @@ export class DataCard extends React.Component<{
             return (
                 [
                     <Divider />,
-                        <DataRowEditable dataStr={this.props.data.name} titleStr="Название : " typeName="name" editFieldCallback={this.updateDataFieldCallBack}/>,
+                    <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                        <DataRowEditable dataStr={this.props.data.name} titleStr="Название : " typeName="name" editFieldCallback={this.updateDataFieldCallBack}/>
+                    </Skeleton>,
                     <Divider />,
+                    <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
                     <DataRow dataStr={this.props.data.id} titleStr="id : "/>
+                    </Skeleton>
                 ]
             )
         }
@@ -118,21 +127,39 @@ export class DataCard extends React.Component<{
                 [<Popconfirm placement="rightTop" title={"Вы точно хотите удалить этот объект?"} onConfirm={()=>this.deleteCard()} okText="Yes" cancelText="No"><DeleteOutlined/></Popconfirm>,<CheckOutlined onClick={()=>{this.makeEditableCardChange();this.updateCard();}}/>]
             )
         }
+
+        componentDidUpdate(prevProps:any, prevState:any, snapshot:any)
+        {
+            if (this.props.loading === false&&prevProps.loading === true) {
+                this.setState({status:"narrow"})
+            }
+        }
+
+
     
         render() {
             return (
+                
                 <Card className="userCard wide"
                     hoverable={true}
                     actions={
                         this.state.status==="narrow"?this.optionsNarrow():this.state.status==="expand"?this.optionsExpand():this.optionsExpandEditable()
                     }
                 >
+                    <Skeleton title={{width:"30%"}} active loading={this.props.loading} paragraph={{ rows: 1,width:"50%"}}>
                     <Meta
                         title={<div className="titleCard">{this.props.data.name}</div>}
                         description={<div className="titleDescriptionCard">{this.props.data.id}</div>}
                     />
-                    {this.state.status==="narrow"?<div/>:this.state.status==="expand"?this.DataRows():this.DataRowsEditable()}
+                    </Skeleton>
+                    
+                    {this.state.status==="narrow"?<div/>:
+                        this.state.status==="expand"?
+                        this.DataRows():
+                        this.DataRowsEditable()
+                }
                 </Card>
+
             );
         }
 

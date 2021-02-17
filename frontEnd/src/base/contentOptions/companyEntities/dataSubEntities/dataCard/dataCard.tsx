@@ -24,24 +24,30 @@ type getCompany = paths["/api/Company"]["get"]["parameters"]["query"];
 
 
 export class DataCard extends React.Component<{
-    data: {
-        id: string;
-        name: string;
-    }},{}> {
+        deleteItemCallback:(position: number)=>void,
+        updateItemCallback:(position: number,item:{id:string,name:string})=>void,
+        position:number,
+        data: {
+            id: string;
+            name: string;
+        }
+    },{}> {
 
         state = {
             status:'narrow',
         };
 
+
+
+
         updateDataFieldCallBack = (val:string,param:string) => {
-            let buf:{ id: string, name: string}=this.props.data;
             switch(param)
             {
                 case "id":
-                    buf.id=val;
+                    this.props.data.id=val;
                     break;
                 case "name":
-                    buf.name=val;
+                    this.props.data.name=val;
                     break;
             }
         };
@@ -61,14 +67,16 @@ export class DataCard extends React.Component<{
                 this.setState({ status: 'expand'});
             }
         };
-    
+     
         deleteCard = () => {
-         
+            this.props.deleteItemCallback(this.props.position);
         };
     
         updateCard = () => {
-            
+            this.props.updateItemCallback(this.props.position,this.props.data);
         };
+
+        
     
     
         DataRows= ():JSX.Element[] =>{
@@ -86,7 +94,7 @@ export class DataCard extends React.Component<{
             return (
                 [
                     <Divider />,
-                        <DataRowEditable dataStr={this.props.data.name} titleStr="Название : " typeName="firstName" editFieldCallback={this.updateDataFieldCallBack}/>,
+                        <DataRowEditable dataStr={this.props.data.name} titleStr="Название : " typeName="name" editFieldCallback={this.updateDataFieldCallBack}/>,
                     <Divider />,
                     <DataRow dataStr={this.props.data.id} titleStr="id : "/>
                 ]

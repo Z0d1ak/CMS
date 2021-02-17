@@ -1,0 +1,11 @@
+.userCard {
+    margin-top: 16px;
+  }
+  
+  .userCard.wide {
+    width: 100%;
+  }
+  
+  .userCard.narrow {
+    width: 30%;
+  }

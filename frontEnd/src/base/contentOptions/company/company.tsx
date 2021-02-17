@@ -10,6 +10,8 @@ import FilterEntity from "../companyEntities/filterEntity/filterEntity"
 import PaginationEntity from "../companyEntities/paginationEntity/paginationEntity"
 
 type getCompanies=paths["/api/Company"]["get"]["responses"]["200"]["content"]["application/json"]
+type deleteCompany=paths["/api/Company/{id}"]["delete"]["parameters"]["path"]
+type updateCompany=paths["/api/Company"]["put"]["requestBody"]["content"]["text/json"]
 
 export class Company extends React.Component<{},{}> {
 
@@ -33,7 +35,7 @@ export class Company extends React.Component<{},{}> {
         SearchBy:"All",
 
         optionName:["SearchBy"],
-        optionList:[["Ascending","Descending","All"]],
+        optionList:[["Name","All"]],
         text:["Искать по"],
 
         count: 0,
@@ -53,6 +55,87 @@ export class Company extends React.Component<{},{}> {
         if (callback !== undefined) 
         this.setState({[type]:val},callback)  
         else this.setState({[type]:val})    
+    }
+
+    delete=(val:string)=>{
+        axios.delete(
+            this.state.requestUrl+this.state.requestPath+"/"+val,
+            {
+                headers: {
+                "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
+              }
+            }
+        )
+        .then(res => {
+            console.log(res);
+            this.update();
+        })
+        .catch(err => {  
+            switch(err.response.status)
+            {
+                case 401:{
+                    console.log("401"); 
+                    break;
+                }
+                case 404:{
+                    console.log("404"); 
+                    break;
+                }
+                default:{
+                    console.log("Undefined error"); 
+                    break;
+                }
+            }
+        })
+    }
+
+    create=(val:string)=>{
+        axios.post(this.state.requestUrl+this.state.requestPath,val,
+        {
+            headers: {
+            "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
+            }
+        })
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => {  
+            console.log(err); 
+        })
+    }
+
+    updateData=(val:updateCompany)=>{
+        axios.put(this.state.requestUrl+this.state.requestPath,val,
+        {
+        headers: {
+        "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
+        }
+        })
+        .then(res => {
+        console.log(res);
+        })
+        .catch(err => {  
+        console.log(err); 
+        switch(err.response.status)
+            {
+                case 401:{
+                    console.log("401"); 
+                    break;
+                }
+                case 404:{
+                    console.log("404"); 
+                    break;
+                }
+                case 409:{
+                    console.log("404"); 
+                    break;
+                }
+                default:{
+                    console.log("Undefined error"); 
+                    break;
+                }
+            }
+        })
     }
 
     update(){ 
@@ -124,7 +207,12 @@ export class Company extends React.Component<{},{}> {
                 text={this.state.text}
                 />
                 <AddEntity/> 
-                <DataEntity items={this.state.items}/>  
+                <DataEntity     
+                updateDataCallback={this.updateData} 
+                deleteCallback={this.delete} 
+                updateCallback={this.update} 
+                changeValueCallback={this.changeValue} 
+                items={this.state.items}/>  
                 <PaginationEntity 
                 countItems={this.state.count}
                 onPageChange={this.onPageChange}

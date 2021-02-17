@@ -1,51 +1,55 @@
 import React from 'react';
 import './dataEntity.css';
 import 'antd/dist/antd.css';
-import { paths } from '../../../../swaggerCode/swaggerCode';
-import axios from 'axios'
-import { Menu, Dropdown, Button, Space,Input,Typography,Row, Col,Card,Form,Cascader,Select,message,Divider,Popconfirm,Avatar } from 'antd';
-import {
-    UpOutlined,
-    CheckOutlined,
-    PlusOutlined,
-    EllipsisOutlined,
-    SettingOutlined,
-    DeleteOutlined
-
-} from '@ant-design/icons';
-import Switch from 'react-bootstrap/esm/Switch';
-import { spawn } from 'child_process';
-import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../../dataEntities/dataRow/dataRow";
+import {Row, Col } from 'antd';
 import {DataCard} from "../dataSubEntities/dataCard/dataCard";
-const { Search } = Input;
-const { Paragraph } = Typography;
-const { Meta } = Card;
+import { paths } from '../../../../swaggerCode/swaggerCode';
+type updateCompany=paths["/api/Company"]["put"]["requestBody"]["content"]["text/json"]
 
-type getCompany = paths["/api/Company"]["get"]["parameters"]["query"];
 
 export class DataEntity extends React.Component<{
-    items: { id: string, name: string}[]},{}> {
+    items: { id: string, name: string}[],
+    updateCallback:()=>void,
+    changeValueCallback:(val:any,type:string,callback:any)=>void,
+    updateDataCallback:(val:updateCompany)=>void,
+    deleteCallback:(val:string)=>void
+    },{}> {
+    
+    updateItem=(position: number, item:{id:string,name:string})=>{
+        let buf=this.props.items;
+        buf[position]=item;
+        this.props.changeValueCallback(buf,"items",this.props.updateDataCallback(item))
+    }
 
-        
-  
+    deleteItem=(position: number)=>{
+        let buf=this.props.items;
+        buf.splice(position, 1);
+        this.props.changeValueCallback(buf,"items",this.props.deleteCallback(this.props.items[position].id))
+    }
+
     render(){
         return(
-            <Row>
-                <Col span={1}></Col>
-                <Col span={22}>
+           <div>
                 {this.props.items.map((d, i) => {
-                    return (<DataCard data={d} key={"dc"+i}/>)
+                    return (
+                        <Row>
+                            <Col span={1}></Col>
+                            <Col span={22}>
+                                <DataCard 
+                                    deleteItemCallback={this.deleteItem}
+                                    updateItemCallback={this.updateItem}
+                                    position={i}
+                                    data={d} 
+                                    key={"DC"+i}
+                                />
+                            </Col>
+                            <Col span={1}></Col>
+                        </Row>
+                    )
                 })}
-                </Col>
-                <Col span={1}></Col>
-            </Row>
+            </div>
         );
     }
-        
-    componentDidMount() {
-       
-    }
-
 }
 
 

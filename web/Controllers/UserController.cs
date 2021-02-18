@@ -150,10 +150,12 @@ namespace web.Controllers
         /// <param name="cancellationToken">Токен для отмены операции.</param>
         /// <response code="204">Пользователь успешно удален.</response>
         /// <response code="404">Пользователь не найден.</response>
+        /// <response code="405">Пользователь не может удалить сам себя.</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = AccessRoles.AnyAdmin)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status405MethodNotAllowed)]
         public async Task<ActionResult> DeleteUserAsync([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await this.userService.DeleteAsync(id, cancellationToken);

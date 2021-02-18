@@ -14,6 +14,10 @@ type deleteCompany=paths["/api/Company/{id}"]["delete"]["parameters"]["path"]
 type updateCompany=paths["/api/Company"]["put"]["requestBody"]["content"]["text/json"]
 type addCompany=paths["/api/Company"]["post"]["requestBody"]["content"]["text/json"]
 
+
+/**
+ * Класс компонента компаний
+ */
 export class Company extends React.Component<{},{}> {
 
   

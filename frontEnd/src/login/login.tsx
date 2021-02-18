@@ -3,7 +3,7 @@ import './login.css';
 import 'antd/dist/antd.css';
 import {Form, Input, Button, Checkbox, Col, Row} from 'antd';
 import axios from 'axios'
-import {paths,/*components,operations*/ } from "../../swaggerCode/swaggerCode"
+import {paths,/*components,operations*/ } from "../swaggerCode/swaggerCode"
 
   import {useHistory} from "react-router-dom";
 
@@ -92,7 +92,7 @@ type field=
 
 
         return (
-            <div className="LoginForm">
+            <div className="loginForm">
 
             <Row>
                 <Col span={7}></Col>

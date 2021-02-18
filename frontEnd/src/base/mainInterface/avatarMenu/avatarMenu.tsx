@@ -12,18 +12,29 @@ import {
     UserOutlined
 } from '@ant-design/icons';
 
-
+/**
+ * Интерфейс для построения меню.
+ * @param text Текст-пояснение опции
+ * @param link Ссылка в рамках React Router.
+ */
 interface menuOpt {
     text:string;
     link:string;
 }
 
+/**
+ * Массив опций меню
+ */
 const avatarMenuContent: Array<menuOpt> = [ 
-    {text:"Профиль",link:"/home/profile"},
-    {text:"Настройки",link:"/home/settings"},
+    {text:"Профиль",link:"/profile"},
+    {text:"Настройки",link:"/settings"},
     {text:"Выход",link:"/login"},
 ];  
 
+
+/**
+ * Сбор всех ссылок для React-router, для родительского компонента
+ */
 export function getLinksAvatarMenu() {
     return (
         avatarMenuContent.map((r, i) => {
@@ -36,6 +47,10 @@ export function getLinksAvatarMenu() {
     );
 };
 
+
+/**
+ * Генерирует компонент меню на основе масива
+ */
 function generateMenu() {
     return (
         avatarMenuContent.map((r, i) => {
@@ -48,6 +63,10 @@ function generateMenu() {
     ));
 };
 
+
+/**
+ * Компонент меню при значке аватара.
+ */
 export class AvatarMenu extends React.Component<{},{}> {
 
     render() {

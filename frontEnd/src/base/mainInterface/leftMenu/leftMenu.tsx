@@ -18,14 +18,20 @@ import {
 
 import Employees from "../../contentOptions/employee/employee"
 import Company from "../../contentOptions/company/company"
-import AllTexts from "../../contentOptions/article/article"
+import Article from "../../contentOptions/article/article"
 import Infographic from "../../contentOptions/infographics/infographics"
-import InWork from "../../contentOptions/task/task"
+import ActualArticle from "../../contentOptions/actualArticle/actualArticle"
 
 
-const {  Sider } = Layout;
 
 
+/**
+ * Интерфейс для построения меню.
+ * @param text Текст-пояснение к иконке
+ * @param link Ссылка в рамках React Router.
+ * @param icon Иконка.
+ * @param component Генерируемый по нажатию компонент в поле Content в Layout.
+ */
 interface menuOpt {
     text:string;
     link:string;
@@ -33,14 +39,21 @@ interface menuOpt {
     component:JSX.Element;
 }
 
+/**
+ * Массив опций меню
+ */
 const leftMenuContent: Array<menuOpt> = [ 
-    {text:"В работе",link:"/home/inwork", icon:<UsbOutlined/>,component: <InWork/>},
+    {text:"В работе",link:"/home/inwork", icon:<UsbOutlined/>,component: <ActualArticle/>},
+    {text:"Статьи",link:"/home/alltexts", icon:<SnippetsOutlined />,component:< Article/>},
     {text:"Компании",link:"/home/company", icon:<BankOutlined />,component: <Company/>},
-    {text:"Все статьи",link:"/home/alltexts", icon:<SnippetsOutlined />,component:< AllTexts/>},
-    {text:"Сотрудник",link:"/home/emplo", icon:<IdcardOutlined />,component:<Employees/>},
+    {text:"Сотрудники",link:"/home/emplo", icon:<IdcardOutlined />,component:<Employees/>},
     {text:"Инфографика",link:"/home/info", icon:<AreaChartOutlined />,component:<Infographic/>}
 ];  
 
+
+/**
+ * Сбор всех ссылок для React-router, для родительского компонента
+ */
 export function getLinksLeftMenu() {
     return (
         leftMenuContent.map((r, i) => {
@@ -53,6 +66,10 @@ export function getLinksLeftMenu() {
     );
 };
 
+
+/**
+ * Генерирует компонент меню на основе масива
+ */
 function generateMenu() {
     return (<Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
         {leftMenuContent.map((r, i) => {
@@ -65,17 +82,17 @@ function generateMenu() {
     </Menu>);
 };
 
+/**
+ * Компонент левого меню.
+ * @param collapsed Состояние меню (расшиернное/суженное)
+ */
 export class LeftMenu extends React.Component<{collapsed:boolean},{}> {
-
-
-
-
     render() {
         return (
-                <Sider trigger={null} collapsible collapsed={this.props.collapsed}>
+                <Layout.Sider trigger={null} collapsible collapsed={this.props.collapsed}>
                     <div className="logo" />
                     {generateMenu()}
-                </Sider>
+                </Layout.Sider>
         );
     }
 }

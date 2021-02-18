@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
-import {Login} from "./loginAndRegister/login/login";
-import {Register} from "./loginAndRegister/register/register";
+import {Login} from "./login/login";
+import {Settings} from "./settings/settings";
+import {Profile} from "./profile/profile";
 import MainPart from "./base/mainInterface/mainPart/mainPart"
 import {
     Switch,
@@ -20,11 +21,14 @@ export class App extends React.Component<{},{}> {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
           <Route path="/home">
             <MainPart></MainPart>
+          </Route>
+          <Route path="/settings">
+            <Settings></Settings>
+          </Route>
+          <Route path="/profile">
+            <Profile></Profile>
           </Route>
         </Switch>
         );

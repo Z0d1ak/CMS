@@ -137,7 +137,7 @@ export class AddForm extends React.Component<{
                             password: allFields[4].value,
                         }  
                     }
-                },()=>console.log(this.state.Company))
+                })
               }}
             >
 

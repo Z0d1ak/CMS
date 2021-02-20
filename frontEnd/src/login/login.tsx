@@ -78,6 +78,8 @@ type field=
             axios.post(pathBase+"/api/Auth/login",auth)
             .then(res => {
                 console.log(res);
+                sessionStorage.setItem('AuthUserId', res.data.user.id);
+                sessionStorage.setItem('AuthUserSecurityToken', res.data.securityToken);
                 history.push("/home");
             })
             .catch(err => {  

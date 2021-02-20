@@ -104,8 +104,8 @@ export class Company extends React.Component<{},{}> {
             this.state.requestUrl+this.state.requestPath+"/"+val,
             {
                 headers: {
-                "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
-              }
+                    "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
+                }
             }
         )
         .then(res => {
@@ -135,7 +135,7 @@ export class Company extends React.Component<{},{}> {
         axios.post(this.state.requestUrl+this.state.requestPath,val,
         {
             headers: {
-            "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
+                "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
             }
         })
         .then(res => {
@@ -165,9 +165,9 @@ export class Company extends React.Component<{},{}> {
     updateData=(val:updateCompany)=>{
         axios.put(this.state.requestUrl+this.state.requestPath,val,
         {
-        headers: {
-        "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
-        }
+            headers: {
+                "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
+            }
         })
         .then(res => {
         console.log(res);
@@ -210,8 +210,8 @@ export class Company extends React.Component<{},{}> {
             this.state.requestUrl+this.state.requestPath+request,
             {
                 headers: {
-                "Authorization": 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJDb21wYW55SWQiOiJmYWNlMWU1NS1iMGQ1LTFhYjUtMWU1NS1iZWYwMDFlZDEwMGYiLCJyb2xlIjoiU3VwZXJBZG1pbiIsIm5iZiI6MTYxMjU1MDU1NywiZXhwIjoxNjE1MTQyNTU3LCJpYXQiOjE2MTI1NTA1NTd9.VqH4-kbHOqvqaDaW5Ei1IAVCkRyoCDDbHLKXsZppYBM9LMctww6ve5nm_rVl3d8YSO_p_B12cLAfez3x7la4PA'
-              }
+                    "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
+                }
             }
         )
         .then(res => {
@@ -252,13 +252,13 @@ export class Company extends React.Component<{},{}> {
     }
     
     onMaxItemsChange=(current: number, size: number)=>{
-        console.log(current);
+        //console.log(current);
         if (current===0){
-            console.log(current);
+            //console.log(current);
             this.setState({PageLimit:size,PageNumber:1},()=>this.update());
         }
         else{
-            console.log(current);
+            //console.log(current);
             this.setState({PageLimit:size,PageNumber:current},()=>this.update());
         }
         

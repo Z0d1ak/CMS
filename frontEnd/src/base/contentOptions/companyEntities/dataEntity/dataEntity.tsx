@@ -33,7 +33,7 @@ export class DataEntity extends React.Component<{
            <div>
                 {this.props.items.map((d, i) => {
                     return (
-                        <Row>
+                        <Row key={"Row"+i}>
                             <Col span={1}></Col>
                             <Col span={22}>
                                 <DataCard 

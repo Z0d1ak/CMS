@@ -48,6 +48,10 @@ export class Profile extends React.Component<{},{}> {
                         <Col span={1}></Col>
                         Здесь будет профиль пользователя
                     </Row>
+                    <Row>
+                        <Col span={1}></Col>
+                        {sessionStorage.getItem('AuthUserId')}
+                    </Row>
                     <BackTop>
                         <div className="BackUp">Вверх</div>
                     </BackTop>

@@ -64,7 +64,7 @@ render(){
 
                     {this.props.option.map((u, i) => {
                         return (
-                            <Row>
+                            <Row key={"Row"+i}>
                                 <Col span={1}></Col>
                                 <Col span={22}>
                                             <ChooseBox 

@@ -80,7 +80,7 @@ type field=
                 console.log(res);
                 sessionStorage.setItem('AuthUserId', res.data.user.id);
                 sessionStorage.setItem('AuthUserSecurityToken', res.data.securityToken);
-                history.push("/home");
+                history.push("/home/inwork");
             })
             .catch(err => {  
                 console.log(err); 

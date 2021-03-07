@@ -36,7 +36,7 @@ namespace web.Entities
         public TaskType Type { get; set; }
 
         /// <summary>
-        /// Контент статьи при заврешении заддания.
+        /// Контент статьи при заврешении задания.
         /// </summary>
         public string Content { get; set; }
     }

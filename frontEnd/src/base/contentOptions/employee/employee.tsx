@@ -204,7 +204,7 @@ OnMaxItemsChange=(current: number, size: number)=>{
 
     generatePagination() {
         return (
-            <Row>
+            <Row className="pagin">
                 <Col span={1}></Col>
                 <Col span={22}>
                     <Pagination className="pagination" defaultCurrent={1} defaultPageSize={10}

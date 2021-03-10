@@ -195,7 +195,7 @@ export class EmployeeCard extends React.Component<{user:userData},{userOfCard:us
     };
 
     render(){
-    
+    console.log(this.props.user);
     return (<EmployeeCardEntity user={this.state.userOfCard} updListCallback={this.updateListFieldCallBack} updFieldCallback={this.updateDataFieldCallBack}/>)    
 }
 }
@@ -220,4 +220,4 @@ export class GenerateCustomCardList extends React.Component<{usersList:userData[
 }
     }
 
-export default GenerateCustomCardList;
+export default {GenerateCustomCardList,EmployeeCard};

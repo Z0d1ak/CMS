@@ -40,11 +40,14 @@ export class Settings extends React.Component<{},{}> {
                         <Row gutter={[0, 48]}>
                             <Col span={1}></Col>
                             
-                            <Button icon={<RollbackOutlined style={{ fontSize: '20px'}}/>} onClick={() =>{ 
-                                console.log("back")
-                            }}>
-                            
-                            </Button>
+                            <Link to="/home/inwork">
+                        <Button icon={<RollbackOutlined style={{ fontSize: '20px'}}/>} onClick={() =>{ 
+                            console.log("back");
+                        }}>
+                        
+                        
+                        </Button>
+                        </Link>
                         </Row>
                         <Row>
                             <Col span={1}></Col>

@@ -17,6 +17,12 @@ namespace web.Contracts.Dto.Request
         public Guid Id { get; set;}
 
         /// <summary>
+        /// Id статьи, для которой создается задание.
+        /// </summary>
+        [Required]
+        public Guid ArticleId { get; set; }
+
+        /// <summary>
         /// Тип задания.
         /// </summary>
         [Required]

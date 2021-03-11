@@ -20,7 +20,7 @@ const { Search } = Input;
 const { Paragraph } = Typography;
 const { Meta } = Card;
 
-type getCompany = paths["/api/Company"]["get"]["parameters"]["query"];
+//type getCompany = paths["/api/Company"]["get"]["parameters"]["query"];
 
 
 export class DataCard extends React.Component<{

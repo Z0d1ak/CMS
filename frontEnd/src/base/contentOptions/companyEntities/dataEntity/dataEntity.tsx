@@ -12,7 +12,7 @@ export class DataEntity extends React.Component<{
     loading:boolean,
     updateCallback:()=>void,
     changeValueCallback:(val:any,type:string,callback:any)=>void,
-    updateDataCallback:(val:updateCompany)=>void,
+    updateDataCallback:(val:any)=>void,
     deleteCallback:(val:string)=>void
     },{}> {
     

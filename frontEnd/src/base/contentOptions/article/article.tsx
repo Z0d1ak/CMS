@@ -9,10 +9,10 @@ import DataEntity from "../companyEntities/dataEntity/dataEntity"
 import FilterEntity from "../companyEntities/filterEntity/filterEntity"
 import PaginationEntity from "../companyEntities/paginationEntity/paginationEntity"
 
-type getArticle=paths["/api/Company"]["get"]["responses"]["200"]["content"]["application/json"]
-type deleteArticle=paths["/api/Company/{id}"]["delete"]["parameters"]["path"]
-type updateArticle=paths["/api/Company"]["put"]["requestBody"]["content"]["text/json"]
-type addArticle=paths["/api/Company"]["post"]["requestBody"]["content"]["text/json"]
+type getArticle=paths["/api/Article"]["get"]["responses"]["200"]["content"]["application/json"]
+type deleteArticle=paths["/api/Article/{id}"]["delete"]["parameters"]["path"]
+type updateArticle=paths["/api/Article"]["put"]["requestBody"]["content"]["text/json"]
+type addArticle=paths["/api/Article"]["post"]["requestBody"]["content"]["text/json"]
 
 
 /**
@@ -24,11 +24,11 @@ export class Article extends React.Component<{},{}> {
 
     state={
         requestUrl:"https://hse-cms.herokuapp.com",
-        requestPath:"/api/Company",
+        requestPath:"/api/Article",
         NameStartsWith: "",
 
-        SortingColumn: "Name",
-        SortingColumnOptions:["Name"],
+        SortingColumn: "Title",
+        SortingColumnOptions:["DeadLine","Title","CreationDate","State","TaskType"],
 
         SortDirection: "Ascending",
         SortDirectionOptions:["Ascending","Descending"],
@@ -40,7 +40,7 @@ export class Article extends React.Component<{},{}> {
         SearchBy:"All",
 
         optionName:["SearchBy"],
-        optionList:[["Name","All"]],
+        optionList:[["Name","All","Assigne","Author"]],
         text:["Искать по"],
 
         count: 0,
@@ -206,7 +206,7 @@ export class Article extends React.Component<{},{}> {
         request+=this.isNull(this.state.SortingColumn)?"":"&SortingColumn="+this.state.SortingColumn;
         request+=this.isNull(this.state.SortDirection)?"":"&SortDirection="+this.state.SortDirection;
         request+=this.isNull(this.state.QuickSearch)?"":"&QuickSearch="+this.state.QuickSearch;
-        axios.get(
+        /*axios.get(
             this.state.requestUrl+this.state.requestPath+request,
             {
                 headers: {
@@ -232,7 +232,29 @@ export class Article extends React.Component<{},{}> {
                     break;
                 }
             }
-        })
+        })*/
+        this.setState({count:10})
+        this.setState({items:[
+            {
+                id: "face1e55-b0d5-1ab5-1e55-bef001ed100f",
+                initiator: {
+                    id: "face1e55-b0d5-1ab5-1e55-bef001ed100f",
+                    companyId: "face1e55-b0d5-1ab5-1e55-bef001ed100f",
+                    email: "admin@admin.com",
+                    firstName: "Adminй",
+                    lastName: "Adminй123",
+                    roles: ["Author" , "Corrector"]
+                },
+                creationDate:"25.10.1999",
+                state: "состояние",
+                title: "Статья",
+                task: "задание"
+            }
+
+
+
+        ]})
+        this.setState({loading:false});
     }
 
  

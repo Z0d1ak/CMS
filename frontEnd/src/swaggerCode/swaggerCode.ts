@@ -4,6 +4,155 @@
  */
 
 export interface paths {
+  "/api/Article": {
+    get: {
+      parameters: {
+        query: {
+          /** Название статьи содержит... */
+          NameContains?: string | null;
+          /** Тип задания. */
+          TaskType?: components["schemas"]["TaskType"];
+          /** Сотрудник, на которого наначено задание. */
+          Assignee?: string | null;
+          /** Автор задания. */
+          Author?: string | null;
+          /** Роль, на которую назначено задание. */
+          Role?: components["schemas"]["RoleType"];
+          /** Состояние задания. */
+          State?: components["schemas"]["ArticleState"];
+          /** Колонка для сортировки. */
+          SortingColumn?: components["schemas"]["ArticleSortingColumn"];
+          /** Быстрый поиск. */
+          QuickSearch?: string | null;
+          /** Количество элементов на станице. По умолчанию 20. */
+          PageLimit?: number;
+          /** Номер страницы. По умолчанию 1. */
+          PageNumber?: number;
+        };
+      };
+      responses: {
+        /** Запрос успешный. */
+        200: {
+          content: {
+            "application/json": components["schemas"]["ResponseArticleInfoDtoSearchResponseDto"];
+          };
+        };
+        /** Unauthorized */
+        401: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    put: {
+      responses: {
+        /** Данные статьи успешно изменены. */
+        204: never;
+        /** Unauthorized */
+        401: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Недостаточно прав для изменения статьи. */
+        403: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Статья не найдена. */
+        404: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Конфликт новых данных стьатьи и существующих данных в БД. */
+        409: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+      /** Изменная стьтья. */
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["StoreArticleDto"];
+          "text/json": components["schemas"]["StoreArticleDto"];
+          "application/*+json": components["schemas"]["StoreArticleDto"];
+        };
+      };
+    };
+    post: {
+      responses: {
+        /** Компания успешно создана. */
+        201: {
+          content: {
+            "application/json": components["schemas"]["ResponseArticleDto"];
+          };
+        };
+        /** Unauthorized */
+        401: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Недостатьчно прав для создания статьи. */
+        403: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Конфликт данных создаваемой компании и существующих данных в БД. */
+        409: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+      /** Информация о создаваемой статье. */
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["StoreArticleDto"];
+          "text/json": components["schemas"]["StoreArticleDto"];
+          "application/*+json": components["schemas"]["StoreArticleDto"];
+        };
+      };
+    };
+  };
+  "/api/Article/{id}": {
+    get: operations["GetArticleAsync"];
+    delete: {
+      parameters: {
+        path: {
+          /** Индентификатор статьи. */
+          id: string;
+        };
+      };
+      responses: {
+        /** Стаьтья успешно удалена. */
+        204: never;
+        /** Unauthorized */
+        401: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Недостаточно прав для удаления статьи. */
+        403: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Стьатья не найдена. */
+        404: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+  };
   "/api/Auth/login": {
     post: {
       responses: {
@@ -223,6 +372,126 @@ export interface paths {
       };
     };
   };
+  "/api/Task/take": {
+    post: {
+      parameters: {
+        query: {
+          /** Id Задания. */
+          taskId?: string;
+        };
+      };
+      responses: {
+        /** Задание успешно взято в работу. */
+        200: unknown;
+        /** Unauthorized */
+        401: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Недостатьчно прав для взятия задания в работу. */
+        403: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Задание не найдено. */
+        404: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Задание уже взято в работу. */
+        409: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+  };
+  "/api/Task/finish": {
+    post: {
+      responses: {
+        /** Задание успешно завершено. */
+        200: unknown;
+        /** Unauthorized */
+        401: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Недостаточно прав для заверешния задания. */
+        403: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Задание не найдено. */
+        404: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Задание уже завершено. */
+        409: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+      /** Id Задания. */
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["FinishTaskDto"];
+          "text/json": components["schemas"]["FinishTaskDto"];
+          "application/*+json": components["schemas"]["FinishTaskDto"];
+        };
+      };
+    };
+  };
+  "/api/Task/create": {
+    post: {
+      responses: {
+        /** Success */
+        200: unknown;
+        /** Задание успешно создано. */
+        201: unknown;
+        /** Unauthorized */
+        401: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Недостаточно прав для создания задания. */
+        403: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** Not Found */
+        404: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** НЕвозможно создать задание данного типа. */
+        409: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+      /** Id Задания. */
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateTaskDto"];
+          "text/json": components["schemas"]["CreateTaskDto"];
+          "application/*+json": components["schemas"]["CreateTaskDto"];
+        };
+      };
+    };
+  };
   "/api/User": {
     get: {
       parameters: {
@@ -353,6 +622,12 @@ export interface paths {
             "application/json": components["schemas"]["ProblemDetails"];
           };
         };
+        /** Пользователь не может удалить сам себя. */
+        405: {
+          content: {
+            "application/json": components["schemas"]["ProblemDetails"];
+          };
+        };
       };
     };
   };
@@ -360,13 +635,22 @@ export interface paths {
 
 export interface components {
   schemas: {
-    /** Контракт данных для авторизации пользователя. */
-    LoginRequestDto: {
-      /** Email пользователя. */
-      email: string;
-      /** Пароль пользвателя. */
-      password: string;
+    /** Контракт данных для создания статьи. */
+    StoreArticleDto: {
+      /** ID статьи. */
+      id: string;
+      /** Заголовок статьи. */
+      title: string;
+      /** Контент статьи. */
+      content?: string | null;
     };
+    ProblemDetails: {
+      type?: string | null;
+      title?: string | null;
+      status?: number | null;
+      detail?: string | null;
+      instance?: string | null;
+    } & { [key: string]: { [key: string]: any } };
     /** Типы ролей пользователя. */
     RoleType:
       | "SuperAdmin"
@@ -390,19 +674,80 @@ export interface components {
       /** Список ролей, в которые входит пользователь. */
       roles: components["schemas"]["RoleType"][];
     };
+    ArticleState: number;
+    TaskType: number;
+    ResponseTaskDto: {
+      /** ID задания. */
+      id: string;
+      type: components["schemas"]["TaskType"];
+      performer?: components["schemas"]["ResponseUserDto"];
+      author?: components["schemas"]["ResponseUserDto"];
+      /** Дата создания задания. */
+      creationDate?: string;
+      /** Дата взятия задания в работу. */
+      assignmentDate?: string | null;
+      /** Дата заврешения задания. */
+      сompletionDate?: string | null;
+      /** Комментарии к заданию. */
+      description: string;
+      /** Комментарии к заданию. */
+      comment: string;
+    };
+    /** Контракт данных для полученяи полной информации о статье. */
+    ResponseArticleDto: {
+      /** ID статьи. */
+      id: string;
+      initiator?: components["schemas"]["ResponseUserDto"];
+      /** Дата взятия статьи в работу. */
+      creationDate?: string;
+      state?: components["schemas"]["ArticleState"];
+      /** Заголовок статьи. */
+      title: string;
+      /** Контент статьи. */
+      content?: string | null;
+      /** Активное задание. */
+      tasks?: components["schemas"]["ResponseTaskDto"][] | null;
+    };
+    ArticleSortingColumn:
+      | "DeadLine"
+      | "Title"
+      | "CreationDate"
+      | "State"
+      | "TaskType";
+    ResponseArticleInfoDto: {
+      /** ID статьи. */
+      id: string;
+      initiator?: components["schemas"]["ResponseUserDto"];
+      /** Дата взятия статьи в работу. */
+      creationDate?: string;
+      state?: components["schemas"]["ArticleState"];
+      /** Заголовок статьи. */
+      title: string;
+      task?: components["schemas"]["ResponseTaskDto"];
+    };
+    /** Контракт данных для результата поиска. */
+    ResponseArticleInfoDtoSearchResponseDto: {
+      /** Колчество элементов, удовлитвоярющих фильтрации. */
+      count: number;
+      /**
+       * Элементы удовлитворяющие фильтрации.
+       * Количество элементов ограничено максимальным количеством элементов на странице.
+       */
+      items: components["schemas"]["ResponseArticleInfoDto"][];
+    };
+    /** Контракт данных для авторизации пользователя. */
+    LoginRequestDto: {
+      /** Email пользователя. */
+      email: string;
+      /** Пароль пользвателя. */
+      password: string;
+    };
     /** Контракт данных для ответа сервера при успешной авторизации пользователя. */
     LoginResponseDto: {
       user: components["schemas"]["ResponseUserDto"];
       /** JWT токен. */
       securityToken: string;
     };
-    ProblemDetails: {
-      type?: string | null;
-      title?: string | null;
-      status?: number | null;
-      detail?: string | null;
-      instance?: string | null;
-    } & { [key: string]: { [key: string]: any } };
     /** Контракт данных для получения информации о компании. */
     StoreCompanyDto: {
       /** Уникальный идентификатор. */
@@ -479,6 +824,26 @@ export interface components {
       /** Название. */
       name: string;
     };
+    /** Контаркт данных для завершения задания. */
+    FinishTaskDto: {
+      /** Идентификатор задания. */
+      id?: string;
+      /** Комментарии. */
+      comment?: string;
+    };
+    /** Контракт для сохранения нового задания. */
+    CreateTaskDto: {
+      /** ID задания. */
+      id: string;
+      taskType: components["schemas"]["TaskType"];
+      /** Описание задания. */
+      description: string;
+      /**
+       * Сотрудник, на которого назначено задания.
+       * Необязательное поле.
+       */
+      assignee?: string | null;
+    };
     /** Контракт данных дял создания пользователя. */
     CreateUserDto: {
       /** Уникальный идентификатор. */
@@ -525,6 +890,34 @@ export interface components {
 }
 
 export interface operations {
+  GetArticleAsync: {
+    parameters: {
+      path: {
+        /** Индентификатор Статьи. */
+        id: string;
+      };
+    };
+    responses: {
+      /** Статья найдена. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ResponseArticleDto"];
+        };
+      };
+      /** Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ProblemDetails"];
+        };
+      };
+      /** Статья не найдена. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ProblemDetails"];
+        };
+      };
+    };
+  };
   GetCompanyAsync: {
     parameters: {
       path: {

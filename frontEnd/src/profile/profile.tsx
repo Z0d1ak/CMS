@@ -94,19 +94,31 @@ export class Profile extends React.Component<{},{}> {
                     <Row>
                         <Col span={1}></Col>
                         <Col span={2}><Paragraph strong>Фамилия:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.userD.firstName}</Paragraph></Col>
+                        <Col span={20} ><Paragraph> {this.state.userD.lastName}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
                     <Row>
                         <Col span={1}></Col>
                         <Col span={2}><Paragraph strong>email:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.userD.firstName}</Paragraph></Col>
+                        <Col span={20} ><Paragraph> {this.state.userD.email}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
                     <Row>
                         <Col span={1}></Col>
                         <Col span={2}><Paragraph strong>Роли:</Paragraph></Col>
                         <Col span={20} ><Paragraph> {this.state.userD.roles[0]}</Paragraph></Col>
+                        <Col span={1}></Col>
+                    </Row>
+                    <Row>
+                        <Col span={1}></Col>
+                        <Col span={2}><Paragraph strong>ID:</Paragraph></Col>
+                        <Col span={20} ><Paragraph> {this.state.userD.id}</Paragraph></Col>
+                        <Col span={1}></Col>
+                    </Row>
+                    <Row>
+                        <Col span={1}></Col>
+                        <Col span={2}><Paragraph strong>CompId:</Paragraph></Col>
+                        <Col span={20} ><Paragraph> {this.state.userD.companyId}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
                     <Divider />

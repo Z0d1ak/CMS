@@ -9,7 +9,7 @@ type addCompany=paths["/api/Company"]["post"]["requestBody"]["content"]["text/js
 
 
 export class AddEntity extends React.Component<{
-    createCallback:(val:addCompany)=>void,
+    createCallback:(val:any)=>void,
 },{}> {
 
    

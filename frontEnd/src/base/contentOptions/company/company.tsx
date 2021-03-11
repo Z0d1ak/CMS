@@ -23,6 +23,7 @@ export class Company extends React.Component<{},{}> {
   
 
     state={
+        dataType:"company",
         requestUrl:"https://hse-cms.herokuapp.com",
         requestPath:"/api/Company",
         NameStartsWith: "",
@@ -284,6 +285,7 @@ export class Company extends React.Component<{},{}> {
                 createCallback={this.create}
                 /> 
                 <DataEntity 
+                dataType={this.state.dataType}
                 loading={this.state.loading}    
                 updateDataCallback={this.updateData} 
                 deleteCallback={this.delete} 

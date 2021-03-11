@@ -10,6 +10,7 @@ type updateCompany=paths["/api/Company"]["put"]["requestBody"]["content"]["text/
 export class DataEntity extends React.Component<{
     items: { id: string, name: string}[],
     loading:boolean,
+    dataType:string,
     updateCallback:()=>void,
     changeValueCallback:(val:any,type:string,callback:any)=>void,
     updateDataCallback:(val:any)=>void,
@@ -43,6 +44,8 @@ export class DataEntity extends React.Component<{
                                     data={d} 
                                     key={"DC"+i}
                                     loading={this.props.loading}
+                                    dataType={this.props.dataType}
+                                    
                                 />
                             </Col>
                             <Col span={1}></Col>

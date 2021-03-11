@@ -23,6 +23,7 @@ export class Role extends React.Component<{},{}> {
   
 
     state={
+        dataType:"role",
         requestUrl:"https://hse-cms.herokuapp.com",
         requestPath:"/api/Role",
         NameStartsWith: "",
@@ -252,6 +253,7 @@ export class Role extends React.Component<{},{}> {
                 text={this.state.text}
                 />
                 <DataEntity 
+                dataType={this.state.dataType}
                 loading={this.state.loading}    
                 updateDataCallback={this.updateData} 
                 deleteCallback={this.delete} 

@@ -9,3 +9,13 @@
   .userCard.narrow {
     width: 30%;
   }
+
+  .red{
+width: 100%;
+  }
+
+  .prev{
+
+background-color: grey;
+height: 50px;
+  }

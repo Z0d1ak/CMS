@@ -23,6 +23,7 @@ export class Article extends React.Component<{},{}> {
   
 
     state={
+        dataType:"article",
         requestUrl:"https://hse-cms.herokuapp.com",
         requestPath:"/api/Article",
         NameStartsWith: "",
@@ -236,20 +237,111 @@ export class Article extends React.Component<{},{}> {
         this.setState({count:10})
         this.setState({items:[
             {
-                id: "face1e55-b0d5-1ab5-1e55-bef001ed100f",
-                initiator: {
-                    id: "face1e55-b0d5-1ab5-1e55-bef001ed100f",
-                    companyId: "face1e55-b0d5-1ab5-1e55-bef001ed100f",
-                    email: "admin@admin.com",
-                    firstName: "Adminй",
-                    lastName: "Adminй123",
-                    roles: ["Author" , "Corrector"]
+                "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "initiator": {
+                  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "email": "user@example.com",
+                  "firstName": "string",
+                  "lastName": "string",
+                  "roles": [
+                    "SuperAdmin"
+                  ]
                 },
-                creationDate:"25.10.1999",
-                state: "состояние",
-                title: "Статья",
-                task: "задание"
-            }
+                "creationDate": "2021-03-11T22:18:00.743Z",
+                "state": "Project",
+                "title": "string",
+                "content": "string",
+                "tasks": [
+                  {
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "type": 0,
+                    "performer": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "email": "user@example.com",
+                      "firstName": "string",
+                      "lastName": "string",
+                      "roles": [
+                        "SuperAdmin"
+                      ]
+                    },
+                    "author": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "email": "user@example.com",
+                      "firstName": "string",
+                      "lastName": "string",
+                      "roles": [
+                        "SuperAdmin"
+                      ]
+                    },
+                    "creationDate": "2021-03-11T22:18:00.743Z",
+                    "assignmentDate": "2021-03-11T22:18:00.743Z",
+                    "сompletionDate": "2021-03-11T22:18:00.743Z",
+                    "description": "string",
+                    "comment": "string"
+                  },
+                  {
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "type": 0,
+                    "performer": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "email": "user@example.com",
+                      "firstName": "string",
+                      "lastName": "string",
+                      "roles": [
+                        "SuperAdmin"
+                      ]
+                    },
+                    "author": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "email": "user@example.com",
+                      "firstName": "string",
+                      "lastName": "string",
+                      "roles": [
+                        "SuperAdmin"
+                      ]
+                    },
+                    "creationDate": "2021-03-11T22:18:00.743Z",
+                    "assignmentDate": "2021-03-11T22:18:00.743Z",
+                    "сompletionDate": "2021-03-11T22:18:00.743Z",
+                    "description": "string",
+                    "comment": "string"
+                  },
+                  {
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "type": 0,
+                    "performer": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "email": "user@example.com",
+                      "firstName": "string",
+                      "lastName": "string",
+                      "roles": [
+                        "SuperAdmin"
+                      ]
+                    },
+                    "author": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "email": "user@example.com",
+                      "firstName": "string",
+                      "lastName": "string",
+                      "roles": [
+                        "SuperAdmin"
+                      ]
+                    },
+                    "creationDate": "2021-03-11T22:18:00.743Z",
+                    "assignmentDate": "2021-03-11T22:18:00.743Z",
+                    "сompletionDate": "2021-03-11T22:18:00.743Z",
+                    "description": "string",
+                    "comment": "string"
+                  }
+                ]
+              }
 
 
 
@@ -306,6 +398,7 @@ export class Article extends React.Component<{},{}> {
                 createCallback={this.create}
                 /> 
                 <DataEntity 
+                dataType={this.state.dataType}
                 loading={this.state.loading}    
                 updateDataCallback={this.updateData} 
                 deleteCallback={this.delete} 

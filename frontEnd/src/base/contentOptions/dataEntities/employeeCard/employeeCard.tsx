@@ -14,7 +14,7 @@ import { Row, Col } from 'antd';
 import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRow/dataRow";
 import {paths,/*components,operations*/ } from "../../../../swaggerCode/swaggerCode"
 import axios from 'axios'
-
+import {MultiplyPicker} from "../../companyEntities/dataSubEntities/multiplyPicker/multiplyPicker"
 const { Meta } = Card;
 
 const pathBase:string ="https://hse-cms.herokuapp.com";
@@ -109,7 +109,7 @@ export class EmployeeCardEntity extends React.Component<{user:userData, updListC
                     <DataRowEditable dataStr={this.props.user.lastName||"null"} titleStr="Фамилия : " typeName="lastName" editFieldCallback={this.props.updFieldCallback}/>,
                     <DataRowEditable dataStr={this.props.user.email} titleStr="Почта : " typeName="email" editFieldCallback={this.props.updFieldCallback}/>,
                 <Divider />,
-                <DataRowListEditable dataList={this.props.user.roles} titleStr="Роли : " typeName="roles"  editListCallback={this.props.updListCallback}/>
+                <MultiplyPicker dataList={this.props.user.roles}  updListCallback={this.props.updListCallback}/>
             ]
         )
     }
@@ -192,6 +192,7 @@ export class EmployeeCard extends React.Component<{user:userData},{userOfCard:us
     updateListFieldCallBack = (val:("SuperAdmin" | "CompanyAdmin" | "ChiefRedactor" | "Redactor" | "Author" | "Corrector")[],param:string) => {
         let buf:userData=this.state.userOfCard;
                 buf.roles=val;
+                this.setState({userOfCard:buf})
     };
 
     render(){

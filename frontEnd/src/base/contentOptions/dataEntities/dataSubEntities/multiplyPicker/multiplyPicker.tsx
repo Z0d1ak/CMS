@@ -17,7 +17,7 @@ import {
 } from '@ant-design/icons';
 import Switch from 'react-bootstrap/esm/Switch';
 import { spawn } from 'child_process';
-import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../../../dataEntities/dataRow/dataRow";
+import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRow/dataRow";
 import { Steps } from 'antd';
 
 const { Step } = Steps;

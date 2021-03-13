@@ -5,7 +5,7 @@ import {Layout,BackTop,Row,Col,Button} from 'antd';
 import {
     RollbackOutlined
 } from '@ant-design/icons';
-import { EmployeeCard} from "../base/contentOptions/dataEntities/employeeCard/employeeCard";
+
 import {
     Route,
     withRouter
@@ -19,7 +19,7 @@ import { UserOutlined } from '@ant-design/icons';
 import {
     Link
   } from "react-router-dom";
-  import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../base/contentOptions/dataEntities/dataRow/dataRow";
+
  // type userData=paths["/api/User/{id}"]["get"]["responses"]["200"]["content"]["application/json"]
 
  import {Dropdown, Menu, message, Typography,Space} from "antd";

@@ -4,10 +4,10 @@ import 'antd/dist/antd.css';
 import { paths } from '../../../swaggerCode/swaggerCode';
 import axios from 'axios'
 import {Row, Col} from 'antd';
-import AddEntity from "../companyEntities/addEntity/addEntity"
-import DataEntity from "../companyEntities/dataEntity/dataEntity"
-import FilterEntity from "../companyEntities/filterEntity/filterEntity"
-import PaginationEntity from "../companyEntities/paginationEntity/paginationEntity"
+import AddEntity from "../dataEntities/addEntity/addEntity"
+import DataEntity from "../dataEntities/dataEntity/dataEntity"
+import FilterEntity from "../dataEntities/filterEntity/filterEntity"
+import PaginationEntity from "../dataEntities/paginationEntity/paginationEntity"
 
 // type getCompanies=paths["/api/Role"]["get"]["responses"]["200"]["content"]["application/json"]
 // type deleteCompany=paths["/api/Role/{id}"]["delete"]["parameters"]["path"]

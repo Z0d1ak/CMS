@@ -1,253 +1,352 @@
 import React from 'react';
 import './employee.css';
 import 'antd/dist/antd.css';
-import { GenerateCustomCardList} from "../dataEntities/employeeCard/employeeCard";
-import { Col, Pagination, Row} from "antd";
-import SearchBox from "../dataEntities/filters/filters";
-import AddEmployeeCard from "../dataEntities/addEmployeeCard/addEmployeeCard"
-
-import {paths,/*components,operations*/ } from "../../../swaggerCode/swaggerCode"
+import { paths } from '../../../swaggerCode/swaggerCode';
 import axios from 'axios'
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
-import { throws } from 'assert';
+import {Row, Col} from 'antd';
+import AddEntity from "../dataEntities/addEntity/addEntity"
+import DataEntity from "../dataEntities/dataEntity/dataEntity"
+import FilterEntity from "../dataEntities/filterEntity/filterEntity"
+import PaginationEntity from "../dataEntities/paginationEntity/paginationEntity"
 
-const pathBase:string ="https://hse-cms.herokuapp.com";
+type getUser=paths["/api/User"]["get"]["responses"]["200"]["content"]["application/json"]
+type deleteUser=paths["/api/User/{id}"]["delete"]["parameters"]["path"]
+type updateUser=paths["/api/User"]["put"]["requestBody"]["content"]["text/json"]
+type addUser=paths["/api/User"]["post"]["requestBody"]["content"]["text/json"]
 
-type userData = paths["/api/User"]["get"]["responses"]["200"]["content"]["application/json"]["items"][0];
-type userDataSearch = paths["/api/User"]["get"]["parameters"]["query"]
 
-export class Employees extends React.Component<{},{}> {
+/**
+ * Класс компонента компаний
+ */
+export class Company extends React.Component<{},{}> {
 
-state={
-    curPage:1,
-    maxItemsOnPage:10,
-    countItems:40,
-    searchAllOptText:"",
-    usersList:[],
-    searcgOptValue:"всему",
-    sortOptValue:"имя",
-    dirOptValue:"возрастанию",
-    roleValue:"любая"
-}
+  
 
-setRoleValue = (val:string) => {
-    this.setState({ roleValue: val });
-};
+    state={
+        dataType:"employee",
+        requestUrl:"https://hse-cms.herokuapp.com",
+        requestPath:"/api/User",
+        NameStartsWith: "",
+        EmailStartsWith:"",
+        FirstNameStartsWith: "",
+        LastNameStartsWith:"",
 
-setsearcgOptValue = (val:string) => {
-    this.setState({ searcgOptValue: val });
-};
+        SortingColumn: "FirstName",
+        SortingColumnOptions:["FirstName","LastName","Email"],
 
-setsortOptValue = (val:string) => {
-    this.setState({ sortOptValue: val  });
-};
+        SortDirection: "Ascending",
+        SortDirectionOptions:["Ascending","Descending"],
 
-setdirOptValue = (val:string) => {
-    this.setState({ dirOptValue: val  });
-};
+        Roles:"",
+        RolesOptions:["SuperAdmin","CompanyAdmin","ChiefRedactor","Redactor","Author","Corrector"],
 
-initSearch = (val:string) => {
-    this.setState({searchAllOptText:val},()=>this.GetUserData(1))
+        QuickSearch: "",
+        PageLimit: 10,
+        PageNumber: 1,
+
+        SearchBy:"All",
+
+        optionName:["SearchBy"],
+        optionList:[["FirstName","LastName","Email","All"]],
+        text:["Искать по"],
+
+        count: 0,
+        items: [
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+            {
+                id: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                roles: []
+            },
+        ],
+        loading:false
+    }
+
+    isNull=(val:string):boolean=>{
+        return val==="";
+    }
+
+    changeValue=(val:any,type:string,callback?:()=>void)=>{
+        if (callback !== undefined) 
+        this.setState({[type]:val},callback)  
+        else this.setState({[type]:val})    
+    }
+
+    delete=(val:string)=>{
+        axios.delete(
+            this.state.requestUrl+this.state.requestPath+"/"+val,
+            {
+                headers: {
+                    "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
+                }
+            }
+        )
+        .then(res => {
+            console.log(res);
+            this.update();
+        })
+        .catch(err => {  
+            switch(err.response.status)
+            {
+                case 401:{
+                    console.log("401"); 
+                    break;
+                }
+                case 404:{
+                    console.log("404"); 
+                    break;
+                }
+                default:{
+                    console.log("Undefined error"); 
+                    break;
+                }
+            }
+        })
+    }
+
+    create=(val:addUser)=>{
+        axios.post(this.state.requestUrl+this.state.requestPath,val,
+        {
+            headers: {
+                "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
+            }
+        })
+        .then(res => {
+            console.log(res);
+            this.update();
+        })
+        .catch(err => {  
+            console.log(err); 
+            switch(err.response.status)
+            {
+                case 401:{
+                    console.log("401"); 
+                    break;
+                }
+                case 409:{
+                    console.log("404"); 
+                    break;
+                }
+                default:{
+                    console.log("Undefined error"); 
+                    break;
+                }
+            }
+        })
+    }
+
+    updateData=(val:updateUser)=>{
+        axios.put(this.state.requestUrl+this.state.requestPath,val,
+        {
+            headers: {
+                "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
+            }
+        })
+        .then(res => {
+        console.log(res);
+        })
+        .catch(err => {  
+        console.log(err); 
+        switch(err.response.status)
+            {
+                case 401:{
+                    console.log("401"); 
+                    break;
+                }
+                case 404:{
+                    console.log("404"); 
+                    break;
+                }
+                case 409:{
+                    console.log("404"); 
+                    break;
+                }
+                default:{
+                    console.log("Undefined error"); 
+                    break;
+                }
+            }
+        })
+        
+    }
+
     
-};
+    update(){ 
+        this.setState({loading:true});
+        let request:string="?";
+        request+="&PageLimit="+this.state.PageLimit;
+        request+="&PageNumber="+this.state.PageNumber;
+        request+=this.isNull(this.state.NameStartsWith)?"":"&EmailStartsWith="+this.state.NameStartsWith;
+        request+=this.isNull(this.state.NameStartsWith)?"":"&LastNameStartsWith="+this.state.NameStartsWith;
+        request+=this.isNull(this.state.NameStartsWith)?"":"&FirstNameStartsWith="+this.state.NameStartsWith;
+        request+=this.isNull(this.state.SortingColumn)?"":"&SortingColumn="+this.state.SortingColumn;
+        request+=this.isNull(this.state.SortDirection)?"":"&SortDirection="+this.state.SortDirection;
+        request+=this.isNull(this.state.QuickSearch)?"":"&QuickSearch="+this.state.QuickSearch;
+        axios.get(
+            this.state.requestUrl+this.state.requestPath+request,
+            {
+                headers: {
+                    "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
+                }
+            }
+        )
+        .then(res => {
+            console.log(res);
+            this.setState({count:res.data.count})
+            this.setState({items:res.data.items})
+            this.setState({loading:false});
+        })
+        .catch(err => { 
+            switch(err.response.status)
+            {
+                case 401:{
+                    console.log("401"); 
+                    break;
+                }
+                default:{
+                    console.log("Undefined error"); 
+                    break;
+                }
+            }
+        })
+    }
 
-ClearArray = () => {
-    this.setState({ usersList: [] });
-};
-
-SetCurPage=(val:number)=>{
-    this.setState({curPage:val},()=>this.GetUserData(val))
-}
-
-SetMaxItemsOnPage=(val:number)=>{
-    this.setState({maxItemsOnPage:val})
-}
-
-SetCountItems=(val:number)=>{
-    this.setState({countItems:val})
-}
-
-SetItemsList=(val:userData[])=>{
-    this.ClearArray();
-    this.setState({usersList:val},()=>{console.log(val)})
-    console.log("set")
-    console.log(this.state.usersList)
-}
  
 
-async GetUserData(page:number) {
-    let Search="";
-    let sortingColumn;
-    let sortDirect;
-    let role="Любая";
-    switch (this.state.searcgOptValue){
-        case "всему":
-            {
-                Search="&QuickSearch="+this.state.searchAllOptText;
-                break;
-            }
-        case "имени":
-            {
-                Search="&FirstNameStartsWith="+this.state.searchAllOptText;
-                break;
-            }
-        case "фамилии":
-            {
-                Search="&LastNameStartsWith="+this.state.searchAllOptText;
-                break;
-            }
-        case "email":
-            {
-                Search="&EmailStartsWith="+this.state.searchAllOptText;
-                break;
-            }
-
+    
+    setCountItems=(val:number)=>{
+        this.setState({count:val})
     }
 
-    switch (this.state.sortOptValue){
-        case "имя":
-            {
-                sortingColumn="&SortingColumn="+"FirstName";
-                break;
-            }
-        case "фамилия":
-            {
-                sortingColumn="&SortingColumn="+"LastName";
-                break;
-            }
-        case "email":
-            {
-                sortingColumn="&SortingColumn="+"Email";
-                break;
-            }
-
+    onPageChange=(page:number, pageSize?: number | undefined)=>{
+        if (page===0){
+            this.setState({PageNumber:1},()=>this.update());
+        }
+        else{
+            this.setState({PageNumber:page},()=>this.update());
+        }
     }
-
-    switch (this.state.dirOptValue){
-        case "возрастанию":
-            {
-                sortDirect="&SortDirection="+"Ascending";
-                break;
-            }
-        case "убыванию":
-            {
-                sortDirect="&SortDirection="+"Descending";
-                break;
-            }
-    }
-
-    switch (this.state.roleValue){
-        case "любая":
-            {
-                role="";
-                break;
-            }
-        case "SuperAdmin":
-            {
-                role="&Role="+"SuperAdmin";
-                break;
-            }
-        case "CompanyAdmin":
-            {
-                role="&Role="+"CompanyAdmin";
-                break;
-            }
-        case "ChiefRedactor":
-            {
-                role="&Role="+"ChiefRedactor";
-                break;
-            }
-            case "Redactor":
-            {
-                role="&Role="+"Redactor";
-                break;
-            }
-            case "Author":
-            {
-                role="&Role="+"Author";
-                break;
-            }
-            case "Corrector":
-            {
-                role="&Role="+"Corrector";
-                break;
-            }
-    }
-
-
-    axios.get(pathBase+"/api/User"+"?PageLimit="+this.state.maxItemsOnPage+"&PageNumber="+this.state.curPage+role+sortDirect+sortingColumn+Search,
-    {
-        headers: {
-        "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
-      } 
-    }
-    )
-    .then(res => {
-        console.log(res);
-        this.SetItemsList(res.data.items);
-        this.SetCountItems(res.data.count)//res.data.count)
-    })
-    .catch(err => {  
-        console.log(err); 
-      })
-  }
-
-
-OnPageChange=(page:number, pageSize?: number | undefined)=>{
-    this.SetCurPage(page);
-}
-
-OnMaxItemsChange=(current: number, size: number)=>{
-    this.SetCurPage(current);
-    this.SetMaxItemsOnPage(size);
-}
-
-    generatePagination() {
-        return (
-            <Row className="pagin">
-                <Col span={1}></Col>
-                <Col span={22}>
-                    <Pagination className="pagination" defaultCurrent={1} defaultPageSize={10}
-                     total={this.state.countItems} onChange={this.OnPageChange}
-                     onShowSizeChange={this.OnMaxItemsChange} showSizeChanger
-                     showTotal={total => `Total ${total} items`}/>
-                </Col>
-                <Col span={1}></Col>
-            </Row>
-        );
-    };
-
-    render() {
-        return(<div>
-            <Row>
-                <Col span={1}></Col>
-                <Col span={22}>
-                    <SearchBox 
-                    roleValue={this.state.roleValue}
-                    searcgOptValue={this.state.searcgOptValue} 
-                    sortOptValue={this.state.sortOptValue}
-                    dirOptValue={this.state.dirOptValue} 
-                    setsearcgOptValue={this.setsearcgOptValue} 
-                    setsortOptValue={this.setsortOptValue} 
-                    setdirOptValue={this.setdirOptValue} 
-                    initSearch={this.initSearch}
-                    setRoleValue={this.setRoleValue}/>
-                </Col>
-                <Col span={1}></Col>
-            </Row>
-            <AddEmployeeCard/>
-            <GenerateCustomCardList  usersList={this.state.usersList}/>
-            {this.generatePagination()}
-
-        </div>);
+    
+    onMaxItemsChange=(current: number, size: number)=>{
+        //console.log(current);
+        if (current===0){
+            //console.log(current);
+            this.setState({PageLimit:size,PageNumber:1},()=>this.update());
+        }
+        else{
+            //console.log(current);
+            this.setState({PageLimit:size,PageNumber:current},()=>this.update());
+        }
+        
     }
 
     
-async componentDidMount() {
-    this.GetUserData(1);
-  }
+    render(){
+        return(
+            <div>
+                <FilterEntity
+                updateCallback={this.update}
+                changeValueCallback={this.changeValue}
+                SortDirection={this.state.SortDirection}
+                SortDirectionOptions={this.state.SortDirectionOptions}
+                SortingColumn={this.state.SortingColumn}
+                SortingColumnOptions={this.state.SortingColumnOptions}
+                option={[this.state.SearchBy]}
+                optionName={this.state.optionName}
+                optionList={this.state.optionList}
+                text={this.state.text}
+                />
+                <AddEntity
+                createCallback={this.create}
+                /> 
+                <DataEntity 
+                dataType={this.state.dataType}
+                loading={this.state.loading}    
+                updateDataCallback={this.updateData} 
+                deleteCallback={this.delete} 
+                updateCallback={this.update} 
+                changeValueCallback={this.changeValue} 
+                items={this.state.items}/>  
+                <PaginationEntity 
+                countItems={this.state.count}
+                onPageChange={this.onPageChange}
+                onMaxItemsChange={this.onMaxItemsChange}/> 
+            </div>
+            
+        );
+    }
+        
+    componentDidMount() {
+        this.update();
+    }
 
 }
 
-export default Employees;
 
+
+
+export default Company;

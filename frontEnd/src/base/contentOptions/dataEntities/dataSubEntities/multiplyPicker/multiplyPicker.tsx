@@ -34,7 +34,8 @@ type task=paths["/api/Article"]["post"]["responses"]["201"]["content"]["applicat
 type emploe=paths["/api/User"]["get"]["responses"]["200"]["content"]["application/json"]["items"][0]
 
 export class MultiplyPicker extends React.Component<{
-        updListCallback:(val:any,param:string) =>void,
+        updListCallback:(val:any) =>void,
+        typeName:string,
         dataList:string[],
     },{}> {
 
@@ -43,24 +44,24 @@ export class MultiplyPicker extends React.Component<{
         }
 
         deleteUl(id:number):string[] {
-            console.log("del"+id);
             let updateArray = [...this.state.bufList];
             updateArray.splice(id, 1);
-            console.log(updateArray);
-            console.log(this.props.dataList);
             this.setState({bufList:updateArray});
-            this.props.updListCallback(updateArray,"");
+            this.props.updListCallback(updateArray);
+            //console.log(this.state.bufList);
+            //console.log(this.props.dataList);
+            //console.log(updateArray);
             return updateArray;
         }
     
         addUl(el:string):string[] {
-            console.log("add"+el);
             let updateArray = [...this.state.bufList];
             updateArray.splice(this.state.bufList.length,0,el );
-            console.log(updateArray);
-            console.log(this.props.dataList);
             this.setState({bufList:updateArray});
-            this.props.updListCallback(updateArray,"");
+            this.props.updListCallback(updateArray);
+            //console.log(this.state.bufList);
+            //console.log(this.props.dataList);
+            //console.log(updateArray);
             return updateArray;
         }
 
@@ -71,7 +72,7 @@ export class MultiplyPicker extends React.Component<{
                     if(this.state.bufList.indexOf( r ) == -1 )
                     return (
                         
-                        <Menu.Item onClick={()=>this.addUl(r)}>
+                        <Menu.Item key={i+"mi"} onClick={()=>this.addUl(r)}>
                             {r}
                         </Menu.Item>
                     )

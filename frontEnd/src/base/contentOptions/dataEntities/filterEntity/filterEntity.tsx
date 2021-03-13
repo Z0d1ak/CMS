@@ -33,7 +33,34 @@ export class FilterEntity extends React.Component<{
     text:string[]
 },{}> {
     
-
+/*
+  switch(this.props.dataType) { 
+            case "article": { 
+             
+            break; 
+            } 
+            case "employee": { 
+             
+            break; 
+            } 
+            case "role": { 
+             
+                break; 
+            } 
+            case "company": { 
+             
+                break; 
+            }
+            case "task": { 
+             
+                break; 
+            } 
+            default: { 
+             
+            break; 
+            } 
+        }
+*/
 render(){
     return (
         <div className="filterEntity">

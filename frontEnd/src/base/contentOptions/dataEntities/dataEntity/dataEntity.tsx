@@ -17,9 +17,10 @@ export class DataEntity extends React.Component<{
     deleteCallback:(val:string)=>void
     },{}> {
     
-    updateItem=(position: number, item:{id:string,name:string})=>{
+    updateItem=(position: number, item:any)=>{
         let buf=this.props.items;
         buf[position]=item;
+        console.log(item);
         this.props.changeValueCallback(buf,"items",this.props.updateDataCallback(item))
     }
 
@@ -30,6 +31,7 @@ export class DataEntity extends React.Component<{
     }
 
     render(){
+
         return(
            <div>
                 {this.props.items.map((d, i) => {

@@ -55,21 +55,21 @@ export class Company extends React.Component<{},{}> {
             {
                 id: "",
                 email: "",
-                firstName: "",
+                firstName: "1",
                 lastName: "",
                 roles: []
             },
             {
                 id: "",
                 email: "",
-                firstName: "",
+                firstName: "2",
                 lastName: "",
                 roles: []
             },
             {
                 id: "",
                 email: "",
-                firstName: "",
+                firstName: "3",
                 lastName: "",
                 roles: []
             },

@@ -73,7 +73,7 @@ export function DataRowList({dataList, titleStr}: IDataRowList) {
                 
                     {dataList.map((r, i) => {
                         return (
-                            <Row>
+                            <Row key={i+"rw"}>
                             <Col span={1}></Col>
                         <Col span={22} className="optionText">{r}</Col>
                         <Col span={1}></Col>

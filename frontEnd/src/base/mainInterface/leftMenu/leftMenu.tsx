@@ -18,6 +18,7 @@ import {
 
 
 import Employees from "../../contentOptions/employee/employee"
+import Employeess from "../../contentOptions/employe/employe"
 import Company from "../../contentOptions/company/company"
 import Article from "../../contentOptions/article/article"
 import Infographic from "../../contentOptions/infographics/infographics"
@@ -45,7 +46,7 @@ interface menuOpt {
  * Массив опций меню
  */
 const leftMenuContent: Array<menuOpt> = [ 
-    {text:"В работе",link:"/home/inwork", icon:<UsbOutlined/>,component: <ActualArticle/>},
+    {text:"В работе",link:"/home/inwork", icon:<UsbOutlined/>,component: <Employeess/>},
     {text:"Статьи",link:"/home/alltexts", icon:<SnippetsOutlined />,component:< Article/>},
     {text:"Компании",link:"/home/company", icon:<BankOutlined />,component: <Company/>},
     {text:"Роли",link:"/home/role", icon:<FunctionOutlined />,component:<Role/>},

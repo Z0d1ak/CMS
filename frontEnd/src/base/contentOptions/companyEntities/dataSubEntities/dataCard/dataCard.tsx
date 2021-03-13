@@ -17,6 +17,7 @@ import Switch from 'react-bootstrap/esm/Switch';
 import { spawn } from 'child_process';
 import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../../../dataEntities/dataRow/dataRow";
 import { Steps } from 'antd';
+import { MultiplyPicker } from "../multiplyPicker/multiplyPicker";
 
 const { Step } = Steps;
 const { Search } = Input;
@@ -118,6 +119,16 @@ export class DataCard extends React.Component<{
                     />
                     </Skeleton>
             );
+            if(this.props.dataType=="employee")
+            return(
+                <Skeleton title={{width:"30%"}} active loading={this.props.loading} paragraph={{ rows: 1,width:"50%"}}>
+                    <Meta
+                    avatar={<Avatar size={50}  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                    title={<div className="titleCard">{this.props.data.firstName} {this.props.data.lastName||"null"}</div>}
+                    description={<div className="titleDescriptionCard">{this.props.data.id}</div>}
+                />
+                    </Skeleton>
+            );
             else
             return(
                 <Skeleton title={{width:"30%"}} active loading={this.props.loading} paragraph={{ rows: 1,width:"50%"}}>
@@ -168,6 +179,22 @@ export class DataCard extends React.Component<{
                     </Skeleton>
                 ]  
             )
+            if(this.props.dataType=="employee")
+            return(
+                [
+                    <Divider />,
+                    <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 3}}>
+                        <DataRow dataStr={this.props.data.firstName} titleStr="Имя : "/>
+                         <DataRow dataStr={this.props.data.lastName||"null"} titleStr="Фамилия : "/>
+                         <DataRow dataStr={this.props.data.email} titleStr="Почта : "/>
+                        </Skeleton>,
+                    <Divider />,
+                    <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                         <DataRowList dataList={this.props.data.roles} titleStr="Роли : "/>
+                         </Skeleton>
+                         
+                ]
+            );
             else
             return (
                 [
@@ -210,6 +237,24 @@ export class DataCard extends React.Component<{
                        </Skeleton>
                 ]  
             )
+            if(this.props.dataType=="employee")
+           return(
+                [
+                    <Divider />,
+                    <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 3}}>
+                        <DataRowEditable dataStr={this.props.data.firstName} titleStr="Имя : " typeName="firstName" editFieldCallback={this.updateDataFieldCallBack}/>,
+                        <DataRowEditable dataStr={this.props.data.lastName||"null"} titleStr="Фамилия : " typeName="lastName" editFieldCallback={this.updateDataFieldCallBack}/>,
+                        <DataRowEditable dataStr={this.props.data.email} titleStr="Почта : " typeName="email" editFieldCallback={this.updateDataFieldCallBack}/>,
+
+                        </Skeleton>,
+                    <Divider />,
+                    <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                        <MultiplyPicker dataList={this.props.data.roles}  updListCallback={this.updateDataFieldCallBack}/>
+                         </Skeleton>
+
+
+                ]
+            );
             else
             return (
                 [

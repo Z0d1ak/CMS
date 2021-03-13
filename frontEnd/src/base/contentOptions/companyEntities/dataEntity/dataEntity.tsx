@@ -8,7 +8,7 @@ type updateCompany=paths["/api/Company"]["put"]["requestBody"]["content"]["text/
 
 
 export class DataEntity extends React.Component<{
-    items: { id: string, name: string}[],
+    items: any[],
     loading:boolean,
     dataType:string,
     updateCallback:()=>void,

@@ -171,11 +171,12 @@ type field=
 
 export class AddForm extends React.Component<{
     createCallback:(val:any)=>void,
-    dataType:string
+    dataType:string,
+    closeForm:(val1:string,val2:string)=>void
 },{fields:field[]}> {
 
     constructor(props:{createCallback:(val:addCompany)=>void,
-        dataType:string}) {
+        dataType:string, closeForm:(val1:string,val2:string)=>void}) {
         super(props);
         switch(this.props.dataType) { 
             case "article": { 
@@ -378,6 +379,7 @@ export class AddForm extends React.Component<{
     
         
         //console.log(buf);
+        this.props.closeForm("hide","status");
         this.props.createCallback(
             buf
         )

@@ -46,9 +46,10 @@ export class AddBox extends React.Component<{
     }
     
 
+
     render() {
         return (
-                <Card className="addBox" 
+                <Card className="addBox" id="addboxId"
                     hoverable={true} 
                     onClick={()=>{
                         if (this.state.status!=="expand")
@@ -60,6 +61,7 @@ export class AddBox extends React.Component<{
                     {this.state.status==="hide"?<PlusOutlined />:<AddForm
                      createCallback={ this.props.createCallback}
                      dataType={this.props.dataType}
+                     closeForm={this.changeStatusValue}
                     />}
                 </Card>
         );

@@ -177,7 +177,12 @@ export class DataCard extends React.Component<{
             }
             case "task": { 
                 return(
-                    <div>task</div>
+                    <Skeleton title={{width:"30%"}} active loading={this.props.loading} paragraph={{ rows: 1,width:"50%"}}>
+                        <Meta
+                            title={<div className="titleCard">{this.props.data.description}</div>}
+                            description={<div className="titleDescriptionCard">{this.props.data.creationDate}</div>}
+                        />
+                    </Skeleton>
                 );
             } 
             default: { 
@@ -276,7 +281,30 @@ export class DataCard extends React.Component<{
                 }
                 case "task": { 
                     return(
-                        [<div>task</div>]
+                        [
+                            <Divider />,
+                            <Paragraph strong>Задание</Paragraph>,
+                            <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 3}}>
+                                <DataRow dataStr={this.props.data.description} titleStr="Формулировка : "/>
+                                <DataRow dataStr={this.props.data.id} titleStr="id : "/>
+                                <DataRow dataStr={this.props.data.creationDate} titleStr="Дата создания : "/>
+                                <DataRow dataStr={this.props.data.assignmentDate} titleStr="Дата поручения : "/>
+                                </Skeleton>,
+                            <Divider />,
+                            <Paragraph strong>Инициатор</Paragraph>,
+                            <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 3}}>
+                                <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                                <DataRow dataStr={this.props.data.author.firstName} titleStr="Имя : "/>
+                                </Skeleton>
+                                <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                                <DataRow dataStr={this.props.data.author.lastName} titleStr="Фамилия : "/>
+                                </Skeleton>
+                                <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                                <DataRow dataStr={this.props.data.author.email} titleStr="Email : "/>
+                                </Skeleton>
+                                </Skeleton>,
+                            <Divider />,
+                        ]
                     );
                 } 
                 default: { 
@@ -287,6 +315,38 @@ export class DataCard extends React.Component<{
             }
         }
     
+
+        /*
+ {
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "type": 0,
+                    "performer": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "email": "user@example.com",
+                      "firstName": "string",
+                      "lastName": "string",
+                      "roles": [
+                        "SuperAdmin"
+                      ]
+                    },
+                    "author": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "email": "user@example.com",
+                      "firstName": "string",
+                      "lastName": "string",
+                      "roles": [
+                        "SuperAdmin"
+                      ]
+                    },
+                    "creationDate": "2021-03-11T22:18:00.743Z",
+                    "assignmentDate": "2021-03-11T22:18:00.743Z",
+                    "сompletionDate": "2021-03-11T22:18:00.743Z",
+                    "description": "string",
+                    "comment": "string"
+                  },
+        */
         DataRowsEditable=():JSX.Element[]=>{
             switch(this.props.dataType) { 
                 case "article": { 
@@ -374,8 +434,18 @@ export class DataCard extends React.Component<{
                 }
                 case "task": { 
                     return(
-                        [<div>task</div>]
-                    );
+                        [ 
+                            <Divider />,
+                            <Paragraph strong>Управление заданием</Paragraph>,
+                            <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                                <button className="red">Завершить</button>
+                           </Skeleton>,
+                           <Paragraph strong>Редактор</Paragraph>,
+                           <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
+                               <button className="red">редактор</button>
+                          </Skeleton>
+                            ]
+                    ); 
                 } 
                 default: { 
                     return (

@@ -59,7 +59,10 @@ export class Settings extends React.Component<{},{}> {
                         </Row>
                         <Row>
                             <Col span={1}></Col>
-                            <RolesList data={["a","b","c","d"]}></RolesList>
+                           
+                           
+
+                           
                         </Row>
                         <BackTop>
                             <div className="BackUp">Вверх</div>
@@ -71,74 +74,6 @@ export class Settings extends React.Component<{},{}> {
     }
 }
 
-export class RolesList extends React.Component<{data:string[]},{}> {
-
-    state=
-    {
-        data:this.props.data
-    }
-
-    deleteUl(id:number):string[] {
-        console.log("del"+id);
-        let updateArray = [...this.state.data];
-        updateArray.splice(id, 1);
-        console.log(updateArray);
-        this.setState({data:updateArray});
-        return updateArray;
-    }
-
-    addUl(el:string):string[] {
-        console.log("add"+el);
-        let updateArray = [...this.state.data];
-        updateArray.splice(this.state.data.length,0,el );
-        console.log(updateArray);
-        this.setState({data:updateArray});
-        return updateArray;
-    }
-
-    updateOptionsMenuCallBack():JSX.Element {
-        let optList:string[]=["SuperAdmin","CompanyAdmin","ChiefRedactor","Redactor","Author","Corrector"]
-        return <Menu>
-            {optList.map((r, i) => {
-                if(this.state.data.indexOf( r ) == -1 )
-                return (
-                    
-                    <Menu.Item onClick={()=>this.addUl(r)}>
-                        {r}
-                    </Menu.Item>
-                )
-            })}
-        </Menu>
-        
-    }
-
-    render() {
-     
-     return(
-        <div>
-            {this.state.data.map((d, i) => {
-                return (
-                <Button  key={i+"dl"} className="deleteButton" danger
-                                    type="dashed"
-                                    onClick={()=>this.deleteUl(i)}
-                  >
-                        {d} <CloseOutlined />
-                </Button>
-                )
-            })}
-            <Dropdown overlay={this.updateOptionsMenuCallBack()}>
-            <Button
-                type="dashed"
-                onClick={() => {}}
-                style={{ width: '100%' }}
-                >
-                Добавить роль <PlusOutlined />
-              </Button>
-            </Dropdown>
-        </div>
-     ); 
-    }
-}
 
 export default Settings;
 

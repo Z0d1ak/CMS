@@ -1,10 +1,10 @@
 import React from 'react';
 import './login.css';
 import 'antd/dist/antd.css';
-import {Form, Input, Button, Checkbox, Col, Row} from 'antd';
+import {Form, Input, Button, Checkbox, Col, Row,notification} from 'antd';
 import axios from 'axios'
 import {paths,/*components,operations*/ } from "../swaggerCode/swaggerCode"
-
+import  { useState } from 'react';
   import {useHistory} from "react-router-dom";
 
 
@@ -70,6 +70,8 @@ type field=
 
     const LoginForm = (props:{fields:field[],onChangeFields:(newFields:any)=>void })=> {
 
+
+        const [loadings, setLoadings] = useState(false);
         const history = useHistory();
 
         const onFinish = () => {
@@ -83,7 +85,26 @@ type field=
                 history.push("/home/inwork");
             })
             .catch(err => {  
-                console.log(err); 
+                switch(err.response.status)
+            {
+                case 401:{
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Ошибка авторизации"
+                      });
+                    break;
+                }
+                default:{
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Неопознанная ошибка"
+                      }); 
+                    break;
+                }
+            }
+                setLoadings(false);
               })
 
         };
@@ -91,6 +112,10 @@ type field=
         const onFinishFailed = () => {
             console.log('Failed:', "1");
         };
+
+        const enterLoading = (index:any) => {
+            
+          };
 
 
         return (
@@ -122,7 +147,7 @@ type field=
                           },
                       ]}
                   >
-                      <Input></Input>
+                      <Input disabled={loadings}></Input>
                   </Form.Item>
 
                   <Form.Item
@@ -135,7 +160,7 @@ type field=
                           },
                       ]}
                   >
-                  <Input.Password></Input.Password>
+                  <Input.Password  disabled={loadings}></Input.Password>
                   </Form.Item>
 
                   <Form.Item {...tailLayout} name="remember" valuePropName="checked">
@@ -143,9 +168,9 @@ type field=
                   </Form.Item>
 
                   <Form.Item {...tailLayout}>
-                      <Button className="buttonLogin" type="primary" htmlType="submit">
-                          Войти
-                      </Button>
+                  <Button type="primary" loading={loadings}  onClick={()=>setLoadings(true)} className="buttonLogin" htmlType="submit">
+                    Войти
+                    </Button>
                   </Form.Item>
               </Form>
             </Col>
@@ -155,7 +180,7 @@ type field=
         );
       };
 
-
+  
     
 export default {Login};
 

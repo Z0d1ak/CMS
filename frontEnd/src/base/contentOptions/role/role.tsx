@@ -3,7 +3,7 @@ import './role.css';
 import 'antd/dist/antd.css';
 import { paths } from '../../../swaggerCode/swaggerCode';
 import axios from 'axios'
-import {Row, Col} from 'antd';
+import {Row, Col,notification} from 'antd';
 import AddEntity from "../dataEntities/addEntity/addEntity"
 import DataEntity from "../dataEntities/dataEntity/dataEntity"
 import FilterEntity from "../dataEntities/filterEntity/filterEntity"
@@ -110,22 +110,38 @@ export class Role extends React.Component<{},{}> {
             }
         )
         .then(res => {
-            console.log(res);
             this.update();
+            notification.success({
+                message: 'Удаление прошло успешно',
+                description:
+                  'Роль с id:'+val+" была удалена",
+              });
         })
         .catch(err => {  
             switch(err.response.status)
             {
                 case 401:{
-                    console.log("401"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Недостаточно прав для удаления роли"
+                      });
                     break;
                 }
                 case 404:{
-                    console.log("404"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Роль с id:"+ val+" не найдена"
+                      });
                     break;
                 }
                 default:{
-                    console.log("Undefined error"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Неопознанная ошибка"
+                      });
                     break;
                 }
             }
@@ -142,26 +158,53 @@ export class Role extends React.Component<{},{}> {
             }
         })
         .then(res => {
-        console.log(res);
+            notification.success({
+                message: 'Данные успешно обновлены',
+                description:
+                  'Данные роли с id:'+val.id+" были успешно обновлены",
+              });
         })
         .catch(err => {  
-        console.log(err); 
         switch(err.response.status)
             {
                 case 401:{
-                    console.log("401"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                        "Ошибка авторизации"
+                      });
+                    break;
+                }
+                case 403:{
+                    notification.error({
+                        message: "Ошибка"+ err.response.status,
+                        description:
+                        "Недостаточно прав для изменения данных роли",
+                      });
                     break;
                 }
                 case 404:{
-                    console.log("404"); 
+                    notification.error({
+                        message: "Ошибка"+ err.response.status,
+                        description:
+                          'Роль с id:'+val.id+" не найдена",
+                      });
                     break;
                 }
                 case 409:{
-                    console.log("404"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Конфликт данных, убедитесь что данные корректны и не дублируют существующие"
+                      }); 
                     break;
                 }
                 default:{
-                    console.log("Undefined error"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Неопознанная ошибка"
+                      });
                     break;
                 }
             }
@@ -187,7 +230,6 @@ export class Role extends React.Component<{},{}> {
             }
         )
         .then(res => {
-            console.log(res);
             this.setState({count:res.data.count})
             this.setState({items:res.data.items})
             this.setState({loading:false});
@@ -196,11 +238,27 @@ export class Role extends React.Component<{},{}> {
             switch(err.response.status)
             {
                 case 401:{
-                    console.log("401"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Ошибка авторизации"
+                      });
+                    break;
+                }
+                case 403:{
+                    notification.error({
+                        message: "Ошибка"+ err.response.status,
+                        description:
+                        "Недостаточно прав для получения данных",
+                      });
                     break;
                 }
                 default:{
-                    console.log("Undefined error"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Неопознанная ошибка"
+                      }); 
                     break;
                 }
             }

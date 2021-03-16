@@ -99,7 +99,7 @@ export class Profile extends React.Component<{},{}> {
                     </Row>
                     <Row>
                         <Col span={1}></Col>
-                        <Col span={2}><Paragraph strong>email:</Paragraph></Col>
+                        <Col span={2}><Paragraph strong>Email:</Paragraph></Col>
                         <Col span={20} ><Paragraph> {this.state.userD.email}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>

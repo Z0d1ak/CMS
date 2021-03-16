@@ -69,7 +69,7 @@ type field=
         name: 'firstName',
         value: 'Дмитрий',
         type:'input',
-        label:'имя',
+        label:'Имя',
         options:[],
         chosedOptions:[]
     },
@@ -77,7 +77,7 @@ type field=
         name: 'lastName',
         value: 'Дубина',
         type:'input',
-        label:'фамилия',
+        label:'Фамилия',
         options:[],
         chosedOptions:[]
     },
@@ -85,7 +85,7 @@ type field=
         name: 'email',
         value: 'dodubina.spam@gmail.com',
         type:'input',
-        label:'email',
+        label:'Email',
         options:[],
         chosedOptions:[]
     },
@@ -93,7 +93,7 @@ type field=
         name: 'password',
         value: '71400444443',
         type:'input',
-        label:'пароль',
+        label:'Пароль',
         options:[],
         chosedOptions:[]
     }
@@ -104,7 +104,7 @@ type field=
         name: 'firstName',
         value: 'Дмитрий',
         type:'input',
-        label:'имя',
+        label:'Имя',
         options:[],
         chosedOptions:[]
     },
@@ -112,7 +112,7 @@ type field=
         name: 'lastName',
         value: 'Дубина',
         type:'input',
-        label:'фамилия',
+        label:'Фамилия',
         options:[],
         chosedOptions:[]
     },
@@ -120,7 +120,7 @@ type field=
         name: 'email',
         value: 'dodubina.spam@gmail.com',
         type:'input',
-        label:'email',
+        label:'Email',
         options:[],
         chosedOptions:[]
     },
@@ -128,7 +128,7 @@ type field=
         name: 'password',
         value: '71400444443',
         type:'input',
-        label:'пароль',
+        label:'Пароль',
         options:[],
         chosedOptions:[]
     },
@@ -137,7 +137,7 @@ type field=
         value: 
         '71400444443',
         type:'multiplyPicker',
-        label:'роли',
+        label:'Роли',
         options:[
             {
                 label:"SuperAdmin",

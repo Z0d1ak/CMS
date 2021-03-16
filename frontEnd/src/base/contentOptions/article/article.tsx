@@ -3,7 +3,7 @@ import './article.css';
 import 'antd/dist/antd.css';
 import { paths } from '../../../swaggerCode/swaggerCode';
 import axios from 'axios'
-import {Row, Col} from 'antd';
+import {Row, Col, notification} from 'antd';
 import AddEntity from "../dataEntities/addEntity/addEntity"
 import DataEntity from "../dataEntities/dataEntity/dataEntity"
 import FilterEntity from "../dataEntities/filterEntity/filterEntity"
@@ -110,22 +110,38 @@ export class Article extends React.Component<{},{}> {
             }
         )
         .then(res => {
-            console.log(res);
             this.update();
+            notification.success({
+                message: 'Удаление прошло успешно',
+                description:
+                  'Компания с id:'+val+" была удалена",
+              });
         })
         .catch(err => {  
             switch(err.response.status)
             {
                 case 401:{
-                    console.log("401"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Недостаточно прав для удаления статьи"
+                      });
                     break;
                 }
                 case 404:{
-                    console.log("404"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Статья с id:"+ val+" не найдена"
+                      });
                     break;
                 }
                 default:{
-                    console.log("Undefined error"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Неопознанная ошибка"
+                      });
                     break;
                 }
             }
@@ -140,23 +156,39 @@ export class Article extends React.Component<{},{}> {
             }
         })
         .then(res => {
-            console.log(res);
             this.update();
+            notification.success({
+                message: 'Создание прошло успешно',
+                description:
+                  'Статья с id:'+val.id+" была успешно создана",
+              });
         })
         .catch(err => {  
             console.log(err); 
             switch(err.response.status)
             {
                 case 401:{
-                    console.log("401"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Недостаточно прав для создания статьи"
+                      });
                     break;
                 }
                 case 409:{
-                    console.log("404"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Конфликт данных, убедитесь что данные корректны и не дублируют существующие"
+                      }); 
                     break;
                 }
                 default:{
-                    console.log("Undefined error"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Неопознанная ошибка"
+                      });
                     break;
                 }
             }
@@ -171,26 +203,54 @@ export class Article extends React.Component<{},{}> {
             }
         })
         .then(res => {
-        console.log(res);
+            notification.success({
+                message: 'Данные успешно обновлены',
+                description:
+                  'Данные статьи с id:'+val.id+" были успешно обновлены",
+              });
         })
         .catch(err => {  
         console.log(err); 
         switch(err.response.status)
             {
                 case 401:{
-                    console.log("401"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                        "Ошибка авторизации"
+                      });
+                    break;
+                }
+                case 403:{
+                    notification.error({
+                        message: "Ошибка"+ err.response.status,
+                        description:
+                        "Недостаточно прав для изменения данных статьи",
+                      });
                     break;
                 }
                 case 404:{
-                    console.log("404"); 
+                    notification.error({
+                        message: "Ошибка"+ err.response.status,
+                        description:
+                          'Статья с id:'+val.id+" не найдена",
+                      });
                     break;
                 }
                 case 409:{
-                    console.log("404"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Конфликт данных, убедитесь что данные корректны и не дублируют существующие"
+                      }); 
                     break;
                 }
                 default:{
-                    console.log("Undefined error"); 
+                    notification.error({
+                        message: 'Ошибка '+ err.response.status,
+                        description:
+                          "Неопознанная ошибка"
+                      });
                     break;
                 }
             }

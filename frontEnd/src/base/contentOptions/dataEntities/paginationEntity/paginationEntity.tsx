@@ -17,6 +17,8 @@ export class PaginationEntity extends React.Component<{
 
     render(){
         return (
+            
+            this.props.countItems!==0?
             <Row className="paginationEntity">
             <Col span={1}></Col>
             <Col span={22}>
@@ -26,7 +28,7 @@ export class PaginationEntity extends React.Component<{
                  showTotal={total => `Total ${total} items`}/>
             </Col>
             <Col span={1}></Col>
-            </Row>
+            </Row>:<div/>
         );
     }
     }

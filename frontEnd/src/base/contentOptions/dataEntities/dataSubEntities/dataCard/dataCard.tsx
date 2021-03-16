@@ -119,48 +119,18 @@ export class DataCard extends React.Component<{
         };
      
         deleteCard = () => {
-            //console.log(this.props.position);
             this.props.deleteItemCallback(this.props.position);
         };
     
         updateCard = () => {
-            //console.log(this.props.position);
             this.props.updateItemCallback(this.props.position, this.state.bufData);
         };
 
         isNull=(val:string):boolean=>{
-            //console.log(val);
+            console.log(val);
             return val===""||val===null;
         }
-/*
-        switch(this.props.dataType) { 
-            case "article": { 
-             
-            break; 
-            } 
-            case "employee": { 
-             
-            break; 
-            } 
-            case "role": { 
-             
-                break; 
-            } 
-            case "company": { 
-             
-                break; 
-            }
-            case "task": { 
-             
-                break; 
-            } 
-            default: { 
-             
-            break; 
-            } 
-        }
-    
-  */  
+
         Header= ():JSX.Element =>{
             
         switch(this.props.dataType) { 
@@ -232,7 +202,7 @@ export class DataCard extends React.Component<{
                             <DataRow dataStr={this.props.data.initiator.lastName} titleStr="Фамилия : "/>
                             </Skeleton>,
                             <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
-                            <DataRow dataStr={this.props.data.initiator.email} titleStr="email : "/>
+                            <DataRow dataStr={this.props.data.initiator.email} titleStr="Email : "/>
                             </Skeleton>,
                             <Divider />,
                             <Paragraph strong>Статус статьи</Paragraph>,
@@ -358,7 +328,15 @@ export class DataCard extends React.Component<{
                                 </Skeleton>,
                             <Divider />,
                             <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
-                                <MultiplyPicker dataList={this.state.bufData.roles} typeName="roles" updListCallback={this.updateListCallBack}/>
+                                
+                                <Row className="DataRow">
+                                    <Col span={3} className='title'><Paragraph className='DataRowTitle'>{"Роли: "}</Paragraph></Col>
+                                    <Col span={4} className="DataRowList">
+                                        
+                                    <MultiplyPicker dataList={this.state.bufData.roles} typeName="roles" updListCallback={this.updateListCallBack}/>
+                                        
+                                    </Col>
+                                </Row>
                                  </Skeleton>
         
         

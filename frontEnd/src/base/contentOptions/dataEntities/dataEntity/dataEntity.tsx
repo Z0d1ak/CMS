@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import {Row, Col } from 'antd';
 import {DataCard} from "../dataSubEntities/dataCard/dataCard";
 import { paths } from '../../../../swaggerCode/swaggerCode';
+import { Empty } from 'antd';
 type updateCompany=paths["/api/Company"]["put"]["requestBody"]["content"]["text/json"]
 
 
@@ -35,7 +36,11 @@ export class DataEntity extends React.Component<{
 
         return(
            <div>
-                {this.props.items.map((d, i) => {
+               
+               
+                {
+                this.props.items.length!==0?
+                this.props.items.map((d, i) => {
                     return (
                         <Row key={"Row"+i}>
                             <Col span={1}></Col>
@@ -54,7 +59,9 @@ export class DataEntity extends React.Component<{
                             <Col span={1}></Col>
                         </Row>
                     )
-                })}
+                })
+                :<Empty />
+            }
             </div>
         );
     }

@@ -241,6 +241,7 @@ export class Role extends React.Component<{},{}> {
         return(
             <div>
                 <FilterEntity
+                dataType={this.state.dataType}
                 updateCallback={this.update}
                 changeValueCallback={this.changeValue}
                 SortDirection={this.state.SortDirection}

@@ -137,6 +137,7 @@ export class Company extends React.Component<{},{}> {
     }
 
     delete=(val:string)=>{
+       // console.log(this.state.items[val]);
         axios.delete(
             this.state.requestUrl+this.state.requestPath+"/"+val,
             {
@@ -309,6 +310,7 @@ export class Company extends React.Component<{},{}> {
         return(
             <div>
                 <FilterEntity
+                dataType={this.state.dataType}
                 updateCallback={this.update}
                 changeValueCallback={this.changeValue}
                 SortDirection={this.state.SortDirection}
@@ -322,6 +324,7 @@ export class Company extends React.Component<{},{}> {
                 />
                 <AddEntity
                 createCallback={this.create}
+                dataType={this.state.dataType}
                 /> 
                 <DataEntity 
                 dataType={this.state.dataType}

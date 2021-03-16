@@ -111,39 +111,54 @@ export class MultiplyPicker extends React.Component<{
 
 }
 
-export class RolesList extends React.Component<{data:string[],optList:string[]},{}> {
+type option=
+{
+    label:string,
+    value:string
+}
+
+export class CMultiplyPicker extends React.Component<{
+    updListCallback:(val:any) =>void,
+    typeName:string,
+    dataList:option[],
+    optionList:option[]
+},{}> {
 
     state={
-        data:this.props.data
+        bufList:this.props.dataList
     }
 
-    deleteUl(id:number):string[] {
-        console.log("del"+id);
-        let updateArray = [...this.state.data];
+    deleteUl(id:number):option[] {
+        let updateArray = [...this.state.bufList];
         updateArray.splice(id, 1);
-        console.log(updateArray);
-        this.setState({data:updateArray});
+        this.setState({bufList:updateArray});
+        this.props.updListCallback(updateArray);
+        //console.log(this.state.bufList);
+        //console.log(this.props.dataList);
+        //console.log(updateArray);
         return updateArray;
     }
 
-    addUl(el:string):string[] {
-        console.log("add"+el);
-        let updateArray = [...this.state.data];
-        updateArray.splice(this.state.data.length,0,el );
-        console.log(updateArray);
-        this.setState({data:updateArray});
+    addUl(el:option):option[] {
+        let updateArray = [...this.state.bufList];
+        updateArray.splice(this.state.bufList.length,0,el );
+        this.setState({bufList:updateArray});
+        this.props.updListCallback(updateArray);
+        //console.log(this.state.bufList);
+        //console.log(this.props.dataList);
+        //console.log(updateArray);
         return updateArray;
     }
 
     updateOptionsMenuCallBack():JSX.Element {
-        let optList:string[]=["SuperAdmin","CompanyAdmin","ChiefRedactor","Redactor","Author","Corrector"]
+ 
         return <Menu>
-            {optList.map((r, i) => {
-                if(this.state.data.indexOf( r ) == -1 )
+            {this.props.optionList.map((r, i) => {
+                if(this.state.bufList.indexOf( r ) == -1 )
                 return (
                     
-                    <Menu.Item onClick={()=>this.addUl(r)}>
-                        {r}
+                    <Menu.Item key={i+"mi"} onClick={()=>this.addUl(r)}>
+                        {r.label}
                     </Menu.Item>
                 )
             })}
@@ -152,16 +167,16 @@ export class RolesList extends React.Component<{data:string[],optList:string[]},
     }
 
     render() {
-     
-     return(
-        <div>
-            {this.state.data.map((d, i) => {
+        return (
+            
+            <div>
+            {this.props.dataList.map((d, i) => {
                 return (
                 <Button  key={i+"dl"} className="deleteButton" danger
                                     type="dashed"
                                     onClick={()=>this.deleteUl(i)}
                   >
-                        {d} <CloseOutlined />
+                        {d.label} <CloseOutlined />
                 </Button>
                 )
             })}
@@ -175,9 +190,12 @@ export class RolesList extends React.Component<{data:string[],optList:string[]},
               </Button>
             </Dropdown>
         </div>
-     ); 
+
+        );
     }
+
 }
 
 
-export default MultiplyPicker;
+
+export default {CMultiplyPicker,MultiplyPicker};

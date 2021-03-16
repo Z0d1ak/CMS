@@ -270,6 +270,7 @@ export class Company extends React.Component<{},{}> {
         return(
             <div>
                 <FilterEntity
+                dataType={this.state.dataType}
                 updateCallback={this.update}
                 changeValueCallback={this.changeValue}
                 SortDirection={this.state.SortDirection}
@@ -282,6 +283,7 @@ export class Company extends React.Component<{},{}> {
                 text={this.state.text}
                 />
                 <AddEntity
+                dataType={this.state.dataType}
                 createCallback={this.create}
                 /> 
                 <DataEntity 

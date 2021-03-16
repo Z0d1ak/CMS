@@ -21,6 +21,7 @@ import {ChooseBox} from "../filterSubEntities/chooseBox/chooseBox"
  */
 
 export class FilterEntity extends React.Component<{
+    dataType:string,
     updateCallback:()=>void
     changeValueCallback:(val:any,type:string,callback:()=>void)=>void
     SortDirection:string

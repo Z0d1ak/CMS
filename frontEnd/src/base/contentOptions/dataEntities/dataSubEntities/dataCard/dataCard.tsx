@@ -119,15 +119,17 @@ export class DataCard extends React.Component<{
         };
      
         deleteCard = () => {
+            //console.log(this.props.position);
             this.props.deleteItemCallback(this.props.position);
         };
     
         updateCard = () => {
+            //console.log(this.props.position);
             this.props.updateItemCallback(this.props.position, this.state.bufData);
         };
 
         isNull=(val:string):boolean=>{
-            console.log(val);
+            //console.log(val);
             return val===""||val===null;
         }
 /*

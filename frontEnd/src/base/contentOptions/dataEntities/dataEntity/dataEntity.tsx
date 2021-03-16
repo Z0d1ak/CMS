@@ -26,8 +26,9 @@ export class DataEntity extends React.Component<{
 
     deleteItem=(position: number)=>{
         let buf=this.props.items;
+        let objId:string=buf[position].id
         buf.splice(position, 1);
-        this.props.changeValueCallback(buf,"items",this.props.deleteCallback(this.props.items[position].id))
+        this.props.changeValueCallback(buf,"items",this.props.deleteCallback(objId))
     }
 
     render(){

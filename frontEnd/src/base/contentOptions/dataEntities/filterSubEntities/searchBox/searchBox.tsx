@@ -21,6 +21,7 @@ export class SearchBox extends React.Component<{
                 <Input.Search 
                     placeholder="Искать"  
                     onSearch={(value: string)=>this.props.changeValueCallback(value,"QuickSearch",this.props.updateCallback)}
+                    className={"searchBox"}
                 />
 
         );

@@ -9,6 +9,7 @@ type addCompany=paths["/api/Company"]["post"]["requestBody"]["content"]["text/js
 
 
 export class AddEntity extends React.Component<{
+    dataType:string,
     createCallback:(val:any)=>void,
 },{}> {
 
@@ -18,7 +19,7 @@ export class AddEntity extends React.Component<{
             <Row>
             <Col span={1}></Col>
                 <Col span={22}>
-                <AddBox createCallback={this.props.createCallback}/>
+                <AddBox createCallback={this.props.createCallback} dataType={this.props.dataType}/>
                 </Col>
                 <Col span={1}></Col>
             </Row>

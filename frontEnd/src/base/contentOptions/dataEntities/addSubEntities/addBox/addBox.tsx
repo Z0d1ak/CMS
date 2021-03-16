@@ -16,8 +16,8 @@ type addCompany=paths["/api/Company"]["post"]["requestBody"]["content"]["text/js
 
 
 export class AddBox extends React.Component<{
-    createCallback:(val:addCompany)=>void,
-
+    createCallback:(val:any)=>void,
+    dataType:string,
 },{}> {
 
     state = {
@@ -59,6 +59,7 @@ export class AddBox extends React.Component<{
                 >
                     {this.state.status==="hide"?<PlusOutlined />:<AddForm
                      createCallback={ this.props.createCallback}
+                     dataType={this.props.dataType}
                     />}
                 </Card>
         );

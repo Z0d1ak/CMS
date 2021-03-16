@@ -674,7 +674,7 @@ export interface components {
       /** Список ролей, в которые входит пользователь. */
       roles: components["schemas"]["RoleType"][];
     };
-    ArticleState: number;
+    ArticleState: "Project";
     TaskType: number;
     ResponseTaskDto: {
       /** ID задания. */
@@ -835,6 +835,8 @@ export interface components {
     CreateTaskDto: {
       /** ID задания. */
       id: string;
+      /** Id статьи, для которой создается задание. */
+      articleId: string;
       taskType: components["schemas"]["TaskType"];
       /** Описание задания. */
       description: string;

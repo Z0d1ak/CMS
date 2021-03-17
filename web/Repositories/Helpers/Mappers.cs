@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using LinqKit;
 using web.Contracts.Dto.Response;
 using web.Entities;
 
@@ -8,7 +9,7 @@ namespace web.Repositories.Helpers
 {
     public static class Mappers
     {
-        public static Expression<Func<User, ResponseUserDto>> ToResponseUserDtoExpression { get; } = user =>
+        public static Expression<Func<User, ResponseUserDto>> ToResponseUserDtoExpression = user =>
             new ResponseUserDto
             {
                 Id = user.Id,
@@ -19,14 +20,14 @@ namespace web.Repositories.Helpers
                 Roles = user.Roles.Select(r => r.Type)
             };
 
-        public static Expression<Func<Company, ResponseCompanyDto>> ToResponseCompanyDtoExpression { get; } = company =>
+        public static Expression<Func<Company, ResponseCompanyDto>> ToResponseCompanyDtoExpression = company =>
             new ResponseCompanyDto
             {
                 Id = company.Id,
                 Name = company.Name
             };
 
-        public static Expression<Func<Role, ResponseRoleDto>> ToResponseRoleDtoExpression { get; } = role =>
+        public static Expression<Func<Role, ResponseRoleDto>> ToResponseRoleDtoExpression = role =>
             new ResponseRoleDto
             {
                 Id = role.Id,
@@ -34,13 +35,41 @@ namespace web.Repositories.Helpers
                 Type = role.Type
             };
 
+        public static Expression<Func<Article, ResponseArticleDto>> ToResponseArticleDtoExpression = article =>
+            new ResponseArticleDto
+            {
+                Id = article.Id,
+                Initiator = ToResponseUserDtoExpression.Invoke(article.Initiator),
+                CreationDate = article.CreationDate,
+                State = article.State,
+                Title = article.Title,
+                Content = article.Content,
+                Tasks = article.Tasks.Select(x => ToResponseTaskDtoExpression.Invoke(x))
+            };  
+
+        public static Expression<Func<WfTask, ResponseTaskDto>> ToResponseTaskDtoExpression => task =>
+            new ResponseTaskDto
+            {
+                Id = task.Id,
+                Type = task.Type,
+                Performer = ToResponseUserDtoExpression.Invoke(task.Performer),
+                Author = ToResponseUserDtoExpression.Invoke(task.Author),
+                CreationDate = task.CreationDate,
+                AssignmentDate = task.AssignmentDate,
+                СompletionDate = task.СompletionDate,
+                Comment = task.Comment,
+                Description = task.Description
+            };
 
         private static readonly Func<User, ResponseUserDto> ToResponseUserDtoCompiled = ToResponseUserDtoExpression.Compile();
 
         private static readonly Func<Company, ResponseCompanyDto> ToResponseCompanyDtoCompiled = ToResponseCompanyDtoExpression.Compile();
 
         private static readonly Func<Role, ResponseRoleDto> ToResponseRoleDtoCompiled = ToResponseRoleDtoExpression.Compile();
-        
+
+        private static readonly Func<WfTask, ResponseTaskDto> ToResponseTaskDtoCompiled = ToResponseTaskDtoExpression.Compile();
+
+        private static readonly Func<Article, ResponseArticleDto> ToResponseAticleDtoCompiled = ToResponseArticleDtoExpression.Compile();
 
         public static ResponseUserDto ToResponseDto(this User user) =>
             ToResponseUserDtoCompiled(user);
@@ -50,6 +79,10 @@ namespace web.Repositories.Helpers
 
         public static ResponseRoleDto ToResponseDto(this Role role) =>
             ToResponseRoleDtoCompiled(role);
-        
+        public static ResponseTaskDto ToResponseDto(this WfTask task) =>
+            ToResponseTaskDtoCompiled(task);
+        public static ResponseArticleDto ToResponseDto(this Article article) =>
+            ToResponseAticleDtoCompiled(article);
+
     }   
 }

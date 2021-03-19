@@ -4,6 +4,7 @@ import {Login} from "./login/login";
 import {Settings} from "./settings/settings";
 import {Profile} from "./profile/profile";
 import MainPart from "./base/mainInterface/mainPart/mainPart"
+import {Redactor} from "./redactor/redactor";
 import {
     Switch,
     Route,
@@ -29,6 +30,9 @@ export class App extends React.Component<{},{}> {
           </Route>
           <Route path="/profile">
             <Profile></Profile>
+          </Route>
+          <Route path="/redactor">
+            <Redactor></Redactor>
           </Route>
         </Switch>
         );

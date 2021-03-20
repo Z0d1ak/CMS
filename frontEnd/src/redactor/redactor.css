@@ -17,11 +17,6 @@ body{
     max-height: 60vh;
 }
 
-.partsPoolBottom{
-    background-color: white;
-    height: 150px;
-    margin: 10px;
-}
 
 .dataPoolTop{
     background-color: white;
@@ -29,20 +24,20 @@ body{
     margin: 10px;
 }
 
-.grey{
-    width:100%;
-    min-height: 25px;
-    background-color: rgb(209, 209, 209);
-}
-
-.test{
-    width:100%;
-    height: 100px;
+.redactorRow{
+    border-bottom-color: black;
+    border-bottom-width: 2px;
     background-color: green;
-    margin: 10px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.white{
+.redactorRow:hover{
+    border-style: solid;
+}
+
+.redactorCell{
     width:100%;
     min-height: 25px;
     height: 100%;
@@ -50,17 +45,10 @@ body{
     border-style: none;
 }
 
-.black{
-    width:100%;
-    height: 25px;
-    background-color: black;
+.redactorCell:hover{
+    background-color:  rgb(172, 172, 172);
 }
 
-.redactorRow{
-    border-bottom-color: black;
-    border-bottom-width: 2px;
-    background-color: green;
-}
 
 .contentStyle{
     height: 160px;
@@ -69,3 +57,79 @@ body{
     text-align: center;
     background-color: #364d79;
 }
+
+
+.buttonStyle{
+    width:30px;
+    height:30px;
+    position:absolute;
+    z-index: 10;
+}
+
+
+
+.deleteButton{
+
+  
+    bottom: -35px;
+    left: -40px;
+}
+.editButton{
+
+
+    bottom: -35px;
+    right: -40px;
+}
+.moveRightButton{
+
+
+    top: -35px;
+    right: -40px;
+}
+.moveTopButton{
+
+
+    top: -35px;
+    left: calc(50% - 15px);
+}
+.moveLeftButton{
+
+
+    top: -35px;
+    left: -40px;
+}
+.moveBottomButton{
+ 
+    bottom: -40px;
+    left: calc(50% - 15px);
+}
+.addRightButton{
+
+    top: calc(50% - 20px);
+    right: -40px;
+}
+.reduceRightButton{
+
+    top: calc(50% + 20px);
+    right: -40px;
+}
+.addLeftButton{
+
+    top:calc(50% - 20px);
+    left: -40px;
+}
+
+.reduceLeftButton{
+
+    top: calc(50% + 20px);
+    left: -40px;
+}
+
+.delRowButton{
+    width:20px;
+    height:20px;
+    position:absolute;
+    z-index: 10;
+    right: -10px;
+}
+

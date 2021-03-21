@@ -11,6 +11,7 @@ import { isThisTypeNode } from 'typescript';
 import Grid from 'antd/lib/card/Grid';
 import Item from 'antd/lib/list/Item';
 import Paragraph from 'antd/lib/skeleton/Paragraph';
+import{DataRowEditable} from "../base/contentOptions/dataEntities/dataSubEntities/dataRow/dataRow"
 import {
     DeleteOutlined,
     CheckOutlined,
@@ -96,7 +97,7 @@ function BlockImg(props:{ name:string, pos:number}) {
         collect: (monitor) => ({
           isDragging: !!monitor.isDragging()
         }),
-        item:ComponentsBlock[props.pos]
+        item:{item:ComponentsBlock[props.pos], cOpt:ComponentsBlockOpt[props.pos], cOptVal:ComponentsBlockOptVals[props.pos]}
       }))
 
     return(
@@ -125,8 +126,29 @@ const ComponentsBlock:JSX.Element[]=[
     </div>
   </Carousel>,
 ]
+const ComponentsBlockOpt:string[][]=[
+    ["text","font-size","allign"],
+    ["allign"],
+    ["allign"],
+    ["allign"],
+    ["allign"],
+    ["allign"]
+]
+
+const ComponentsBlockOptVals:string[][]=[
+    ["abc","12","center"],
+    ["center"],
+    ["center"],
+    ["center"],
+    ["center"],
+    ["center"]
+]
+
+
 
 function Instuments(props:{ 
+    cOpt:string[],
+    cOptVal:string[],
     delete:()=>void, 
     edit:()=>void,
     mvR:()=>void,
@@ -134,7 +156,8 @@ function Instuments(props:{
     aR:()=>void,
     rR:()=>void,
     aL:()=>void,
-    rL:()=>void}
+    rL:()=>void,
+}
     ) {
         const [visible, setVisible] = useState(false);
 
@@ -150,7 +173,7 @@ function Instuments(props:{
         <VerticalRightOutlined className={"reduceRightButton buttonStyle" }onClick={props.rR}/>
         <VerticalRightOutlined className={"addLeftButton buttonStyle"}onClick={props.aL}/>
         <VerticalLeftOutlined className={"reduceLeftButton buttonStyle"}onClick={props.rL}/>
-        <Settings visible={visible}></Settings>
+        <Settings visible={visible} cOpt={props.cOpt} cOptVal={props.cOptVal}></Settings>
         </>
     );
 
@@ -166,14 +189,16 @@ function Instuments(props:{
     */
 }
 
-function Settings(props:{visible:boolean}
+function Settings(props:{visible:boolean ,
+    cOpt:string[],
+    cOptVal:string[]
+}
     ) {
-
     return(
         props.visible?
-        <div className={"settingsForm"}>
-        
-        </div>:
+        <Card className={"settingsForm"} onClick={()=>{console.log(props.cOpt)}}>
+            <DataRowEditable dataStr={props.cOpt[0]} titleStr={props.cOptVal[0]} typeName={"q"} editFieldCallback={()=>{}}/>
+        </Card>:
         <></>
     );
 
@@ -190,6 +215,8 @@ function Settings(props:{visible:boolean}
 }
 
 function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
+    cOpt:string[]|null,
+    cOptVal:string[]|null,
     edit:()=>void,
     mvR:(x:number,y:number)=>void,
     mvL:(x:number,y:number)=>void,
@@ -198,15 +225,15 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
     aL:(x:number,y:number)=>void,
     rL:(x:number,y:number)=>void,
     delete:(x:number,y:number)=>void, 
-    insert:(x:number,y:number,item:JSX.Element)=>void, 
+    insert:(x:number,y:number,item:JSX.Element, cOpt:string[], cOptVal:string[])=>void, 
 }) {
 
 
     const [{ isOver }, drop] = useDrop(
         () => ({
           accept: "option",
-          drop: (item:JSX.Element) => {
-              props.insert(props.x,props.y,item)
+          drop: (item:{item:JSX.Element,cOpt:string[],cOptVal:string[]}) => {
+              props.insert(props.x,props.y,item.item,item.cOpt,item.cOptVal)
           },
           collect: (monitor) => ({
             isOver: !!monitor.isOver()
@@ -234,6 +261,8 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
             aL={()=>{props.aL(props.x,props.y)}}
             rL={()=>{props.rL(props.x,props.y)}}
             delete={()=>{props.delete(props.x,props.y)}}
+            cOpt={props.cOpt!}
+            cOptVal={props.cOptVal!}
             />:<></>}
         </Col>
         
@@ -246,7 +275,9 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
         x:number,
         y:number,
         width:number,
-        content:JSX.Element|null
+        content:JSX.Element|null,
+        cOpt:string[]|null,
+        cOptVal:string[]|null
     }
 
 
@@ -279,7 +310,9 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                     x:x+i,
                     y:y,
                     width: 1,
-                    content: null
+                    content: null,
+                    cOpt:null,
+                    cOptVal:null
                 }
                 buf[y].splice(x+i,0,zel);
             }
@@ -344,7 +377,9 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                         x:x,
                         y:y,
                         width:1,
-                        content:null 
+                        content:null,
+                        cOpt:null,
+                        cOptVal:null 
                     }
                     buf[y].splice(x,1,gridel,el);  
                 this.setState({grid:buf})
@@ -376,7 +411,9 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                         x:x,
                         y:y,
                         width:1,
-                        content:null 
+                        content:null ,
+                        cOpt:null,
+                        cOptVal:null 
                     }
                     buf[y].splice(x,1,el,gridel);  
                 this.setState({grid:buf})
@@ -392,7 +429,9 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                     x:j,
                     y:this.state.rows,
                     width:1,
-                    content:null 
+                    content:null ,
+                    cOpt:null,
+                    cOptVal:null 
                 }
                gridRow.splice(j,0,el);
             }
@@ -417,14 +456,16 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
              this.setState({grid:buf})
         }
 
-        insert=(x:number,y:number,item:JSX.Element)=>{
+        insert=(x:number,y:number,item:JSX.Element, cOpt:string[], cOptVal:string[])=>{
             console.log(x+":"+y);
             let buf:cel[][]=this.state.grid;
             let bufel={
                 x:x,
                 y:y,
                 width: this.state.grid[y][x].width,
-                content: item
+                content: item,
+                cOpt:cOpt,
+                cOptVal:cOptVal
             }
             buf[y][x]=bufel;
             this.setState({grid:buf})
@@ -465,7 +506,9 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                             x:j,
                             y:i,
                             width:1,
-                            content:null 
+                            content:null ,
+                            cOpt:null,
+                            cOptVal:null 
                         }
                        gridRow.splice(j,0,el);
                     }
@@ -507,7 +550,9 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                 <Row className={"redactorRow"}>
                 {r.map((c,j)=>{
                    return(
-                    <Cell x={this.state.grid[i][j].x} y={this.state.grid[i][j].y} width={this.state.grid[i][j].width} content={this.state.grid[i][j].content}
+                    <Cell x={this.state.grid[i][j].x} y={this.state.grid[i][j].y} width={this.state.grid[i][j].width} content={this.state.grid[i][j].content }
+                    cOpt={this.state.grid[i][j].cOpt}
+                    cOptVal={this.state.grid[i][j].cOptVal}
                     edit={this.edit}
                     mvR={this.mvR}
                     mvL={this.mvL}

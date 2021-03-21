@@ -24,7 +24,7 @@ namespace web.Entities
 
         public string Title { get; set; }
 
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         public ICollection<WfTask> Tasks { get; set; }
     }

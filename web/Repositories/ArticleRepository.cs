@@ -50,8 +50,7 @@ namespace web.Repositories
             try
             {
                 await this.dataContext.SaveChangesAsync(cancellationToken);
-                article = await this.dataContext.Articles.Include(x => x.Initiator).FirstAsync(x => x.Id == article.Id);
-                return new ServiceResult<ResponseArticleDto>(article.ToResponseDto());
+                return await this.GetByIdAsync(article.Id, cancellationToken);
             }
             catch (DbUpdateException dbUpdateException)
             {

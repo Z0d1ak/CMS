@@ -31,7 +31,7 @@ namespace web.Services
         public async Task<ServiceResult<ResponseArticleDto>> CreateAsync(StoreArticleDto storeArticleDto, CancellationToken cancellationToken = default)
         {
             if(!this.userInfoProvider.User.IsInRole(AccessRoles.ChiefRedactor)
-                && this.userInfoProvider.User.IsInRole(AccessRoles.Author))
+                && !this.userInfoProvider.User.IsInRole(AccessRoles.Author))
             {
                 return new ServiceResult<ResponseArticleDto>(StatusCodes.Status403Forbidden);
             }

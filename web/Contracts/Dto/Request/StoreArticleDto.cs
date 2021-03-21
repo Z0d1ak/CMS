@@ -25,6 +25,6 @@ namespace web.Contracts.Dto.Request
         /// <summary>
         /// Контент статьи.
         /// </summary>
-        public string Content { get; set; } = null!;
+        public string? Content { get; set; } = null!;
     }
 }

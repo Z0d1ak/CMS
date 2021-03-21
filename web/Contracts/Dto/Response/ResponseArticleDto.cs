@@ -42,7 +42,7 @@ namespace web.Contracts.Dto.Response
         /// <summary>
         /// Контент статьи.
         /// </summary>
-        public string Content { get; set; } = null!;
+        public string? Content { get; set; } = null!;
 
         /// <summary>
         ///   Активное задание.

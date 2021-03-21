@@ -81,8 +81,8 @@ namespace web.Repositories.Helpers
             ToResponseRoleDtoCompiled(role);
         public static ResponseTaskDto ToResponseDto(this WfTask task) =>
             ToResponseTaskDtoCompiled(task);
-        public static ResponseArticleDto ToResponseDto(this Article article) =>
-            ToResponseAticleDtoCompiled(article);
+        //public static ResponseArticleDto ToResponseDto(this Article article) =>
+        //    ToResponseAticleDtoCompiled(article);
 
     }   
 }

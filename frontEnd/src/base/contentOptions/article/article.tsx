@@ -187,7 +187,7 @@ export class Article extends React.Component<{},{}> {
                     notification.error({
                         message: 'Ошибка '+ err.response.status,
                         description:
-                          "Неопознанная ошибка"
+                          err.response.body
                       });
                     break;
                 }
@@ -267,7 +267,7 @@ export class Article extends React.Component<{},{}> {
         request+=this.isNull(this.state.SortingColumn)?"":"&SortingColumn="+this.state.SortingColumn;
         request+=this.isNull(this.state.SortDirection)?"":"&SortDirection="+this.state.SortDirection;
         request+=this.isNull(this.state.QuickSearch)?"":"&QuickSearch="+this.state.QuickSearch;
-        /*axios.get(
+        axios.get(
             this.state.requestUrl+this.state.requestPath+request,
             {
                 headers: {
@@ -293,120 +293,7 @@ export class Article extends React.Component<{},{}> {
                     break;
                 }
             }
-        })*/
-        this.setState({count:10})
-        this.setState({items:[
-            {
-                "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "initiator": {
-                  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                  "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                  "email": "user@example.com",
-                  "firstName": "string",
-                  "lastName": "string",
-                  "roles": [
-                    "SuperAdmin"
-                  ]
-                },
-                "creationDate": "2021-03-11T22:18:00.743Z",
-                "state": "Project",
-                "title": "string",
-                "content": "string",
-                "tasks": [
-                  {
-                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "type": 0,
-                    "performer": {
-                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "email": "user@example.com",
-                      "firstName": "string",
-                      "lastName": "string",
-                      "roles": [
-                        "SuperAdmin"
-                      ]
-                    },
-                    "author": {
-                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "email": "user@example.com",
-                      "firstName": "string",
-                      "lastName": "string",
-                      "roles": [
-                        "SuperAdmin"
-                      ]
-                    },
-                    "creationDate": "2021-03-11T22:18:00.743Z",
-                    "assignmentDate": "2021-03-11T22:18:00.743Z",
-                    "сompletionDate": "2021-03-11T22:18:00.743Z",
-                    "description": "string",
-                    "comment": "string"
-                  },
-                  {
-                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "type": 0,
-                    "performer": {
-                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "email": "user@example.com",
-                      "firstName": "string",
-                      "lastName": "string",
-                      "roles": [
-                        "SuperAdmin"
-                      ]
-                    },
-                    "author": {
-                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "email": "user@example.com",
-                      "firstName": "string",
-                      "lastName": "string",
-                      "roles": [
-                        "SuperAdmin"
-                      ]
-                    },
-                    "creationDate": "2021-03-11T22:18:00.743Z",
-                    "assignmentDate": "2021-03-11T22:18:00.743Z",
-                    "сompletionDate": "2021-03-11T22:18:00.743Z",
-                    "description": "string",
-                    "comment": "string"
-                  },
-                  {
-                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "type": 0,
-                    "performer": {
-                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "email": "user@example.com",
-                      "firstName": "string",
-                      "lastName": "string",
-                      "roles": [
-                        "SuperAdmin"
-                      ]
-                    },
-                    "author": {
-                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                      "email": "user@example.com",
-                      "firstName": "string",
-                      "lastName": "string",
-                      "roles": [
-                        "SuperAdmin"
-                      ]
-                    },
-                    "creationDate": "2021-03-11T22:18:00.743Z",
-                    "assignmentDate": "2021-03-11T22:18:00.743Z",
-                    "сompletionDate": "2021-03-11T22:18:00.743Z",
-                    "description": "string",
-                    "comment": "string"
-                  }
-                ]
-              }
-
-
-
-        ]})
-        this.setState({loading:false});
+        })
     }
 
  
@@ -443,34 +330,36 @@ export class Article extends React.Component<{},{}> {
         return(
             <div>
                 <FilterEntity
-                dataType={this.state.dataType}
-                updateCallback={this.update}
-                changeValueCallback={this.changeValue}
-                SortDirection={this.state.SortDirection}
-                SortDirectionOptions={this.state.SortDirectionOptions}
-                SortingColumn={this.state.SortingColumn}
-                SortingColumnOptions={this.state.SortingColumnOptions}
-                option={[this.state.SearchBy]}
-                optionName={this.state.optionName}
-                optionList={this.state.optionList}
-                text={this.state.text}
+                    dataType={this.state.dataType}
+                    updateCallback={this.update}
+                    changeValueCallback={this.changeValue}
+                    SortDirection={this.state.SortDirection}
+                    SortDirectionOptions={this.state.SortDirectionOptions}
+                    SortingColumn={this.state.SortingColumn}
+                    SortingColumnOptions={this.state.SortingColumnOptions}
+                    option={[this.state.SearchBy]}
+                    optionName={this.state.optionName}
+                    optionList={this.state.optionList}
+                    text={this.state.text}
                 />
                 <AddEntity
-                dataType={this.state.dataType}
-                createCallback={this.create}
+                    dataType={this.state.dataType}
+                    createCallback={this.create}
                 /> 
                 <DataEntity 
-                dataType={this.state.dataType}
-                loading={this.state.loading}    
-                updateDataCallback={this.updateData} 
-                deleteCallback={this.delete} 
-                updateCallback={this.update} 
-                changeValueCallback={this.changeValue} 
-                items={this.state.items}/>  
+                    dataType={this.state.dataType}
+                    loading={this.state.loading}    
+                    updateDataCallback={this.updateData} 
+                    deleteCallback={this.delete} 
+                    updateCallback={this.update} 
+                    changeValueCallback={this.changeValue} 
+                    items={this.state.items}
+                />  
                 <PaginationEntity 
-                countItems={this.state.count}
-                onPageChange={this.onPageChange}
-                onMaxItemsChange={this.onMaxItemsChange}/> 
+                    countItems={this.state.count}
+                    onPageChange={this.onPageChange}
+                    onMaxItemsChange={this.onMaxItemsChange}
+                /> 
             </div>
             
         );

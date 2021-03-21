@@ -23,6 +23,9 @@ import {
 type addCompany=paths["/api/Company"]["post"]["requestBody"]["content"]["text/json"]
 type addUser=paths["/api/User"]["post"]["requestBody"]["content"]["text/json"]
 
+type addArticle=paths["/api/Article"]["post"]["requestBody"]["content"]["text/json"]
+
+
 const { Paragraph } = Typography;
 type option=
 {
@@ -39,6 +42,25 @@ type field=
         options:option[],
         chosedOptions:option[]        
     }
+
+    const articleFields:field[]=[
+         {
+            name: 'articleTitle',
+            value: 'Добавление статьи',
+            type:'text',
+            label:'Данные статьи',
+            options:[],
+            chosedOptions:[]
+        },
+        {
+            name: 'articleName',
+            value: 'Итория о...',
+            type:'input',
+            label:'Заголовок статьи',
+            options:[],
+            chosedOptions:[]
+        }
+    ]
 
     const companyFields:field[]=[
         {
@@ -181,7 +203,7 @@ export class AddForm extends React.Component<{
         switch(this.props.dataType) { 
             case "article": { 
                 this.state = {
-                    fields:companyFields
+                    fields:articleFields
             }
                 break;
             }
@@ -309,7 +331,55 @@ export class AddForm extends React.Component<{
                 value:""
                 }
             ]
-        }
+        },
+                    {
+                name: 'articleName',
+                value: 'Данные статьи',
+                type:'input',
+                label:'Данные статьи',
+                options:[{
+                    label:"",
+                    value:""
+                }],
+                chosedOptions:[
+                    {label:"",
+                    value:""
+                    }
+                ]
+                
+            },
+             {
+                name: 'articleTitle',
+                value: 'Данные статьи',
+                type:'text',
+                label:'Данные статьи',
+                options:[{
+                    label:"",
+                    value:""
+                }],
+                chosedOptions:[
+                    {label:"",
+                    value:""
+                    }
+                ]
+                
+            },
+                         {
+                name: 'articleName',
+                value: 'Данные статьи',
+                type:'input',
+                label:'Статьи',
+                options:[{
+                    label:"",
+                    value:""
+                }],
+                chosedOptions:[
+                    {label:"",
+                    value:""
+                    }
+                ]
+                
+            }
         ]
     };
 
@@ -319,7 +389,12 @@ export class AddForm extends React.Component<{
         let buf;
         switch(this.props.dataType) { 
             case "article": { 
-                buf={}
+                let guis1:string=uuidv4();
+                buf={
+                    id: guis1,
+                    title: this.state.fields[1].value,
+                    content: "{}",
+                }
                 break;
             }
             case "employee": { 
@@ -406,11 +481,10 @@ export class AddForm extends React.Component<{
             onFinishFailed={this.onFinishFailed}
             onFieldsChange={(_, allFields) => {
                 let buf=this.state.fields;
-                buf[0].value=allFields[0].value;
-                buf[1].value=allFields[1].value;
-                buf[2].value=allFields[2].value;
-                buf[3].value=allFields[3].value;
-                buf[4].value=allFields[4].value;
+                for (var _i = 0; _i < allFields.length; _i++){
+                    buf[_i].value=allFields[_i].value;
+
+                }
                 this.setState({
                    fields:buf
                 })

@@ -11,6 +11,16 @@ import { isThisTypeNode } from 'typescript';
 import Grid from 'antd/lib/card/Grid';
 import Item from 'antd/lib/list/Item';
 import Paragraph from 'antd/lib/skeleton/Paragraph';
+import {
+    DeleteOutlined,
+    CheckOutlined,
+    CloseOutlined,
+    CaretLeftOutlined,
+    CaretRightOutlined,
+    VerticalLeftOutlined,
+    VerticalRightOutlined,
+    EditOutlined 
+} from '@ant-design/icons';
 
 export class Redactor extends React.Component<{},{}> {
 
@@ -94,7 +104,7 @@ function BlockImg(props:{ name:string, pos:number}) {
     );
 }
 const ComponentsBlock:JSX.Element[]=[
-    <Typography.Paragraph className={"grey"}>The useDrophook provides a way for you to wire in your component into the DnD system as a drop target. By passing in a specification into the useDrophook, you can specify including what types of data items the drop-target will accept, what props to collect, and more. This function returns an array containing a ref to attach to the Drop Target node and the collected props.</Typography.Paragraph>,
+    <Typography.Paragraph className={"grey"}>The useDrophook provides a way for you to wire in your component into the DnD system as a drop target. By passing in a specification into the useDrophook, you can specify including what types of data items the drop-target will accept, what props to collect, and more.</Typography.Paragraph>,
     <Image  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>,
     <>2</>,
     <>3</>,
@@ -121,41 +131,73 @@ function Instuments(props:{
     edit:()=>void,
     mvR:()=>void,
     mvL:()=>void,
-    mvT:()=>void,
-    mvB:()=>void,
     aR:()=>void,
     rR:()=>void,
     aL:()=>void,
     rL:()=>void}
     ) {
+        const [visible, setVisible] = useState(false);
 
     return(
         <>
-        <Button className={"deleteButton buttonStyle"} onClick={props.delete}> d</Button>
-        <Button className={"editButton buttonStyle"} onClick={props.edit}> e</Button>
-        <Button className={"moveRightButton buttonStyle"} onClick={props.mvR}> mr</Button>
-        <Button className={"moveTopButton buttonStyle" } onClick={props.mvT}> mt</Button>
-        <Button className={"moveLeftButton buttonStyle"} onClick={props.mvL}> ml</Button>
-        <Button className={"moveBottomButton buttonStyle"} onClick={props.mvB}> mb</Button>
-        <Button className={"addRightButton buttonStyle"} onClick={props.aR}> ar</Button>
-        <Button className={"reduceRightButton buttonStyle" }onClick={props.rR}> rr</Button>
-        <Button className={"addLeftButton buttonStyle"}onClick={props.aL}> al</Button>
-        <Button className={"reduceLeftButton buttonStyle"}onClick={props.rL}> rl</Button>
+        <DeleteOutlined className={"deleteButton buttonStyle"} onClick={props.delete}/>
+        <EditOutlined className={"editButton buttonStyle"} onClick={()=>setVisible(!visible)}/>
+        <CaretRightOutlined className={"moveRightButton buttonStyle"} onClick={props.mvR}/>
+
+        <CaretLeftOutlined className={"moveLeftButton buttonStyle"} onClick={props.mvL}/>
+
+        <VerticalLeftOutlined className={"addRightButton buttonStyle"} onClick={props.aR}/>
+        <VerticalRightOutlined className={"reduceRightButton buttonStyle" }onClick={props.rR}/>
+        <VerticalRightOutlined className={"addLeftButton buttonStyle"}onClick={props.aL}/>
+        <VerticalLeftOutlined className={"reduceLeftButton buttonStyle"}onClick={props.rL}/>
+        <Settings visible={visible}></Settings>
         </>
     );
+
+    /*
+     DeleteOutlined,
+    CheckOutlined,
+    CloseOutlined,
+    CaretLeftOutlined,
+    CaretRightOutlined,
+    VerticalLeftOutlined,
+    VerticalRightOutlined,
+    EditOutlined
+    */
+}
+
+function Settings(props:{visible:boolean}
+    ) {
+
+    return(
+        props.visible?
+        <div className={"settingsForm"}>
+        
+        </div>:
+        <></>
+    );
+
+    /*
+     DeleteOutlined,
+    CheckOutlined,
+    CloseOutlined,
+    CaretLeftOutlined,
+    CaretRightOutlined,
+    VerticalLeftOutlined,
+    VerticalRightOutlined,
+    EditOutlined
+    */
 }
 
 function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
     edit:()=>void,
     mvR:(x:number,y:number)=>void,
     mvL:(x:number,y:number)=>void,
-    mvT:(x:number,y:number)=>void,
-    mvB:(x:number,y:number)=>void,
     aR:(x:number,y:number)=>void,
     rR:(x:number,y:number)=>void,
     aL:(x:number,y:number)=>void,
     rL:(x:number,y:number)=>void,
-    delete:()=>void, 
+    delete:(x:number,y:number)=>void, 
     insert:(x:number,y:number,item:JSX.Element)=>void, 
 }) {
 
@@ -181,19 +223,17 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
     return(
         
         <Col span={props.width}>
-            <div  ref={drop} className="redactorCell" onClick={()=>{setVisible(!visible);console.log(visible)}}><>{props.content}</>
+            <div  ref={drop} className="redactorCell" onClick={()=>{if(props.content!=null)setVisible(!visible);}}><>{props.content}</>
          </div>
          {props.content!==null&&visible?<Instuments
             edit={props.edit}
             mvR={()=>{props.mvR(props.x,props.y)}}
             mvL={()=>{props.mvL(props.x,props.y)}}
-            mvT={()=>{props.mvT(props.x,props.y)}}
-            mvB={()=>{props.mvB(props.x,props.y)}}
             aR={()=>{props.aR(props.x,props.y)}}
             rR={()=>{props.rR(props.x,props.y)}}
             aL={()=>{props.aL(props.x,props.y)}}
             rL={()=>{props.rL(props.x,props.y)}}
-            delete={props.delete}
+            delete={()=>{props.delete(props.x,props.y)}}
             />:<></>}
         </Col>
         
@@ -217,64 +257,84 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
             grid:cel[][],
     }> {
 
-
-        delete=()=>{
-            console.log("delete");
-       /*     let buf:JSX.Element[][]=this.state.grid;
-            buf[y].splice(x,1);
-            for (var j = 0; j < width; j++) {
-                buf[y].splice(x+j,0, <Cell x={y+j} y={y} width={1} content={<></>} insertComponent={this.insertComponent}deleteComponent={this.deleteComponent}/>);
+        updRowVals=(y:number)=>{
+            let buf:cel[][]=this.state.grid;
+            for (var j = 0; j < this.state.grid[y].length; j++) {
+            
+                buf[y][j].x=j;
+                buf[y][j].y=y;
             }
-            this.setState({grid:buf})*/
+            this.setState({grid:buf})
+        }
+
+        delete=(x:number,y:number)=>{
+            console.log("delete");
+            console.log(x+":"+y);
+            let buf:cel[][]=this.state.grid;
+            let bufw=this.state.grid[y][x].width;
+            buf[y].splice(x,1);
+            for(let i=0;i< bufw;i++)
+            {
+                let zel={
+                    x:x+i,
+                    y:y,
+                    width: 1,
+                    content: null
+                }
+                buf[y].splice(x+i,0,zel);
+            }
+            this.setState({grid:buf})
+            this.updRowVals(y);
         } 
         edit=()=>{
             console.log("edit");
         }
         mvR=(x:number,y:number)=>{
             console.log("mvR");
-            if(x+this.state.grid[y][x].width<24){
+            console.log(x+":"+y);
+            if(x+1<this.state.grid[y].length){
             let buf:cel[][]=this.state.grid;
-            let gridel:cel=buf[y][x+1];
-            buf[y][x+1]=buf[y][x];
-            buf[y][x]=gridel; 
-            buf[y][x+1].x= buf[y][x+1].x+1;
-            buf[y][x].x= buf[y][x].x-1;
+            let gridel1:cel=buf[y][x+1];
+            gridel1.x=x;
+            let gridel2:cel=buf[y][x];
+            gridel2.x=x+1;
+            buf[y][x]=gridel1;
+            buf[y][x+1]=gridel2;
             this.setState({grid:buf})
             }
+            this.updRowVals(y);
         }
         mvL=(x:number,y:number)=>{
             console.log("mvL");
+            console.log(x+":"+y);
             if(x>0){
                 let buf:cel[][]=this.state.grid;
-                let gridel:cel=buf[y][x-1];
-                buf[y][x-1]=buf[y][x];
-                buf[y][x]=gridel; 
-                buf[y][x-1].x= buf[y][x-1].x-1;
-                buf[y][x].x= buf[y][x].x+1;
+                let gridel1:cel=buf[y][x-1];
+                gridel1.x=x;
+                let gridel2:cel=buf[y][x];
+                gridel2.x=x-1;
+                buf[y][x]=gridel1;
+                buf[y][x-1]=gridel2;
                 this.setState({grid:buf})
                 }
-        }
-        mvT=()=>{
-            console.log("mvt");
-        }
-        mvB=()=>{
-            console.log("mvb");
+                this.updRowVals(y);
         }
         aR=(x:number,y:number)=>{
             console.log("ar");
-            if(x+this.state.grid[y][x].width<=23){
+            console.log(x+":"+y);
+            if(x+1<this.state.grid[y].length)
+            if(this.state.grid[y][x+1].content==null){
                 let buf:cel[][]=this.state.grid;
                 let gridel:cel=buf[y][x];
-                if(buf[y][x+1].content==null)
-                {
-                    gridel.width=gridel.width+1;
-                    buf[y].splice(x,2,gridel);  
-                }
+                gridel.width=gridel.width+1;
+                buf[y].splice(x,2,gridel);  
                 this.setState({grid:buf})
-                }
+            }
+                this.updRowVals(y);
         }
         rR=(x:number,y:number)=>{
             console.log("rr");
+            console.log(x+":"+y);
             if(this.state.grid[y][x].width>1){
                 let buf:cel[][]=this.state.grid;
                 let gridel:cel=buf[y][x];
@@ -289,23 +349,24 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                     buf[y].splice(x,1,gridel,el);  
                 this.setState({grid:buf})
                 }
+                this.updRowVals(y);
         }
         aL=(x:number,y:number)=>{
             console.log("al");
-            if(x>=1){
+            console.log(x+":"+y);
+            if(x>=1&&this.state.grid[y][x-1].content==null){
                 let buf:cel[][]=this.state.grid;
                 let gridel:cel=buf[y][x];
-                if(buf[y][x-1].content==null)
-                {
-                    gridel.width=gridel.width+1;
-                    gridel.x=gridel.x-1;
-                    buf[y].splice(x-1,2,gridel);  
-                }
+                gridel.width=gridel.width+1;
+                gridel.x=gridel.x-1;
+                buf[y].splice(x-1,2,gridel);  
                 this.setState({grid:buf})
-                }
+            }
+            this.updRowVals(y);
         }
         rL=(x:number,y:number)=>{
             console.log("rl");
+            console.log(x+":"+y);
             if(this.state.grid[y][x].width>1){
                 let buf:cel[][]=this.state.grid;
                 let gridel:cel=buf[y][x];
@@ -320,6 +381,7 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                     buf[y].splice(x,1,el,gridel);  
                 this.setState({grid:buf})
                 }
+                this.updRowVals(y);
         }
 
         addRow=()=>{
@@ -328,7 +390,7 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
             for (var j = 0; j < this.state.cels; j++) {
                 let el:cel={
                     x:j,
-                    y:this.state.rows+1,
+                    y:this.state.rows,
                     width:1,
                     content:null 
                 }
@@ -342,13 +404,31 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
         deleteRow=(y:number)=>{
              let buf:cel[][]=this.state.grid;
              buf.splice(y,1);
+
+             for (let i=0;i<buf.length;i++)
+             {
+                for (let j=0;j<buf[i].length;j++)
+             {
+                 buf[i][j].y=i
+             } 
+             }
+            
+             this.setState({rows:this.state.rows-1})
              this.setState({grid:buf})
         }
 
         insert=(x:number,y:number,item:JSX.Element)=>{
+            console.log(x+":"+y);
             let buf:cel[][]=this.state.grid;
-            buf[y][x].content=item;
+            let bufel={
+                x:x,
+                y:y,
+                width: this.state.grid[y][x].width,
+                content: item
+            }
+            buf[y][x]=bufel;
             this.setState({grid:buf})
+            this.updRowVals(y);
         }    
 
         /*insertComponent=(x:number,y:number,width:number,component:JSX.Element)=>{
@@ -397,7 +477,7 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                     grid:buf
                 }
             }
-            this.state.grid[3][3].content=ComponentsBlock[6];
+           // this.state.grid[3][3].content=ComponentsBlock[6];
             //this.state.grid[3][6].content=ComponentsBlock[6];
             console.log(this.state.grid)
         }
@@ -421,7 +501,9 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                 <Card className="articleBody"  title="Макет саттьи">
                 {this.state.grid.map((r,i)=>{
                 return(
-                <>
+                <Row>
+                    <Col span={1}></Col>
+                    <Col span={22}>
                 <Row className={"redactorRow"}>
                 {r.map((c,j)=>{
                    return(
@@ -429,8 +511,6 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
                     edit={this.edit}
                     mvR={this.mvR}
                     mvL={this.mvL}
-                    mvT={this.mvT}
-                    mvB={this.mvB}
                     aR={this.aR}
                     rR={this.rR}
                     aL={this.aL}
@@ -441,11 +521,14 @@ function Cell(props:{x:number,y:number,width:number,content:JSX.Element|null,
     
                    ); 
                 })}
-                <Button className={"delRowButton"} type="dashed" onClick={()=>this.deleteRow(i)}>del+{i}</Button>
+                <DeleteOutlined className={"delRowButton"} type="dashed" onClick={()=>this.deleteRow(i)}/>
                 </Row>
-                 </>
+                </Col>
+                <Col span={1}></Col>
+                 </Row>
                 )
              })}
+             {this.state.rows}: {this.state.cels}
              <Divider/>
 
              <Row >

@@ -13,7 +13,7 @@ body{
     background-color: white;
     height: 60vh;
     margin: 10px;
-    overflow: auto scroll; 
+    overflow-y: auto scroll;
     max-height: 60vh;
 }
 
@@ -71,58 +71,46 @@ body{
 .deleteButton{
 
   
-    bottom: -35px;
-    left: -40px;
+    top: calc(50% + 30px);
+    left: -27px;
 }
 .editButton{
 
-
-    bottom: -35px;
-    right: -40px;
+    top: calc(50% + 30px);
+    right: -35px;
 }
 .moveRightButton{
 
-
-    top: -35px;
-    right: -40px;
+    top: calc(50% - 30px);
+    right: -25px;
 }
-.moveTopButton{
 
-
-    top: -35px;
-    left: calc(50% - 15px);
-}
 .moveLeftButton{
 
+    top: calc(50% - 30px);
+    left: -25px;
+}
 
-    top: -35px;
-    left: -40px;
-}
-.moveBottomButton{
- 
-    bottom: -40px;
-    left: calc(50% - 15px);
-}
 .addRightButton{
 
-    top: calc(50% - 20px);
-    right: -40px;
+    top: calc(50% - 10px);
+    right: -45px;
 }
 .reduceRightButton{
 
-    top: calc(50% + 20px);
-    right: -40px;
+    top: calc(50% - 10px);
+    right: -25px;
 }
 .addLeftButton{
 
-    top:calc(50% - 20px);
-    left: -40px;
+    top:calc(50% - 10px);
+    left: -45px;
 }
 
 .reduceLeftButton{
 
-    top: calc(50% + 20px);
-    left: -40px;
+    top: calc(50% - 10px);
+    left: -25px;
 }
 
 .delRowButton{
@@ -133,3 +121,14 @@ body{
     right: -10px;
 }
 
+
+.settingsForm
+{
+    top: calc(50% + 50px);
+    right: -340px;
+    background-color: grey;
+    width: 300px;
+    height: 300px;
+    z-index: 50;
+    position:absolute;
+}

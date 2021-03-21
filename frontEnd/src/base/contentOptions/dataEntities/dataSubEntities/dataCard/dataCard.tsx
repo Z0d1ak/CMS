@@ -488,6 +488,7 @@ export class DataCard extends React.Component<{
                 
                 <Card className="userCard wide"
                     hoverable={true}
+                    extra={<a href={window.location.href + "/" +this.props.data.id}>More</a>}
                     actions={
                         this.state.status==="narrow"?this.optionsNarrow():this.state.status==="expand"?this.optionsExpand():this.optionsExpandEditable()
                     }

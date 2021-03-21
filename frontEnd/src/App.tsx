@@ -22,6 +22,9 @@ export class App extends React.Component<{},{}> {
           <Route path="/login">
             <Login />
           </Route>
+          <Route path="/home/alltexts/:id">
+            <MainPart></MainPart>
+          </Route>
           <Route path="/home">
             <MainPart></MainPart>
           </Route>

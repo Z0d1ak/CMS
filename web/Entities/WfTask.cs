@@ -11,6 +11,8 @@ namespace web.Entities
     {
         public Guid Id { get; set; }
 
+        public Guid? ParentTaskId { get; set; }
+
         public Guid CompanyId { get; set; }
         public Company Company { get; set; }
 
@@ -36,7 +38,7 @@ namespace web.Entities
         public TaskType Type { get; set; }
 
         /// <summary>
-        /// Контент статьи при заврешении заддания.
+        /// Контент статьи при заврешении задания.
         /// </summary>
         public string Content { get; set; }
     }

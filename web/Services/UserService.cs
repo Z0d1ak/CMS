@@ -41,6 +41,10 @@ namespace web.Services
 
         public async Task<ServiceResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            if(userInfoProvider.UserId == id)
+            {
+                return new ServiceResult(StatusCodes.Status405MethodNotAllowed);
+            }
             return await this.userRepository.DeleteAsync(id, cancellationToken);
         }
 

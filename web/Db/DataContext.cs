@@ -82,7 +82,7 @@ namespace web.Db
             modelBuilder.Entity<Article>().Property(x => x.InitiatorId).IsRequired();
             modelBuilder.Entity<Article>().Property(x => x.State).IsRequired();
             modelBuilder.Entity<Article>().Property(x => x.Title).IsRequired().HasMaxLength(256);
-            modelBuilder.Entity<Article>().Property(x => x.Content).HasColumnType("jsonb");
+            modelBuilder.Entity<Article>().Property(x => x.Content);
             modelBuilder.Entity<Article>().Property(x => x.State)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<ArticleState>());

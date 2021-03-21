@@ -84,14 +84,12 @@ namespace web.Repositories
                 }
             }
 
-            selectQuery = selectQuery
-                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
-                .Take(searchParameters.PageLimit);
-
+            var count = await selectQuery.CountAsync(cancellationToken);
             var roles = await selectQuery
+                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
+                .Take(searchParameters.PageLimit)
                 .Select(Mappers.ToResponseRoleDtoExpression)
                 .ToListAsync(cancellationToken);
-            var count = await selectQuery.CountAsync(cancellationToken);
 
             var searchResponse = new SearchResponseDto<ResponseRoleDto>(count, roles);
             return new ServiceResult<SearchResponseDto<ResponseRoleDto>>(searchResponse);

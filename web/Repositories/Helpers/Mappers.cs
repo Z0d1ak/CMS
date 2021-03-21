@@ -35,16 +35,16 @@ namespace web.Repositories.Helpers
                 Type = role.Type
             };
 
-        public static Expression<Func<Article, ResponseArticleDto>> ToResponseArticleDtoExpression = article =>
+        public static Expression<Func<Article, ResponseArticleDto>> ToResponseArticleDtoExpression = dbArticle =>
             new ResponseArticleDto
             {
-                Id = article.Id,
-                Initiator = ToResponseUserDtoExpression.Invoke(article.Initiator),
-                CreationDate = article.CreationDate,
-                State = article.State,
-                Title = article.Title,
-                Content = article.Content,
-                Tasks = article.Tasks.Select(x => ToResponseTaskDtoExpression.Invoke(x))
+                Id = dbArticle.Id,
+                Initiator = ToResponseUserDtoExpression.Invoke(dbArticle.Initiator),
+                CreationDate = dbArticle.CreationDate,
+                State = dbArticle.State,
+                Title = dbArticle.Title,
+                Content = dbArticle.Content,
+                Tasks = dbArticle.Tasks.Select(x => ToResponseTaskDtoExpression.Invoke(x))
             };  
 
         public static Expression<Func<WfTask, ResponseTaskDto>> ToResponseTaskDtoExpression => task =>
@@ -52,7 +52,7 @@ namespace web.Repositories.Helpers
             {
                 Id = task.Id,
                 Type = task.Type,
-                Performer = ToResponseUserDtoExpression.Invoke(task.Performer),
+                Performer = task.Performer == null ? null : ToResponseUserDtoExpression.Invoke(task.Performer),
                 Author = ToResponseUserDtoExpression.Invoke(task.Author),
                 CreationDate = task.CreationDate,
                 AssignmentDate = task.AssignmentDate,

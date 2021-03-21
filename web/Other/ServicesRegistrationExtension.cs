@@ -14,6 +14,8 @@ namespace web.Other
             serviceCollection.AddScoped<ICompanyService, CompanyService>();
             serviceCollection.AddScoped<IRoleService, RoleService>();
             serviceCollection.AddScoped<IPasswordService, PasswordService>();
+            serviceCollection.AddScoped<IArticleRepository, ArticleRepository>();
+            serviceCollection.AddScoped<IWfService, WfService>();
         }
 
         public static void AddInfrastructure(this IServiceCollection serviceCollection)
@@ -28,6 +30,7 @@ namespace web.Other
             serviceCollection.AddScoped<ICompanyRepository, CompanyRepository>();
             serviceCollection.AddScoped<IRoleRepository, RoleRepository>();
             serviceCollection.AddScoped<IAuthRepository, AuthRepository>();
+            serviceCollection.AddScoped<IArticleService, ArticleService>();
         }
     }
 }

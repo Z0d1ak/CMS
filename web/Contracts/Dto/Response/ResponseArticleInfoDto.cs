@@ -41,6 +41,6 @@ namespace web.Contracts.Dto.Response
         /// <summary>
         ///   Активное задание.
         /// </summary>
-        public ResponseTaskDto Task { get; set; } = null!;
+        public ResponseTaskDto? Task { get; set; }
     }
 }

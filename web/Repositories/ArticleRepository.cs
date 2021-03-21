@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,9 +45,12 @@ namespace web.Repositories
                 State = ArticleState.Project
             };
 
+            this.dataContext.Articles.Add(article);
+
             try
             {
                 await this.dataContext.SaveChangesAsync(cancellationToken);
+                article = await this.dataContext.Articles.Include(x => x.Initiator).FirstAsync(x => x.Id == article.Id);
                 return new ServiceResult<ResponseArticleDto>(article.ToResponseDto());
             }
             catch (DbUpdateException dbUpdateException)
@@ -86,20 +88,82 @@ namespace web.Repositories
             }
         }
 
-        public Task<ServiceResult<SearchResponseDto<ResponseArticleInfoDto>>> FindAsync(ArticleSearchParameters articleSearchParameters, CancellationToken cancellationToken)
+        public async Task<ServiceResult<SearchResponseDto<ResponseArticleInfoDto>>> FindAsync(ArticleSearchParameters searchParameters, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var dbArticles = await this.dataContext.Articles
+                    .Include(x => x.Tasks).ThenInclude(x => x.Performer)
+                    .Include(x => x.Tasks).ThenInclude(x => x.Author)
+                    .Include(x => x.Initiator)
+                    .ToListAsync(cancellationToken);
+            var articles = dbArticles.Select(article =>
+            new ResponseArticleInfoDto
+            {
+                Id = article.Id,
+                Initiator = article.Initiator.ToResponseDto(),
+                CreationDate = article.CreationDate,
+                State = article.State,
+                Title = article.Title,
+                Task = article.Tasks.FirstOrDefault(x => x.СompletionDate == null)?.ToResponseDto(),
+            });
+
+            var isAuthor = this.userInfoProvider.User.IsInRole(RoleType.Author.ToString());
+            var isChiefRedactor = this.userInfoProvider.User.IsInRole(RoleType.ChiefRedactor.ToString());
+            var isCorrector = this.userInfoProvider.User.IsInRole(RoleType.Corrector.ToString());
+            var isRedactor = this.userInfoProvider.User.IsInRole(RoleType.Redactor.ToString());
+            articles = articles.Where(x => x.Task == null || x.Task.Performer == null || x.Task.Performer.Id == this.userInfoProvider.UserId);
+
+            articles = articles.Where(x =>
+                (isAuthor
+                    && x.Task == null && x.Initiator.Id == this.userInfoProvider.UserId)
+                || (isAuthor
+                    && x.Task != null && (x.Task.Type == TaskType.Write || x.Task.Type == TaskType.ValidateCorrect || x.Task.Type == TaskType.ValidateRedact))
+                || (isCorrector
+                    && x.Task != null && x.Task.Type == TaskType.Correct)
+                || (isRedactor
+                    && x.Task != null && x.Task.Type == TaskType.Redact)
+                || (isChiefRedactor
+                    && x.Task == null && x.Initiator.Id == this.userInfoProvider.UserId)
+                || (isChiefRedactor
+                    && x.Task != null && (x.Task.Type == TaskType.Approve || x.Task.Type == TaskType.Redact))
+                );
+            var count = articles.Count();
+
+            articles = articles.Where(x =>
+                (searchParameters.Assignee == null || searchParameters.Assignee == x.Task?.Performer?.Id)
+                && (searchParameters.Author == null || searchParameters.Author == x.Initiator.Id)
+                && (searchParameters.NameContains == null || x.Title.Contains(searchParameters.NameContains))
+                && (searchParameters.State == null || searchParameters.State == x.State)
+                && (searchParameters.TaskType == null || searchParameters.TaskType == x.Task?.Type)
+                );
+            var resp = articles
+                .Skip((searchParameters.PageNumber - 1) * searchParameters.PageLimit)
+                .Take(searchParameters.PageLimit);
+
+
+            var searchResponse = new SearchResponseDto<ResponseArticleInfoDto>(count, articles);
+            return new ServiceResult<SearchResponseDto<ResponseArticleInfoDto>>(searchResponse);
         }
+
+      
 
         public async Task<ServiceResult<ResponseArticleDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var article = await this.dataContext.Articles
+            var dbArticle = await this.dataContext.Articles
                     .Include(x => x.Tasks).ThenInclude(x => x.Performer)
                     .Include(x => x.Tasks).ThenInclude(x => x.Author)
                     .Include(x => x.Initiator)
                     .Where(x => x.Id == id)
-                    .Select(Mappers.ToResponseArticleDtoExpression)
                     .FirstOrDefaultAsync(cancellationToken);
+            var article = new ResponseArticleDto
+            {
+                Id = dbArticle.Id,
+                Initiator = dbArticle.Initiator.ToResponseDto(),
+                CreationDate = dbArticle.CreationDate,
+                State = dbArticle.State,
+                Title = dbArticle.Title,
+                Content = dbArticle.Content,
+                Tasks = dbArticle.Tasks.Select(x => x.ToResponseDto())
+            };
 
             if (article is null)
             {

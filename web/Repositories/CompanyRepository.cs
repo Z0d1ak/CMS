@@ -101,6 +101,7 @@ namespace web.Repositories
                 Id = createCompanyDto.Admin.Id,
                 Email = createCompanyDto.Admin.Email,
                 FirstName = createCompanyDto.Admin.FirstName,
+                LastName = createCompanyDto.Admin.LastName,
                 CompanyId = company.Id
             };
             (user.PasswordHash, user.PasswordSalt) =

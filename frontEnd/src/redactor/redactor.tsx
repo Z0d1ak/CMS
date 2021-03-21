@@ -104,8 +104,30 @@ function BlockImg(props:{ name:string, pos:number}) {
         <div ref={drag} className="test">{props.name}</div>
     );
 }
+
+const ComponentsBlockOpt:string[][]=[
+    ["text","font-size","color"],
+    ["allign"],
+    ["allign"],
+    ["allign"],
+    ["allign"],
+    ["allign"]
+]
+
+const ComponentsBlockOptVals:string[][]=[
+    ["abc","12","green"],
+    ["center"],
+    ["center"],
+    ["center"],
+    ["center"],
+    ["center"]
+]
+
+
+
+
 const ComponentsBlock:JSX.Element[]=[
-    <Typography.Paragraph className={"grey"}>The useDrophook provides a way for you to wire in your component into the DnD system as a drop target. By passing in a specification into the useDrophook, you can specify including what types of data items the drop-target will accept, what props to collect, and more.</Typography.Paragraph>,
+    <Typography.Paragraph className={"grey"} style={{ [ComponentsBlockOpt[0][1]]: ComponentsBlockOptVals[0][1], [ComponentsBlockOpt[0][2]]: ComponentsBlockOptVals[0][2] }}>{ComponentsBlockOptVals[0][0]}</Typography.Paragraph>,
     <Image  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>,
     <>2</>,
     <>3</>,
@@ -126,23 +148,7 @@ const ComponentsBlock:JSX.Element[]=[
     </div>
   </Carousel>,
 ]
-const ComponentsBlockOpt:string[][]=[
-    ["text","font-size","allign"],
-    ["allign"],
-    ["allign"],
-    ["allign"],
-    ["allign"],
-    ["allign"]
-]
 
-const ComponentsBlockOptVals:string[][]=[
-    ["abc","12","center"],
-    ["center"],
-    ["center"],
-    ["center"],
-    ["center"],
-    ["center"]
-]
 
 
 
@@ -197,7 +203,9 @@ function Settings(props:{visible:boolean ,
     return(
         props.visible?
         <Card className={"settingsForm"} onClick={()=>{console.log(props.cOpt)}}>
-            <DataRowEditable dataStr={props.cOpt[0]} titleStr={props.cOptVal[0]} typeName={"q"} editFieldCallback={()=>{}}/>
+            {props.cOptVal.map((r,i)=>{
+               return(<DataRowEditable dataStr={props.cOptVal[i]} titleStr={props.cOpt[i]+":"} typeName={"opt"+i} editFieldCallback={()=>{}}/>)
+            })}
         </Card>:
         <></>
     );

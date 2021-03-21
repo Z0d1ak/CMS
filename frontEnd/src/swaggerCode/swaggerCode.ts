@@ -675,7 +675,13 @@ export interface components {
       roles: components["schemas"]["RoleType"][];
     };
     ArticleState: "Project";
-    TaskType: number;
+    TaskType:
+      | "Write"
+      | "Redact"
+      | "ValidateRedact"
+      | "Correct"
+      | "ValidateCorrect"
+      | "Approve";
     ResponseTaskDto: {
       /** ID задания. */
       id: string;
@@ -829,7 +835,7 @@ export interface components {
       /** Идентификатор задания. */
       id?: string;
       /** Комментарии. */
-      comment?: string;
+      comment?: string | null;
     };
     /** Контракт для сохранения нового задания. */
     CreateTaskDto: {

@@ -35,8 +35,17 @@ type addArticle=paths["/api/Article"]["post"]["requestBody"]["content"]["text/js
 //Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI1MWE4YjZmZC0wYWEwLTQ5MWUtOWMzNC1hZGRiZGZlNDgzMjQiLCJDb21wYW55SWQiOiJmZjA4Y2IzMS05YzBhLTQ1N2EtYTljNC0wNWYwNjZlMzAxYjUiLCJyb2xlIjoiQ29tcGFueUFkbWluIiwibmJmIjoxNjE2NDQ2NzYwLCJleHAiOjE2MTkwMzg3NjAsImlhdCI6MTYxNjQ0Njc2MH0.YbQtvyJpgWS6_V0k0dDtaEgJMut2v0JDT5TPeKEGWfzJ4c9U9C7DYmJjKmKqIw4J-hrldmyykeB4tB0AYm1xRw
 //Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmMDdjM2E5My04MTU2LTRhZDAtOWY5ZC1iOTYyY2Q0MWI4ODEiLCJDb21wYW55SWQiOiJmZjA4Y2IzMS05YzBhLTQ1N2EtYTljNC0wNWYwNjZlMzAxYjUiLCJyb2xlIjoiQ2hpZWZSZWRhY3RvciIsIm5iZiI6MTYxNjQ0Njg4NywiZXhwIjoxNjE5MDM4ODg3LCJpYXQiOjE2MTY0NDY4ODd9.IU5baTAuSnm96nFmg81eTgNqjf1sH7wsdbxhF4mXP0KWYA9dK3F4mdHS_IwBPxcgNRnvnqfCexWVBqYirU9KJg
 
+type cel={
+    x:number,
+    y:number,
+    width:number,
+    content:string|null,
+    cOpt:string[]|null,
+    cOptVal:string[]|null
+}
+
+
 export class Redactor extends React.Component<{id:string},{    
-    
 }> {
 
     state={
@@ -48,21 +57,20 @@ export class Redactor extends React.Component<{id:string},{
             id:"",
             title:"",
             content:'[[{"x":0,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":1,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":2,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":3,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":4,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":5,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":6,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":7,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":8,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":9,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":10,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":11,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":12,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":13,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":14,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":15,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":16,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":17,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":18,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":19,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":20,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":21,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":22,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":23,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null}]]'
-        }
+        },
+        grid:[]
     }
 
-    updateCallback=(content:string)=>{
-        let buf=this.state.article;
-        buf.content=content;
-        this.setState({article:buf})
+    updateCallback=(content:cel[][])=>{
+        this.setState({grid:content})
     }
     
 
-    updateData=(val:string)=>{
+    updateData=(val:cel[][])=>{
         let buf={
             id: this.state.article.id,
             title: this.state.article.title,
-            content: val
+            content: JSON.stringify(val)
           }
         axios.put(this.state.requestUrl+this.state.requestPath,buf,
         {
@@ -141,6 +149,7 @@ export class Redactor extends React.Component<{id:string},{
         .then(res => {
             console.log(res);
             this.setState({article:res.data});
+            this.setState({grid:JSON.parse(res.data.content)})
         })
         .catch(err => {  
             switch(err.response.status)
@@ -175,7 +184,7 @@ export class Redactor extends React.Component<{id:string},{
          <Row >
             <Col span={1}></Col>
             <Col span={16}>
-            <ArticleBlock rows={5} cels={24}  updateCallback={this.updateCallback} save={this.updateData} gridArticle={this.state.article.content=="null"||this.state.article==null?null:JSON.parse(this.state.article.content)}/>
+            <ArticleBlock rows={this.state.grid.length} cels={24}  updateCallback={this.updateCallback} save={this.updateData} gridArticle={this.state.grid}/>
             </Col>
             <Col span={6}>
             <OptionsBlock/>
@@ -441,50 +450,24 @@ function Cell(props:{x:number,y:number,width:number,
 }
 
 
-    type cel={
-        x:number,
-        y:number,
-        width:number,
-        content:string|null,
-        cOpt:string[]|null,
-        cOptVal:string[]|null
-    }
 
 
-
-    export class ArticleBlock extends React.Component<{rows:number,  updateCallback:(content:string)=>void, cels:number, gridArticle:cel[][]|null, save:(val:string)=>void},{
+    export class ArticleBlock extends React.Component<{rows:number,  updateCallback:(content:cel[][])=>void, cels:number, gridArticle:cel[][]|null, save:(content:cel[][])=>void},{
         rows:number,
             cels:number,
-            grid:cel[][],
-
     }> {
 
         changeOption=(x:number,y:number,newOptVal:string[])=>{
-            this.setState({grid:this.props.gridArticle!})
-            let buf:cel[][]=this.state.grid;
+            let buf:cel[][]=this.props.gridArticle!;
             buf[y][x].cOptVal=newOptVal;
-            this.setState({grid:buf})
-            this.props.updateCallback(JSON.stringify(this.state.grid));
+            this.props.updateCallback(buf);
         }
 
-        updRowVals=(y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-            let buf:cel[][]=this.state.grid;
-            for (var j = 0; j < this.state.grid[y].length; j++) {
-            
-                buf[y][j].x=j;
-                buf[y][j].y=y;
-            }
-            this.setState({grid:buf})
-            this.props.updateCallback(JSON.stringify(this.state.grid));
-        }
 
         delete=(x:number,y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-            console.log("delete");
-            console.log(x+":"+y);
-            let buf:cel[][]=this.state.grid;
-            let bufw=this.state.grid[y][x].width;
+            
+            let buf:cel[][]=this.props.gridArticle!;
+            let bufw=this.props.gridArticle![y][x].width;
             buf[y].splice(x,1);
             for(let i=0;i< bufw;i++)
             {
@@ -498,68 +481,68 @@ function Cell(props:{x:number,y:number,width:number,
                 }
                 buf[y].splice(x+i,0,zel);
             }
-            this.setState({grid:buf})
-            this.updRowVals(y);
-            this.props.updateCallback(JSON.stringify(this.state.grid));
+            for (var j = 0; j <buf[y].length; j++) {
+            
+                buf[y][j].x=j;
+                buf[y][j].y=y;
+            }
+            this.props.updateCallback(buf);
         } 
         edit=()=>{
             console.log("edit");
         }
         mvR=(x:number,y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-            console.log("mvR");
-            console.log(x+":"+y);
-            if(x+1<this.state.grid[y].length){
-            let buf:cel[][]=this.state.grid;
+            if(x+1<this.props.gridArticle![y].length){
+            let buf:cel[][]=this.props.gridArticle!;
             let gridel1:cel=buf[y][x+1];
             gridel1.x=x;
             let gridel2:cel=buf[y][x];
             gridel2.x=x+1;
             buf[y][x]=gridel1;
             buf[y][x+1]=gridel2;
-            this.setState({grid:buf})
+            for (var j = 0; j <buf[y].length; j++) {
+            
+                buf[y][j].x=j;
+                buf[y][j].y=y;
             }
-            this.updRowVals(y);
-            this.props.updateCallback(JSON.stringify(this.state.grid));
+            this.props.updateCallback(buf);
+            }
         }
         mvL=(x:number,y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-            console.log("mvL");
-            console.log(x+":"+y);
             if(x>0){
-                let buf:cel[][]=this.state.grid;
+                let buf:cel[][]=this.props.gridArticle!;
                 let gridel1:cel=buf[y][x-1];
                 gridel1.x=x;
                 let gridel2:cel=buf[y][x];
                 gridel2.x=x-1;
                 buf[y][x]=gridel1;
                 buf[y][x-1]=gridel2;
-                this.setState({grid:buf})
+                for (var j = 0; j <buf[y].length; j++) {
+            
+                    buf[y][j].x=j;
+                    buf[y][j].y=y;
                 }
-                this.updRowVals(y);
-                this.props.updateCallback(JSON.stringify(this.state.grid));
+                this.props.updateCallback(buf);
+                }
         }
         aR=(x:number,y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-            console.log("ar");
-            console.log(x+":"+y);
-            if(x+1<this.state.grid[y].length)
-            if(this.state.grid[y][x+1].content==null){
-                let buf:cel[][]=this.state.grid;
+            if(x+1<this.props.gridArticle![y].length)
+            if(this.props.gridArticle![y][x+1].content==null){
+                let buf:cel[][]=this.props.gridArticle!;
                 let gridel:cel=buf[y][x];
                 gridel.width=gridel.width+1;
                 buf[y].splice(x,2,gridel);  
-                this.setState({grid:buf})
+                for (var j = 0; j <buf[y].length; j++) {
+            
+                    buf[y][j].x=j;
+                    buf[y][j].y=y;
+                }
+                this.props.updateCallback(buf);
             }
-                this.updRowVals(y);
-                this.props.updateCallback(JSON.stringify(this.state.grid));
         }
         rR=(x:number,y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-            console.log("rr");
-            console.log(x+":"+y);
-            if(this.state.grid[y][x].width>1){
-                let buf:cel[][]=this.state.grid;
+            if(this.props.gridArticle![y][x].width>1){
+                let buf:cel[][]=this.props.gridArticle!;
                 let gridel:cel=buf[y][x];
                     gridel.width=gridel.width-1;
                     gridel.x=gridel.x;
@@ -572,32 +555,32 @@ function Cell(props:{x:number,y:number,width:number,
                         cOptVal:null
                     }
                     buf[y].splice(x,1,gridel,el);  
-                this.setState({grid:buf})
+                    for (var j = 0; j <buf[y].length; j++) {
+            
+                        buf[y][j].x=j;
+                        buf[y][j].y=y;
+                    }
+                    this.props.updateCallback(buf);
                 }
-                this.updRowVals(y);
-                this.props.updateCallback(JSON.stringify(this.state.grid));
         }
         aL=(x:number,y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-            console.log("al");
-            console.log(x+":"+y);
-            if(x>=1&&this.state.grid[y][x-1].content==null){
-                let buf:cel[][]=this.state.grid;
+            if(x>=1&&this.props.gridArticle![y][x-1].content==null){
+                let buf:cel[][]=this.props.gridArticle!;
                 let gridel:cel=buf[y][x];
                 gridel.width=gridel.width+1;
                 gridel.x=gridel.x-1;
                 buf[y].splice(x-1,2,gridel);  
-                this.setState({grid:buf})
+            for (var j = 0; j <buf[y].length; j++) {
+            
+                buf[y][j].x=j;
+                buf[y][j].y=y;
             }
-            this.updRowVals(y);
-            this.props.updateCallback(JSON.stringify(this.state.grid));
+            this.props.updateCallback(buf);
+        }
         }
         rL=(x:number,y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-            console.log("rl");
-            console.log(x+":"+y);
-            if(this.state.grid[y][x].width>1){
-                let buf:cel[][]=this.state.grid;
+            if(this.props.gridArticle![y][x].width>1){
+                let buf:cel[][]=this.props.gridArticle!;
                 let gridel:cel=buf[y][x];
                     gridel.width=gridel.width-1;
                     gridel.x=gridel.x+1;
@@ -610,15 +593,17 @@ function Cell(props:{x:number,y:number,width:number,
                         cOptVal:null 
                     }
                     buf[y].splice(x,1,el,gridel);  
-                this.setState({grid:buf})
+                for (var j = 0; j <buf[y].length; j++) {
+            
+                    buf[y][j].x=j;
+                    buf[y][j].y=y;
                 }
-                this.updRowVals(y);
-                this.props.updateCallback(JSON.stringify(this.state.grid));
+                this.props.updateCallback(buf);
+            }
         }
 
         addRow=()=>{
-            this.setState({grid:this.props.gridArticle!})
-            let buf:cel[][]=this.state.grid;
+            let buf:cel[][]=this.props.gridArticle!;
             let gridRow:cel[] =[]
             for (var j = 0; j < this.state.cels; j++) {
                 let el:cel={
@@ -633,13 +618,11 @@ function Cell(props:{x:number,y:number,width:number,
             }
             buf.splice(this.state.rows+1,0,gridRow);
             this.setState({rows:this.state.rows+1}); 
-            this.setState({grid:buf})
-            this.props.updateCallback(JSON.stringify(this.state.grid));
+            this.props.updateCallback(buf);
         }
 
         deleteRow=(y:number)=>{
-            this.setState({grid:this.props.gridArticle!})
-             let buf:cel[][]=this.state.grid;
+             let buf:cel[][]=this.props.gridArticle!;
              buf.splice(y,1);
 
              for (let i=0;i<buf.length;i++)
@@ -649,37 +632,36 @@ function Cell(props:{x:number,y:number,width:number,
                  buf[i][j].y=i
              } 
              }
-            
              this.setState({rows:this.state.rows-1})
-             this.setState({grid:buf})
-             this.props.updateCallback(JSON.stringify(this.state.grid));
+             this.props.updateCallback(buf);
         }
 
         insert=(x:number,y:number,item:string, cOpt:string[], cOptVal:string[])=>{
-            this.setState({grid:this.props.gridArticle!})
-            console.log(x+":"+y);
-            let buf:cel[][]=this.state.grid;
+            let buf:cel[][]=this.props.gridArticle!;
             let bufel={
                 x:x,
                 y:y,
-                width: this.state.grid[y][x].width,
+                width: this.props.gridArticle![y][x].width,
                 content: item,
                 cOpt:cOpt,
                 cOptVal:cOptVal
             }
             buf[y][x]=bufel;
-            this.setState({grid:buf})
-            this.updRowVals(y);
-            this.props.updateCallback(JSON.stringify(this.state.grid));
+            for (var j = 0; j <buf[y].length; j++) {
+            
+                buf[y][j].x=j;
+                buf[y][j].y=y;
+            }
+            this.props.updateCallback(buf);
         }    
 
 
         update=()=>{
-            console.log(JSON.stringify(this.state.grid))
+            console.log(JSON.stringify(this.props.gridArticle!))
         }   
         
         send=()=>{
-            console.log(JSON.stringify(this.state.grid))
+            console.log(JSON.stringify(this.props.gridArticle!))
         }
         /*insertComponent=(x:number,y:number,width:number,component:JSX.Element)=>{
             if(x+width>24) {x=24-width}
@@ -691,21 +673,19 @@ function Cell(props:{x:number,y:number,width:number,
 
 
 
-        constructor(props:{rows:number, updateCallback:(content:string)=>void, cels:number, gridArticle:cel[][]|null, save:(val:string)=>void}) {
+        constructor(props:{rows:number, updateCallback:(content:cel[][])=>void, cels:number, gridArticle:cel[][]|null, save:(content:cel[][])=>void}) {
             super(props);
 
             if (this.props.gridArticle!==null){
                 this.state={
                     rows:this.props.rows,
                     cels:this.props.cels,
-                    grid:this.props.gridArticle!
                 }
             }
             else{
                 this.state={
                     rows:this.props.rows,
                     cels:this.props.cels,
-                    grid:[]
                 }
                 let buf:cel[][]=[]
                 for (var i = 0; i < this.state.rows; i++) {
@@ -722,11 +702,11 @@ function Cell(props:{x:number,y:number,width:number,
                        gridRow.splice(j,0,el);
                     }
                     buf.splice(i,0,gridRow);
+                    this.props.updateCallback(buf);
                 }
                 this.state={
                     rows:this.props.rows,
                     cels:this.props.cels,
-                    grid:buf
                 }
             }
            // this.state.grid[3][3].content=ComponentsBlock[6];
@@ -752,7 +732,7 @@ function Cell(props:{x:number,y:number,width:number,
             
             return(
                 <Card className="articleBody"  title="Макет саттьи">
-                {this.state.grid.map((r,i)=>{
+                {this.props.gridArticle!.map((r,i)=>{
                 return(
                 <Row>
                     <Col span={1}></Col>
@@ -794,7 +774,7 @@ function Cell(props:{x:number,y:number,width:number,
                 <Col span={22}>
                 <Button type="dashed" onClick={()=>this.addRow()}>Add</Button>
                 <Button type="dashed" onClick={()=>this.update()}>Update</Button>
-                <Button type="dashed" onClick={()=>{console.log(JSON.stringify(this.state.grid));this.props.save(JSON.stringify(this.state.grid))}}>Save</Button>
+                <Button type="dashed" onClick={()=>{console.log(JSON.stringify(this.props.gridArticle!));this.props.save(this.props.gridArticle!)}}>Save</Button>
                 </Col>
                 <Col span={1}></Col>
              </Row>

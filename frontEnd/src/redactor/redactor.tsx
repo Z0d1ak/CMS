@@ -11,6 +11,7 @@ import { isThisTypeNode } from 'typescript';
 import Grid from 'antd/lib/card/Grid';
 import Item from 'antd/lib/list/Item';
 import Paragraph from 'antd/lib/skeleton/Paragraph';
+import DataEntity from "../base/contentOptions/dataEntities/dataEntity/dataEntity"
 import{DataRowEditable} from "../base/contentOptions/dataEntities/dataSubEntities/dataRow/dataRow"
 import {
     DeleteOutlined,
@@ -55,6 +56,7 @@ export class Redactor extends React.Component<{id:string},{
         loading:false,
         article:{
             id:"",
+            tasks:[],
             title:"",
             content:'[[{"x":0,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":1,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":2,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":3,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":4,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":5,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":6,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":7,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":8,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":9,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":10,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":11,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":12,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":13,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":14,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":15,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":16,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":17,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":18,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":19,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":20,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":21,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":22,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":23,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null}]]'
         },
@@ -147,7 +149,7 @@ export class Redactor extends React.Component<{id:string},{
             }
         )
         .then(res => {
-            console.log(res);
+            //console.log(res);
             this.setState({article:res.data});
             this.setState({grid:JSON.parse(res.data.content)})
         })
@@ -169,22 +171,25 @@ export class Redactor extends React.Component<{id:string},{
  
 
     render() {
-        console.log(JSON.parse(this.state.article.content));
+        //console.log(JSON.parse(this.state.article));
+        //  return(
+        //      <ArticleV gridArticle={this.state.grid}/>        
+        //  );
         return(
             <DndProvider backend={HTML5Backend}>
           
         <Row>
-        <Col span={1}></Col>
-            <Col span={22} >
-            <DataBlock/>
+        
+            <Col span={24} >
+            <DataBlock articleData={this.state.article}/>
             </Col>
-            <Col span={1}></Col>
+        
         </Row>
 
          <Row >
             <Col span={1}></Col>
             <Col span={16}>
-            <ArticleBlock rows={this.state.grid.length} cels={24}  updateCallback={this.updateCallback} save={this.updateData} gridArticle={this.state.grid}/>
+            <ArticleBlock  updateCallback={this.updateCallback} save={this.updateData} gridArticle={this.state.grid}/>
             </Col>
             <Col span={6}>
             <OptionsBlock/>
@@ -207,14 +212,24 @@ export class Redactor extends React.Component<{id:string},{
 
   
 
-export class DataBlock extends React.Component<{},{}> {
+export class DataBlock extends React.Component<{articleData:any},{}> {
 
     render() {
+        console.log("!!!!!")
+        console.log(this.props.articleData)
         return(
-            <Card className="dataPoolTop" title="Задание">
-            content
-            
-        </Card>
+           
+            <div className="dataPoolTop">
+             <DataEntity 
+                dataType={"task"}
+                loading={false}    
+                updateDataCallback={()=>{}} 
+                deleteCallback={()=>{}} 
+                updateCallback={()=>{}} 
+                changeValueCallback={()=>{}} 
+                items={this.props.articleData.tasks}/>  
+            </div>
+        
         );
     }
 }
@@ -266,6 +281,8 @@ export class OptionsBlock extends React.Component<{},{}> {
             <Card className="partsPoolright">
                <BlockImg name={"text"}/>
                <BlockImg name={"img"}/>
+               <BlockImg name={"text"}/>
+               <BlockImg name={"img"}/>
             </Card>
         );
     }
@@ -287,7 +304,7 @@ function BlockImg(props:{ name:string}) {
       }))
 
     return(
-        <div ref={drag} className="test">{props.name}</div>
+        <div ref={drag} className="contentStyle">{props.name}</div>
     );
 }
 
@@ -450,11 +467,55 @@ function Cell(props:{x:number,y:number,width:number,
 }
 
 
+export class ArticleV extends React.Component<{gridArticle:cel[][]|null},{
+
+}> {
+
+    render() {
+            
+        return(
+            <div className="articleB"  title="Макет саттьи">
+            {this.props.gridArticle!.map((r,i)=>{
+            return(
+            <Row>
+                <Col span={1}></Col>
+                <Col span={22}>
+            <Row className={""}>
+            {r.map((c,j)=>{
+               return(
+                <Col span={c.width}>
+                {(() => {
+              //console.log(props.content);
+              switch(c.content) {
+              case 'text':
+                  return (<TextBlock  styleTypes={c.cOpt!} styleValues={c.cOptVal!}/>)
+              case 'img':
+                  return(<ImgBlock  styleTypes={c.cOpt!} styleValues={c.cOptVal!}/>)
+                default:
+                  return(<></>)
+              }
+            })()}
+            </Col>
+
+               ); 
+            })}
+            </Row>
+            </Col>
+            <Col span={1}></Col>
+             </Row>
+            );})}
+            </div>
+        );
+    }
 
 
-    export class ArticleBlock extends React.Component<{rows:number,  updateCallback:(content:cel[][])=>void, cels:number, gridArticle:cel[][]|null, save:(content:cel[][])=>void},{
-        rows:number,
-            cels:number,
+}
+
+
+
+
+    export class ArticleBlock extends React.Component<{updateCallback:(content:cel[][])=>void, gridArticle:cel[][]|null, save:(content:cel[][])=>void},{
+
     }> {
 
         changeOption=(x:number,y:number,newOptVal:string[])=>{
@@ -605,10 +666,10 @@ function Cell(props:{x:number,y:number,width:number,
         addRow=()=>{
             let buf:cel[][]=this.props.gridArticle!;
             let gridRow:cel[] =[]
-            for (var j = 0; j < this.state.cels; j++) {
+            for (var j = 0; j < 24; j++) {
                 let el:cel={
                     x:j,
-                    y:this.state.rows,
+                    y:this.props.gridArticle!.length,
                     width:1,
                     content:null ,
                     cOpt:null,
@@ -616,8 +677,7 @@ function Cell(props:{x:number,y:number,width:number,
                 }
                gridRow.splice(j,0,el);
             }
-            buf.splice(this.state.rows+1,0,gridRow);
-            this.setState({rows:this.state.rows+1}); 
+            buf.splice(this.props.gridArticle!.length+1,0,gridRow);
             this.props.updateCallback(buf);
         }
 
@@ -632,7 +692,6 @@ function Cell(props:{x:number,y:number,width:number,
                  buf[i][j].y=i
              } 
              }
-             this.setState({rows:this.state.rows-1})
              this.props.updateCallback(buf);
         }
 
@@ -677,20 +736,13 @@ function Cell(props:{x:number,y:number,width:number,
             super(props);
 
             if (this.props.gridArticle!==null){
-                this.state={
-                    rows:this.props.rows,
-                    cels:this.props.cels,
-                }
+
             }
             else{
-                this.state={
-                    rows:this.props.rows,
-                    cels:this.props.cels,
-                }
                 let buf:cel[][]=[]
-                for (var i = 0; i < this.state.rows; i++) {
+                for (var i = 0; i < this.props.gridArticle!.length; i++) {
                     let gridRow:cel[] =[]
-                    for (var j = 0; j < this.state.cels; j++) {
+                    for (var j = 0; j < 24; j++) {
                         let el:cel={
                             x:j,
                             y:i,
@@ -705,8 +757,8 @@ function Cell(props:{x:number,y:number,width:number,
                     this.props.updateCallback(buf);
                 }
                 this.state={
-                    rows:this.props.rows,
-                    cels:this.props.cels,
+                    rows:buf.length,
+                    cels:24,
                 }
             }
            // this.state.grid[3][3].content=ComponentsBlock[6];
@@ -731,7 +783,7 @@ function Cell(props:{x:number,y:number,width:number,
         render() {
             
             return(
-                <Card className="articleBody"  title="Макет саттьи">
+                <Card className="articleBody"  title="Макет статьи">
                 {this.props.gridArticle!.map((r,i)=>{
                 return(
                 <Row>
@@ -765,7 +817,7 @@ function Cell(props:{x:number,y:number,width:number,
                  </Row>
                 )
              })}
-             {this.state.rows}: {this.state.cels}
+             {this.props.gridArticle!.length}: {24}
              <Divider/>
 
              <Row >

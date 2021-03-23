@@ -35,7 +35,7 @@ export class App extends React.Component<{},{}> {
             <Profile></Profile>
           </Route>
           <Route path="/redactor">
-            <Redactor></Redactor>
+            <Redactor id={"bba9d209-aa4c-4385-8f62-623844e02345"}></Redactor>
           </Route>
         </Switch>
         );

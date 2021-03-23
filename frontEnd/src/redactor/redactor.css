@@ -13,14 +13,14 @@ body{
     background-color: white;
     height: 60vh;
     margin: 10px;
-    overflow-y: auto scroll;
+    overflow: auto scroll;
     max-height: 60vh;
 }
 
 
 .dataPoolTop{
     background-color: white;
-    height: 150px;
+    height: auto;
     margin: 10px;
 }
 
@@ -56,6 +56,7 @@ body{
     line-height: 160px;
     text-align: center;
     background-color: #364d79;
+    margin: 10px;
 }
 
 
@@ -64,6 +65,7 @@ body{
     height:30px;
     position:absolute;
     z-index: 10;
+    
 }
 
 
@@ -126,9 +128,21 @@ body{
 {
     top: calc(50% + 50px);
     right: -340px;
-    background-color: grey;
+    background-color: white;
     width: 300px;
     height: 300px;
     z-index: 50;
     position:absolute;
+}
+
+
+.articleB{
+    background-color: white;
+    width:80%;
+margin-left: auto;
+margin-right: auto;
+margin-top: 50px;
+height: auto;
+border: 1px solid  grey ;
+padding: 10px;
 }

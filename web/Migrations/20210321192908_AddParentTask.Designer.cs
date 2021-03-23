@@ -10,8 +10,8 @@ using web.Db;
 namespace web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210116213256_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210321192908_AddParentTask")]
+    partial class AddParentTask
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,13 @@ namespace web.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("RoleUser");
+
+                    b.HasData(
+                        new
+                        {
+                            RolesId = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            UsersId = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f")
+                        });
                 });
 
             modelBuilder.Entity("web.Entities.Article", b =>
@@ -42,7 +49,7 @@ namespace web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
@@ -51,7 +58,7 @@ namespace web.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("InitiatorID")
+                    b.Property<Guid>("InitiatorId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("State")
@@ -65,11 +72,11 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyID");
+                    b.HasIndex("CompanyId");
 
-                    b.HasIndex("InitiatorID");
+                    b.HasIndex("InitiatorId");
 
-                    b.ToTable("articles");
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("web.Entities.Company", b =>
@@ -85,7 +92,14 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("companies");
+                    b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            Name = "SuperAdminCompany"
+                        });
                 });
 
             modelBuilder.Entity("web.Entities.Role", b =>
@@ -94,7 +108,7 @@ namespace web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -108,9 +122,18 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyID");
+                    b.HasIndex("CompanyId");
 
-                    b.ToTable("roles");
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            CompanyId = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            Name = "SuperAdmin",
+                            Type = "SuperAdmin"
+                        });
                 });
 
             modelBuilder.Entity("web.Entities.User", b =>
@@ -119,7 +142,7 @@ namespace web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -136,11 +159,6 @@ namespace web.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
-
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("bytea");
@@ -151,9 +169,23 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyID");
+                    b.HasIndex("CompanyId");
 
-                    b.ToTable("users");
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            CompanyId = new Guid("face1e55-b0d5-1ab5-1e55-bef001ed100f"),
+                            Email = "admin@admin.com",
+                            FirstName = "Admin",
+                            PasswordHash = new byte[] { 112, 56, 236, 22, 206, 76, 245, 171, 79, 196, 11, 27, 18, 83, 129, 203, 226, 235, 47, 163, 234, 249, 128, 149, 42, 41, 184, 37, 227, 14, 9, 127, 200, 204, 55, 254, 157, 157, 35, 161, 53, 92, 36, 204, 59, 175, 55, 147, 64, 182, 82, 132, 255, 233, 37, 247, 201, 135, 78, 216, 99, 172, 197, 210 },
+                            PasswordSalt = new byte[] { 111, 148, 13, 192, 142, 19, 125, 71, 65, 229, 64, 250, 98, 5, 245, 216, 202, 247, 255, 160, 167, 83, 99, 249, 81, 152, 76, 239, 60, 108, 56, 244, 208, 27, 21, 11, 223, 149, 141, 30, 139, 241, 56, 197, 214, 186, 181, 137, 251, 203, 254, 86, 35, 41, 15, 192, 222, 45, 170, 79, 216, 32, 144, 56, 89, 204, 208, 205, 159, 206, 32, 98, 235, 197, 88, 186, 27, 215, 167, 99, 72, 240, 97, 188, 2, 35, 222, 44, 250, 208, 53, 209, 203, 234, 27, 247, 18, 19, 80, 146, 97, 13, 75, 91, 64, 62, 37, 122, 57, 197, 126, 168, 99, 118, 244, 220, 17, 151, 243, 223, 31, 206, 54, 196, 171, 249, 39, 78 }
+                        });
                 });
 
             modelBuilder.Entity("web.Entities.WfTask", b =>
@@ -162,8 +194,11 @@ namespace web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ArticleID")
+                    b.Property<Guid>("ArticleId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("AssignmentDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
@@ -172,7 +207,7 @@ namespace web.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
@@ -185,30 +220,30 @@ namespace web.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<Guid?>("ParentTaskId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("PerformerId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("TakenToWorkDate")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("СompletionDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ArticleID");
+                    b.HasIndex("ArticleId");
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("CompanyID");
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("PerformerId");
 
-                    b.ToTable("tasks");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -230,13 +265,13 @@ namespace web.Migrations
                 {
                     b.HasOne("web.Entities.Company", "Company")
                         .WithMany("Articles")
-                        .HasForeignKey("CompanyID")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("web.Entities.User", "Initiator")
                         .WithMany("InitiatedArticles")
-                        .HasForeignKey("InitiatorID")
+                        .HasForeignKey("InitiatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -249,7 +284,7 @@ namespace web.Migrations
                 {
                     b.HasOne("web.Entities.Company", "Company")
                         .WithMany("Roles")
-                        .HasForeignKey("CompanyID")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -260,7 +295,7 @@ namespace web.Migrations
                 {
                     b.HasOne("web.Entities.Company", "Company")
                         .WithMany("Users")
-                        .HasForeignKey("CompanyID")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -271,7 +306,7 @@ namespace web.Migrations
                 {
                     b.HasOne("web.Entities.Article", "Article")
                         .WithMany("Tasks")
-                        .HasForeignKey("ArticleID")
+                        .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -283,7 +318,7 @@ namespace web.Migrations
 
                     b.HasOne("web.Entities.Company", "Company")
                         .WithMany("Tasks")
-                        .HasForeignKey("CompanyID")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace web.Entities
+﻿namespace web.Entities
 {
     public enum TaskType
     {
-            
+        Write,
+        Redact,
+        ValidateRedact,
+        Correct,
+        ValidateCorrect,
+        Approve
     }
 }

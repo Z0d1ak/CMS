@@ -384,7 +384,10 @@ export class DataCard extends React.Component<{
                                 <DataRowEditable dataStr={this.state.bufData.firstName} titleStr="Имя : " typeName="firstName" editFieldCallback={this.updateDataFieldCallBack}/>
                                 <DataRowEditable dataStr={this.state.bufData.lastName||"Нет данных"} titleStr="Фамилия : " typeName="lastName" editFieldCallback={this.updateDataFieldCallBack}/>
                                 <DataRowEditable dataStr={this.state.bufData.email} titleStr="Почта : " typeName="email" editFieldCallback={this.updateDataFieldCallBack}/>
-        
+                                {
+                                      (this.props.data.roles.includes("CompanyAdmin") ||  this.props.data.id === sessionStorage.getItem("AuthUserId"))
+                                     && <DataRowEditable dataStr={this.state.bufData.password} titleStr="Новый пароль : " typeName='password' editFieldCallback={this.updateDataFieldCallBack}/>
+                                 }
                                 </Skeleton>,
                             <Divider />,
                             <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
@@ -488,6 +491,7 @@ export class DataCard extends React.Component<{
                 
                 <Card className="userCard wide"
                     hoverable={true}
+                    extra={<a href={window.location.href + "/" +this.props.data.id}>More</a>}
                     actions={
                         this.state.status==="narrow"?this.optionsNarrow():this.state.status==="expand"?this.optionsExpand():this.optionsExpandEditable()
                     }

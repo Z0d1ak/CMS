@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace web.Entities
 {
+    #nullable disable
+
     /// <summary>
-    /// Пользователь системы.
+    /// Объект, описывающий сущность пользователя в системе.
     /// </summary>
-    [Table("users")]
     public sealed class User
     {
         public Guid Id { get; set; }
 
-        public Guid CompanyID { get; set; }
-        public Company Company { get; set; }
+        public Guid CompanyId { get; set; }
 
-        public string Login { get; set; }
+        public Company Company { get; set; }
 
         public string Email { get; set; }
 
@@ -28,12 +27,12 @@ namespace web.Entities
 
         public byte[] PasswordSalt { get; set; }
 
-        public ICollection<Role> Roles { get; set; }
+        public ICollection<Role> Roles { get; set; } = new List<Role>();
 
-        public ICollection<Article> InitiatedArticles { get; set; }
+        public ICollection<Article> InitiatedArticles { get; set; } = new List<Article>();
 
-        public ICollection<WfTask> CreatedTasks { get; set; }
+        public ICollection<WfTask> CreatedTasks { get; set; } = new List<WfTask>();
 
-        public ICollection<WfTask> PerfomingTasks { get; set; }
+        public ICollection<WfTask> PerfomingTasks { get; set; } = new List<WfTask>();
     }
 }

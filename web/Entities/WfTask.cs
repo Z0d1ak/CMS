@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace web.Entities
 {
     /// <summary>
-    /// Завершенное задание.
+    /// Объект, описывающий сущность задания.
     /// </summary>
     public class WfTask
     {
         public Guid Id { get; set; }
 
-        public Guid CompanyID { get; set; }
+        public Guid? ParentTaskId { get; set; }
+
+        public Guid CompanyId { get; set; }
         public Company Company { get; set; }
 
-        public Guid ArticleID { get; set; }
+        public Guid ArticleId { get; set; }
         public Article Article { get; set; }
 
         public Guid AuthorId { get; set; }
@@ -28,9 +27,9 @@ namespace web.Entities
 
         public DateTime CreationDate { get; set; }
 
-        public DateTime? TakenToWorkDate { get; set; }
+        public DateTime? AssignmentDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        public DateTime? СompletionDate { get; set; }
 
         public string Description { get; set; }
 
@@ -38,9 +37,8 @@ namespace web.Entities
 
         public TaskType Type { get; set; }
 
-
         /// <summary>
-        /// Контент статьи при заврешении заддания.
+        /// Контент статьи при заврешении задания.
         /// </summary>
         public string Content { get; set; }
     }

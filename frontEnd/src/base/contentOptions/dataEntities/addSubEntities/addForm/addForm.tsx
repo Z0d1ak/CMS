@@ -3,382 +3,383 @@ import './addForm.css';
 import 'antd/dist/antd.css';
 import { v4 as uuidv4 } from 'uuid';
 import { paths } from '../../../../../swaggerCode/swaggerCode';
-import { timingSafeEqual } from 'crypto';
-import {Skeleton, Menu, Dropdown, Button, Space,Input,Typography,Row, Col,Card,Form,Cascader,Select,message,Divider,Popconfirm,Avatar } from 'antd';
+import { Input, Typography, Form, } from 'antd';
 
-import {MultiplyPicker,CMultiplyPicker} from '../../dataSubEntities/multiplyPicker/multiplyPicker';
-import {
-    UpOutlined,
-    CheckOutlined,
-    PlusOutlined,
-    EllipsisOutlined,
-    SettingOutlined,
-    DeleteOutlined,
-    RollbackOutlined,
-    CloseOutlined
-
-} from '@ant-design/icons';
+import { CMultiplyPicker } from '../../dataSubEntities/multiplyPicker/multiplyPicker';
 
 
-type addCompany=paths["/api/Company"]["post"]["requestBody"]["content"]["text/json"]
-type addUser=paths["/api/User"]["post"]["requestBody"]["content"]["text/json"]
 
-type addArticle=paths["/api/Article"]["post"]["requestBody"]["content"]["text/json"]
+type addCompany = paths["/api/Company"]["post"]["requestBody"]["content"]["text/json"]
+type addUser = paths["/api/User"]["post"]["requestBody"]["content"]["text/json"]
+
+type addArticle = paths["/api/Article"]["post"]["requestBody"]["content"]["text/json"]
 
 
 const { Paragraph } = Typography;
-type option=
-{
-    label:string,
-    value:string
-}
-
-type field=
+type option =
     {
-        name:string,
-        value:string,
-        type:string,
-        label:string,
-        options:option[],
-        chosedOptions:option[]        
+        label: string,
+        value: string
     }
 
-    const articleFields:field[]=[
-         {
-            name: 'articleTitle',
-            value: 'Добавление статьи',
-            type:'text',
-            label:'Данные статьи',
-            options:[],
-            chosedOptions:[]
-        },
-        {
-            name: 'articleName',
-            value: 'Итория о...',
-            type:'input',
-            label:'Заголовок статьи',
-            options:[],
-            chosedOptions:[]
-        }
-    ]
+type field =
+    {
+        name: string,
+        value: string,
+        type: string,
+        label: string,
+        options: option[],
+        chosedOptions: option[]
+    }
 
-    const companyFields:field[]=[
-        {
-            name: 'companyTitle',
-            value: 'Данные компании',
-            type:'text',
-            label:'Данные компании',
-            options:[],
-            chosedOptions:[]
-        },
+const articleFields: field[] = [
+    {
+        name: 'articleTitle',
+        value: 'Добавление статьи',
+        type: 'text',
+        label: 'Данные статьи',
+        options: [],
+        chosedOptions: []
+    },
+    {
+        name: 'articleName',
+        value: 'Итория о...',
+        type: 'input',
+        label: 'Заголовок статьи',
+        options: [],
+        chosedOptions: []
+    }
+]
+
+const companyFields: field[] = [
+    {
+        name: 'companyTitle',
+        value: 'Данные компании',
+        type: 'text',
+        label: 'Данные компании',
+        options: [],
+        chosedOptions: []
+    },
     {
         name: 'companyName',
         value: 'ООО "ЛОЛКЕК"',
-        type:'input',
-        label:'Название:',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Название:',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'adminTitle',
         value: 'Данные админа',
-        type:'text',
-        label:'Данные админа',
-        options:[],
-        chosedOptions:[]
+        type: 'text',
+        label: 'Данные админа',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'firstName',
         value: 'Дмитрий',
-        type:'input',
-        label:'Имя',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Имя',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'lastName',
         value: 'Дубина',
-        type:'input',
-        label:'Фамилия',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Фамилия',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'email',
         value: 'dodubina.spam@gmail.com',
-        type:'input',
-        label:'Email',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Email',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'password',
         value: '71400444443',
-        type:'input',
-        label:'Пароль',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Пароль',
+        options: [],
+        chosedOptions: []
     }
-    ]
+]
 
-    const employeeFields:field[]=[
+const employeeFields: field[] = [
     {
         name: 'firstName',
         value: 'Дмитрий',
-        type:'input',
-        label:'Имя',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Имя',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'lastName',
         value: 'Дубина',
-        type:'input',
-        label:'Фамилия',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Фамилия',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'email',
         value: 'dodubina.spam@gmail.com',
-        type:'input',
-        label:'Email',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Email',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'password',
         value: '71400444443',
-        type:'input',
-        label:'Пароль',
-        options:[],
-        chosedOptions:[]
+        type: 'input',
+        label: 'Пароль',
+        options: [],
+        chosedOptions: []
     },
     {
         name: 'roles',
-        value: 
-        '71400444443',
-        type:'multiplyPicker',
-        label:'Роли',
-        options:[
+        value:
+            '71400444443',
+        type: 'multiplyPicker',
+        label: 'Роли',
+        options: [
             {
-                label:"SuperAdmin",
-                value:"SuperAdmin"
+                label: "SuperAdmin",
+                value: "SuperAdmin"
             },
             {
-                label:"CompanyAdmin",
-                value:"CompanyAdmin"
+                label: "CompanyAdmin",
+                value: "CompanyAdmin"
             },
             {
-                label:"ChiefRedactor",
-                value:"ChiefRedactor"
+                label: "ChiefRedactor",
+                value: "ChiefRedactor"
             },
             {
-                label:"Redactor",
-                value:"Redactor"
+                label: "Redactor",
+                value: "Redactor"
             },
             {
-                label:"Author",
-                value:"Author"
+                label: "Author",
+                value: "Author"
             },
             {
-                label:"Corrector",
-                value:"Corrector"
-            }    
+                label: "Corrector",
+                value: "Corrector"
+            }
         ],
-        chosedOptions:[
+        chosedOptions: [
         ]
     }
-    ]
+]
 
 export class AddForm extends React.Component<{
-    createCallback:(val:any)=>void,
-    dataType:string,
-    closeForm:(val1:string,val2:string)=>void
-},{fields:field[]}> {
+    createCallback: (val: any) => void,
+    dataType: string,
+    closeForm: (val1: string, val2: string) => void
+}, { fields: field[] }> {
 
-    constructor(props:{createCallback:(val:addCompany)=>void,
-        dataType:string, closeForm:(val1:string,val2:string)=>void}) {
+    constructor(props: {
+        createCallback: (val: addCompany) => void,
+        dataType: string, closeForm: (val1: string, val2: string) => void
+    }) {
         super(props);
-        switch(this.props.dataType) { 
-            case "article": { 
+        switch (this.props.dataType) {
+            case "article": {
                 this.state = {
-                    fields:articleFields
-            }
+                    fields: articleFields
+                }
                 break;
             }
-            case "employee": { 
+            case "employee": {
                 this.state = {
-                    fields:employeeFields
-            }
-            break; 
-            } 
-            case "role": { 
-                this.state = {
-                    fields:companyFields
-            }
+                    fields: employeeFields
+                }
                 break;
             }
-            case "company": { 
+            case "role": {
                 this.state = {
-                    fields:companyFields
-            }
+                    fields: companyFields
+                }
                 break;
             }
-            case "task": { 
+            case "company": {
                 this.state = {
-                    fields:companyFields
-            }
+                    fields: companyFields
+                }
                 break;
             }
-            default:  { 
+            case "task": {
                 this.state = {
-                    fields:companyFields
+                    fields: companyFields
+                }
+                break;
             }
+            default: {
+                this.state = {
+                    fields: companyFields
+                }
                 break;
             }
         }
-        
-    }
-    
 
-       state = {
-        fields:[
+    }
+
+
+    state = {
+        fields: [
             {
                 name: 'companyTitle',
                 value: 'Данные компании',
-                type:'text',
-                label:'Данные компании',
-                options:[{
-                    label:"",
-                    value:""
+                type: 'text',
+                label: 'Данные компании',
+                options: [{
+                    label: "",
+                    value: ""
                 }],
-                chosedOptions:[
-                    {label:"",
-                    value:""
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
                     }
                 ]
-                
+
             },
-        {
-            name: 'companyName',
-            value: 'ООО "ЛОЛКЕК"',
-            type:'input',
-            label:'Название:',
-            options:[],
-            chosedOptions:[
-                {label:"",
-                value:""
-                }
-            ]
-        },
-        {
-            name: 'adminTitle',
-            value: 'Данные админа',
-            type:'text',
-            label:'Данные админа',
-            options:[],
-            chosedOptions:[
-                {label:"",
-                value:""
-                }
-            ]
-        },
-        {
-            name: 'firstName',
-            value: 'Дмитрий',
-            type:'input',
-            label:'имя',
-            options:[],
-            chosedOptions:[
-                {label:"",
-                value:""
-                }
-            ]
-        },
-        {
-            name: 'lastName',
-            value: 'Дубина',
-            type:'input',
-            label:'фамилия',
-            options:[],
-            chosedOptions:[
-                {label:"",
-                value:""
-                }
-            ]
-        },
-        {
-            name: 'email',
-            value: 'dodubina.spam@gmail.com',
-            type:'input',
-            label:'email',
-            options:[],
-            chosedOptions:[
-                {label:"",
-                value:""
-                }
-            ]
-        },
-        {
-            name: 'password',
-            value: '71400444443',
-            type:'input',
-            label:'пароль',
-            options:[],
-            chosedOptions:[
-                {label:"",
-                value:""
-                }
-            ]
-        },
+            {
+                name: 'companyName',
+                value: 'ООО "ЛОЛКЕК"',
+                type: 'input',
+                label: 'Название:',
+                options: [],
+                chosedOptions: [
                     {
+                        label: "",
+                        value: ""
+                    }
+                ]
+            },
+            {
+                name: 'adminTitle',
+                value: 'Данные админа',
+                type: 'text',
+                label: 'Данные админа',
+                options: [],
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
+                    }
+                ]
+            },
+            {
+                name: 'firstName',
+                value: 'Дмитрий',
+                type: 'input',
+                label: 'имя',
+                options: [],
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
+                    }
+                ]
+            },
+            {
+                name: 'lastName',
+                value: 'Дубина',
+                type: 'input',
+                label: 'фамилия',
+                options: [],
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
+                    }
+                ]
+            },
+            {
+                name: 'email',
+                value: 'dodubina.spam@gmail.com',
+                type: 'input',
+                label: 'email',
+                options: [],
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
+                    }
+                ]
+            },
+            {
+                name: 'password',
+                value: '71400444443',
+                type: 'input',
+                label: 'пароль',
+                options: [],
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
+                    }
+                ]
+            },
+            {
                 name: 'articleName',
                 value: 'Данные статьи',
-                type:'input',
-                label:'Данные статьи',
-                options:[{
-                    label:"",
-                    value:""
+                type: 'input',
+                label: 'Данные статьи',
+                options: [{
+                    label: "",
+                    value: ""
                 }],
-                chosedOptions:[
-                    {label:"",
-                    value:""
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
                     }
                 ]
-                
+
             },
-             {
+            {
                 name: 'articleTitle',
                 value: 'Данные статьи',
-                type:'text',
-                label:'Данные статьи',
-                options:[{
-                    label:"",
-                    value:""
+                type: 'text',
+                label: 'Данные статьи',
+                options: [{
+                    label: "",
+                    value: ""
                 }],
-                chosedOptions:[
-                    {label:"",
-                    value:""
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
                     }
                 ]
-                
+
             },
-                         {
+            {
                 name: 'articleName',
                 value: 'Данные статьи',
-                type:'input',
-                label:'Статьи',
-                options:[{
-                    label:"",
-                    value:""
+                type: 'input',
+                label: 'Статьи',
+                options: [{
+                    label: "",
+                    value: ""
                 }],
-                chosedOptions:[
-                    {label:"",
-                    value:""
+                chosedOptions: [
+                    {
+                        label: "",
+                        value: ""
                     }
                 ]
-                
+
             }
         ]
     };
@@ -387,43 +388,43 @@ export class AddForm extends React.Component<{
     onFinish = () => {
         //console.log(this.state.fields);
         let buf;
-        switch(this.props.dataType) { 
-            case "article": { 
-                let guis1:string=uuidv4();
-                buf={
+        switch (this.props.dataType) {
+            case "article": {
+                let guis1: string = uuidv4();
+                buf = {
                     id: guis1,
                     title: this.state.fields[0].value,
                     content: "[]",
                 }
                 break;
             }
-            case "employee": { 
-                let guis1:string=uuidv4();
-                let roles:string[]=[]
+            case "employee": {
+                let guis1: string = uuidv4();
+                let roles: string[] = []
                 this.state.fields[4].chosedOptions.map((u, i) => {
-                roles.splice(roles.length,0,u.value);
+                    roles.splice(roles.length, 0, u.value);
                 })
                 //console.log(roles);
-                buf={
-                        id: "",
-                        email: this.state.fields[2].value,
-                        firstName:  this.state.fields[0].value,
-                        lastName: this.state.fields[1].value,
-                        password:  this.state.fields[3].value,
-                        roles: roles
+                buf = {
+                    id: "",
+                    email: this.state.fields[2].value,
+                    firstName: this.state.fields[0].value,
+                    lastName: this.state.fields[1].value,
+                    password: this.state.fields[3].value,
+                    roles: roles
                 };
-                
-                buf.id=guis1;
-                break; 
-            } 
-            case "role": { 
-                buf={}
+
+                buf.id = guis1;
                 break;
             }
-            case "company": { 
-                let guis1:string=uuidv4();
-                let guis2:string=uuidv4();
-                buf={
+            case "role": {
+                buf = {}
+                break;
+            }
+            case "company": {
+                let guis1: string = uuidv4();
+                let guis2: string = uuidv4();
+                buf = {
                     company: {
                         id: "",
                         name: this.state.fields[0].value,
@@ -431,30 +432,30 @@ export class AddForm extends React.Component<{
                     admin: {
                         id: "",
                         email: this.state.fields[3].value,
-                        firstName:  this.state.fields[1].value,
+                        firstName: this.state.fields[1].value,
                         lastName: this.state.fields[2].value,
-                        password:  this.state.fields[4].value,
-                    }  
+                        password: this.state.fields[4].value,
+                    }
                 };
-                buf.admin.id=guis1;
-                buf.company.id=guis2;
+                buf.admin.id = guis1;
+                buf.company.id = guis2;
                 break;
             }
-            case "task": { 
-                buf={}
-            
-                break;
-            }
-            default:  { 
+            case "task": {
+                buf = {}
 
-                buf={}
+                break;
+            }
+            default: {
+
+                buf = {}
                 break;
             }
         }
-    
-        
+
+
         //console.log(buf);
-        this.props.closeForm("hide","status");
+        this.props.closeForm("hide", "status");
         this.props.createCallback(
             buf
         )
@@ -465,39 +466,39 @@ export class AddForm extends React.Component<{
     };
 
 
-    updateListCallBack = (val:option[]) => {
-        let buf=this.state.fields;
-        buf[4].chosedOptions=val;
-        this.setState({fields:buf});       
+    updateListCallBack = (val: option[]) => {
+        let buf = this.state.fields;
+        buf[4].chosedOptions = val;
+        this.setState({ fields: buf });
     };
 
-   
 
-    formGenerator=():JSX.Element=>{
+
+    formGenerator = (): JSX.Element => {
         return (
-            <Form id="AddForm" labelCol={{span:3} } wrapperCol={{span:20,offset:1}} fields={this.state.fields}
-            
-            onFinish={this.onFinish}
-            onFinishFailed={this.onFinishFailed}
-            onFieldsChange={(_, allFields) => {
-                let buf=this.state.fields;
-                for (var i = 0; i < allFields.length; i++){
-                    buf[i].value=allFields[i].value;
+            <Form id="AddForm" labelCol={{ span: 3 }} wrapperCol={{ span: 20, offset: 1 }} fields={this.state.fields}
 
-                }
-                console.log(buf)
-                this.setState({
-                   fields:buf
-                })
-              }}
+                onFinish={this.onFinish}
+                onFinishFailed={this.onFinishFailed}
+                onFieldsChange={(_, allFields) => {
+                    let buf = this.state.fields;
+                    for (var i = 0; i < allFields.length; i++) {
+                        buf[i].value = allFields[i].value;
+
+                    }
+                    console.log(buf)
+                    this.setState({
+                        fields: buf
+                    })
+                }}
             >
 
-                
+
                 {this.state.fields.map((u, i) => {
-                    switch(u.type){
-                        case "input":{
+                    switch (u.type) {
+                        case "input": {
                             return <Form.Item name={u.name} label={u.label} rules={[{ required: true }]}>
-                                <Input/>
+                                <Input />
                             </Form.Item>
                             break;
                         }
@@ -513,7 +514,7 @@ export class AddForm extends React.Component<{
                         //           if(u.value!==uo.value)
                         //           return(
                         //             <Select.Option  value={uo.value} onClick={()=>{
-                                       
+
                         //             }}>{uo.label}</Select.Option>
                         //           );
                         //       })}
@@ -521,13 +522,13 @@ export class AddForm extends React.Component<{
                         //   </Form.Item>
                         //     break;
                         // }
-                         case "multiplyPicker":{
-                             return <Form.Item name={u.name} label={u.label} rules={[{ required: true }]}>
-                             <CMultiplyPicker  updListCallback={this.updateListCallBack} typeName="" dataList={u.chosedOptions} optionList={u.options}/>
-                           </Form.Item>
-                             break;
+                        case "multiplyPicker": {
+                            return <Form.Item name={u.name} label={u.label} rules={[{ required: true }]}>
+                                <CMultiplyPicker updListCallback={this.updateListCallBack} typeName="" dataList={u.chosedOptions} optionList={u.options} />
+                            </Form.Item>
+                            break;
                         }
-                        case "text":{
+                        case "text": {
                             return <Paragraph>
                                 {u.value}
                             </Paragraph>
@@ -535,8 +536,8 @@ export class AddForm extends React.Component<{
                         }
 
                     }
-                    
-            })}
+
+                })}
             </Form>
 
 

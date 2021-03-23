@@ -10,28 +10,28 @@ import { Row, Col, Pagination } from 'antd';
  * @param onMaxItemsChange Колбек функции на смену колличества объектов, отображаемых на одной старнице.
  */
 export class PaginationEntity extends React.Component<{
-    countItems:number,
-    onPageChange:(page:number, pageSize?: number | undefined)=>void,
-    onMaxItemsChange:(current: number, size: number)=>void
-    },{}> {
+    countItems: number,
+    onPageChange: (page: number, pageSize?: number | undefined) => void,
+    onMaxItemsChange: (current: number, size: number) => void
+}, {}> {
 
-    render(){
+    render() {
         return (
-            
-            this.props.countItems!==0?
-            <Row className="paginationEntity">
-            <Col span={1}></Col>
-            <Col span={22}>
-                <Pagination defaultCurrent={1} defaultPageSize={10}
-                 total={this.props.countItems} onChange={this.props.onPageChange}
-                 onShowSizeChange={this.props.onMaxItemsChange} showSizeChanger
-                 showTotal={total => `Total ${total} items`}/>
-            </Col>
-            <Col span={1}></Col>
-            </Row>:<div/>
+
+            this.props.countItems !== 0 ?
+                <Row className="paginationEntity">
+                    <Col span={1}></Col>
+                    <Col span={22}>
+                        <Pagination defaultCurrent={1} defaultPageSize={10}
+                            total={this.props.countItems} onChange={this.props.onPageChange}
+                            onShowSizeChange={this.props.onMaxItemsChange} showSizeChanger
+                            showTotal={total => `Total ${total} items`} />
+                    </Col>
+                    <Col span={1}></Col>
+                </Row> : <div />
         );
     }
-    }
+}
 
 
 export default PaginationEntity;

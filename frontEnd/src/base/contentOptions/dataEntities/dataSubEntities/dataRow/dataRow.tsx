@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col,Button } from 'antd';
+import { Row, Col, Button } from 'antd';
 import 'antd/dist/antd.css';
 import './dataRow.css';
 import {
@@ -7,22 +7,22 @@ import {
     EditOutlined,
     PlusOutlined
 } from '@ant-design/icons';
-import {Dropdown, Menu, message, Typography,Space} from "antd";
+import { Dropdown, Menu, message, Typography, Space } from "antd";
 const { Paragraph } = Typography;
 
 
 export interface IDataRowE {
     dataStr: string
     titleStr: string
-    typeName:string
-    editFieldCallback: (val:string,param:string) => void;
+    typeName: string
+    editFieldCallback: (val: string, param: string) => void;
 }
 
 export interface IDataRowListE {
     dataList: string[]
     titleStr: string
-    typeName:string
-    editListCallback: (val:string[],param:string) => void;
+    typeName: string
+    editListCallback: (val: string[], param: string) => void;
 }
 
 export interface IDataRow {
@@ -35,7 +35,7 @@ export interface IDataRowList {
     titleStr: string
 }
 
-export function DataRowEditable({dataStr, titleStr,typeName,editFieldCallback}: IDataRowE) {
+export function DataRowEditable({ dataStr, titleStr, typeName, editFieldCallback }: IDataRowE) {
     const [editableStr, setEditableStr] = React.useState(dataStr);
     return (
         <Row className="DataRow">
@@ -43,12 +43,12 @@ export function DataRowEditable({dataStr, titleStr,typeName,editFieldCallback}: 
                 <Paragraph className='DataRowTitle'>{titleStr}</Paragraph>
             </Col>
             <Col span={19}>
-                <Paragraph className='DataRowData'editable={{
-                maxLength: 10000,
-                icon: <EditOutlined />,
-                tooltip: 'Изменить',
-                onChange:(editableStr)=>{setEditableStr(editableStr);editFieldCallback(editableStr,typeName);},
-            }}>
+                <Paragraph className='DataRowData' editable={{
+                    maxLength: 10000,
+                    icon: <EditOutlined />,
+                    tooltip: 'Изменить',
+                    onChange: (editableStr) => { setEditableStr(editableStr); editFieldCallback(editableStr, typeName); },
+                }}>
                     {editableStr}
                 </Paragraph>
             </Col>
@@ -56,7 +56,7 @@ export function DataRowEditable({dataStr, titleStr,typeName,editFieldCallback}: 
     )
 }
 
-export function DataRow({dataStr, titleStr}: IDataRow) {
+export function DataRow({ dataStr, titleStr }: IDataRow) {
     return (
         <Row className="DataRow">
             <Col span={3} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
@@ -65,50 +65,50 @@ export function DataRow({dataStr, titleStr}: IDataRow) {
     )
 }
 
-export function DataRowList({dataList, titleStr}: IDataRowList) {
+export function DataRowList({ dataList, titleStr }: IDataRowList) {
     return (
         <Row className="DataRow">
             <Col span={3} className='title'><Paragraph className='DataRowTitle'>{titleStr}</Paragraph></Col>
             <Col span={4} className="DataRowList">
-                
-                    {dataList.map((r, i) => {
-                        return (
-                            <Row key={i+"rw"}>
+
+                {dataList.map((r, i) => {
+                    return (
+                        <Row key={i + "rw"}>
                             <Col span={1}></Col>
-                        <Col span={22} className="optionText">{r}</Col>
-                        <Col span={1}></Col>
-                        </Row> )
-                    })}
-                
+                            <Col span={22} className="optionText">{r}</Col>
+                            <Col span={1}></Col>
+                        </Row>)
+                })}
+
             </Col>
         </Row>
     )
 }
 
 
-export function DataRowListEditable({dataList, titleStr,typeName,editListCallback}: IDataRowListE) {
+export function DataRowListEditable({ dataList, titleStr, typeName, editListCallback }: IDataRowListE) {
 
-    function deleteUl(id:number,list:string[]):string[] {
+    function deleteUl(id: number, list: string[]): string[] {
         let updateArray = [...list];
         updateArray.splice(id, 1);
         message.info(id);
-        editListCallback(updateArray,typeName);
+        editListCallback(updateArray, typeName);
         return updateArray;
     }
 
-    function addUl(el:string,list:string[]):string[] {
+    function addUl(el: string, list: string[]): string[] {
         let updateArray = [...list];
-        updateArray.splice(list.length,0,el );
-        editListCallback(updateArray,typeName);
+        updateArray.splice(list.length, 0, el);
+        editListCallback(updateArray, typeName);
         return updateArray;
     }
 
-    function updateOptionsMenuCallBack():JSX.Element {
-        let optList:string[]=["SuperAdmin","CompanyAdmin","ChiefRedactor","Redactor","Author","Corrector"]
+    function updateOptionsMenuCallBack(): JSX.Element {
+        let optList: string[] = ["SuperAdmin", "CompanyAdmin", "ChiefRedactor", "Redactor", "Author", "Corrector"]
         return <Menu>
             {optList.map((r, i) => {
                 return (
-                    <Menu.Item onClick={()=>editListCallback(addUl(r,dataList),typeName)}>
+                    <Menu.Item onClick={() => editListCallback(addUl(r, dataList), typeName)}>
                         {r}
                     </Menu.Item>
                 )
@@ -124,29 +124,29 @@ export function DataRowListEditable({dataList, titleStr,typeName,editListCallbac
                 <ul>
                     {dataList.map((r, i) => {
                         return (
-                            
-                                <Button className="deleteButton" danger
-                                    type="dashed"
-                                    onClick={()=>editListCallback(deleteUl(i,dataList),typeName)}
-                                    
-                                >
-                                     {r} <CloseOutlined />
-                                </Button>
-                           
-                            
+
+                            <Button className="deleteButton" danger
+                                type="dashed"
+                                onClick={() => editListCallback(deleteUl(i, dataList), typeName)}
+
+                            >
+                                {r} <CloseOutlined />
+                            </Button>
+
+
                         )
                     })}
-                    
+
                     <div>
-                    
+
                         <Dropdown overlay={updateOptionsMenuCallBack()}>
                             <Button
-                type="dashed"
-                onClick={() => {}}
-                style={{ width: '100%' }}
-                >
-                Добавить роль <PlusOutlined />
-              </Button>
+                                type="dashed"
+                                onClick={() => { }}
+                                style={{ width: '100%' }}
+                            >
+                                Добавить роль <PlusOutlined />
+                            </Button>
                         </Dropdown>
                     </div>
                 </ul>

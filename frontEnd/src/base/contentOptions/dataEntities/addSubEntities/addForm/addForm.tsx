@@ -35,7 +35,7 @@ type field =
 const articleFields: field[] = [
     {
         name: 'articleTitle',
-        value: 'Добавление статьи',
+        value: '',
         type: 'text',
         label: 'Данные статьи',
         options: [],
@@ -43,7 +43,7 @@ const articleFields: field[] = [
     },
     {
         name: 'articleName',
-        value: 'Итория о...',
+        value: '',
         type: 'input',
         label: 'Заголовок статьи',
         options: [],
@@ -54,7 +54,7 @@ const articleFields: field[] = [
 const companyFields: field[] = [
     {
         name: 'companyTitle',
-        value: 'Данные компании',
+        value: '',
         type: 'text',
         label: 'Данные компании',
         options: [],
@@ -62,7 +62,7 @@ const companyFields: field[] = [
     },
     {
         name: 'companyName',
-        value: 'ООО "ЛОЛКЕК"',
+        value: '',
         type: 'input',
         label: 'Название:',
         options: [],
@@ -70,7 +70,7 @@ const companyFields: field[] = [
     },
     {
         name: 'adminTitle',
-        value: 'Данные админа',
+        value: '',
         type: 'text',
         label: 'Данные админа',
         options: [],
@@ -78,7 +78,7 @@ const companyFields: field[] = [
     },
     {
         name: 'firstName',
-        value: 'Дмитрий',
+        value: '',
         type: 'input',
         label: 'Имя',
         options: [],
@@ -86,7 +86,7 @@ const companyFields: field[] = [
     },
     {
         name: 'lastName',
-        value: 'Дубина',
+        value: '',
         type: 'input',
         label: 'Фамилия',
         options: [],
@@ -94,7 +94,7 @@ const companyFields: field[] = [
     },
     {
         name: 'email',
-        value: 'dodubina.spam@gmail.com',
+        value: '',
         type: 'input',
         label: 'Email',
         options: [],
@@ -102,7 +102,7 @@ const companyFields: field[] = [
     },
     {
         name: 'password',
-        value: '71400444443',
+        value: '',
         type: 'input',
         label: 'Пароль',
         options: [],
@@ -113,7 +113,7 @@ const companyFields: field[] = [
 const employeeFields: field[] = [
     {
         name: 'firstName',
-        value: 'Дмитрий',
+        value: '',
         type: 'input',
         label: 'Имя',
         options: [],
@@ -121,7 +121,7 @@ const employeeFields: field[] = [
     },
     {
         name: 'lastName',
-        value: 'Дубина',
+        value: '',
         type: 'input',
         label: 'Фамилия',
         options: [],
@@ -129,7 +129,7 @@ const employeeFields: field[] = [
     },
     {
         name: 'email',
-        value: 'dodubina.spam@gmail.com',
+        value: '',
         type: 'input',
         label: 'Email',
         options: [],
@@ -137,7 +137,7 @@ const employeeFields: field[] = [
     },
     {
         name: 'password',
-        value: '71400444443',
+        value: '',
         type: 'input',
         label: 'Пароль',
         options: [],
@@ -145,8 +145,7 @@ const employeeFields: field[] = [
     },
     {
         name: 'roles',
-        value:
-            '71400444443',
+        value: '',
         type: 'multiplyPicker',
         label: 'Роли',
         options: [
@@ -237,7 +236,7 @@ export class AddForm extends React.Component<{
         fields: [
             {
                 name: 'companyTitle',
-                value: 'Данные компании',
+                value: '',
                 type: 'text',
                 label: 'Данные компании',
                 options: [{
@@ -254,7 +253,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'companyName',
-                value: 'ООО "ЛОЛКЕК"',
+                value: '',
                 type: 'input',
                 label: 'Название:',
                 options: [],
@@ -267,7 +266,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'adminTitle',
-                value: 'Данные админа',
+                value: '',
                 type: 'text',
                 label: 'Данные админа',
                 options: [],
@@ -280,7 +279,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'firstName',
-                value: 'Дмитрий',
+                value: '',
                 type: 'input',
                 label: 'имя',
                 options: [],
@@ -293,7 +292,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'lastName',
-                value: 'Дубина',
+                value: '',
                 type: 'input',
                 label: 'фамилия',
                 options: [],
@@ -306,7 +305,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'email',
-                value: 'dodubina.spam@gmail.com',
+                value: '',
                 type: 'input',
                 label: 'email',
                 options: [],
@@ -319,7 +318,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'password',
-                value: '71400444443',
+                value: '',
                 type: 'input',
                 label: 'пароль',
                 options: [],
@@ -332,7 +331,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'articleName',
-                value: 'Данные статьи',
+                value: '',
                 type: 'input',
                 label: 'Данные статьи',
                 options: [{
@@ -349,7 +348,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'articleTitle',
-                value: 'Данные статьи',
+                value: '',
                 type: 'text',
                 label: 'Данные статьи',
                 options: [{
@@ -366,7 +365,7 @@ export class AddForm extends React.Component<{
             },
             {
                 name: 'articleName',
-                value: 'Данные статьи',
+                value: '',
                 type: 'input',
                 label: 'Статьи',
                 options: [{
@@ -386,7 +385,6 @@ export class AddForm extends React.Component<{
 
 
     onFinish = () => {
-        //console.log(this.state.fields);
         let buf;
         switch (this.props.dataType) {
             case "article": {
@@ -404,7 +402,6 @@ export class AddForm extends React.Component<{
                 this.state.fields[4].chosedOptions.map((u, i) => {
                     roles.splice(roles.length, 0, u.value);
                 })
-                //console.log(roles);
                 buf = {
                     id: "",
                     email: this.state.fields[2].value,
@@ -452,9 +449,6 @@ export class AddForm extends React.Component<{
                 break;
             }
         }
-
-
-        //console.log(buf);
         this.props.closeForm("hide", "status");
         this.props.createCallback(
             buf
@@ -462,7 +456,7 @@ export class AddForm extends React.Component<{
     };
 
     onFinishFailed = () => {
-        console.log('Failed:', "1");
+        
     };
 
 
@@ -486,7 +480,6 @@ export class AddForm extends React.Component<{
                         buf[i].value = allFields[i].value;
 
                     }
-                    console.log(buf)
                     this.setState({
                         fields: buf
                     })

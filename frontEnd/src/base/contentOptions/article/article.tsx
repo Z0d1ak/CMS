@@ -283,7 +283,7 @@ export class Article extends React.Component<{}, {}> {
             }
         )
             .then(res => {
-                console.log(res);
+                //console.log(res);
                 this.setState({ count: res.data.count })
                 this.setState({ items: res.data.items })
                 this.setState({ loading: false });

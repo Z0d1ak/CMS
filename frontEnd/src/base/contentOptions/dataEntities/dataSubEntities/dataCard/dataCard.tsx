@@ -129,7 +129,6 @@ export class DataCard extends React.Component<{
     };
 
     isNull = (val: string): boolean => {
-        console.log(val);
         return val === "" || val === null;
     }
 
@@ -196,13 +195,13 @@ export class DataCard extends React.Component<{
     }
 
     openArticle = (id: string) => {
-        console.log(id)
+
         return <Redirect from='/home/inwork' to='/article/:id/' />
         return <Route path="/article/:id/" component={ArticleV} />
     }
 
     editArticle = (id: string) => {
-        console.log(id)
+
         return <Redirect from='/home/inwork' to='/redactor/:id/' />
         return <Route path="/redactor/:id/" component={Redactor} />
 
@@ -413,23 +412,7 @@ export class DataCard extends React.Component<{
 
 
 
-                        /*
-                         openArticle=(id:string)=>{
-                                console.log(id)
-                                return <Redirect from='/home/inwork' to='/article/:id/'/>
-                                return <Route path="/article/:id/" component={ArticleV} />
-                            }
-                        
-                            editArticle=(id:string)=>{
-                                console.log(id)
-                                return <Redirect from='/home/inwork' to='/redactor/:id/'/>
-                                return <Route path="/redactor/:id/" component={Redactor} />
-                                
-                            } <Route path={r.link}  key={"ll"+i} >
-                            {r.component}
-                        </Route>
-                                
-                        */
+                     
                     ]
                 )
             }

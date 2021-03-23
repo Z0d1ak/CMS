@@ -21,7 +21,6 @@ export class DataEntity extends React.Component<{
     updateItem = (position: number, item: any) => {
         let buf = this.props.items;
         buf[position] = item;
-        console.log(item);
         this.props.changeValueCallback(buf, "items", this.props.updateDataCallback(item))
     }
 

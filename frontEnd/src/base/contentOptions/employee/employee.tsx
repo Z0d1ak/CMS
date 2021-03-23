@@ -140,7 +140,6 @@ export class Company extends React.Component<{}, {}> {
     }
 
     delete = (val: string) => {
-        // console.log(this.state.items[val]);
         axios.delete(
             this.state.requestUrl + this.state.requestPath + "/" + val,
             {
@@ -380,13 +379,13 @@ export class Company extends React.Component<{}, {}> {
     }
 
     onMaxItemsChange = (current: number, size: number) => {
-        //console.log(current);
+
         if (current === 0) {
-            //console.log(current);
+ 
             this.setState({ PageLimit: size, PageNumber: 1 }, () => this.update());
         }
         else {
-            //console.log(current);
+    
             this.setState({ PageLimit: size, PageNumber: current }, () => this.update());
         }
 

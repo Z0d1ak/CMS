@@ -181,7 +181,7 @@ namespace web
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "../../frontEnd";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {

@@ -1,0 +1,15 @@
+.BackUp{
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  border-radius: 4px;
+  background-color: #1088e9;
+  text-align: center;
+  font-size: 14px;
+  color: #fff;
+}
+
+.whole-layout{
+  height: auto;
+  min-height: 100vh;
+}

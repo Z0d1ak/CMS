@@ -1,0 +1,1 @@
+npx openapi-typescript https://hse-cms.herokuapp.com/swagger/v1/swagger.json --output ./src/swaggerCode/swaggerCode.ts

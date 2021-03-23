@@ -1,3 +1,10 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,13 +25,9 @@ using Swashbuckle.AspNetCore.Filters;
 using web.Db;
 using web.Options;
 using web.Other;
-using web.Services;
 
 namespace web
 {
-    /// <summary>
-    /// МБ тут повезет
-    /// </summary>
     public class Startup
     {
         #region Private Fields
@@ -45,18 +48,27 @@ namespace web
 
         #endregion
 
-        #region Public Methods
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddControllersWithViews();
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
+
             var swaggerConfig = new SwaggerConfig();
             this.configuration.GetSection(SwaggerConfig.Swagger).Bind(swaggerConfig);
             services.AddControllers().AddJsonOptions(options =>
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = swaggerConfig.Title, Version = swaggerConfig.Version, Description = swaggerConfig.Description});
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = swaggerConfig.Title, Version = swaggerConfig.Version, Description = swaggerConfig.Description });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -71,7 +83,7 @@ namespace web
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
                 });
-           
+
                 x.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -120,7 +132,7 @@ namespace web
                 services.AddDbContext<DataContext>(options =>
                         options.UseNpgsql(GetHerokuConnectionString(herocuDatabaseUrl)));
             }
-            else if(Server_Test)
+            else if (Server_Test)
             {
                 services.AddDbContext<DataContext>(options =>
                         options.UseNpgsql(this.configuration.GetConnectionString("Test")));
@@ -135,9 +147,23 @@ namespace web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (Server_Test || Server_IsDevelopment || env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+
+            if (Server_Test || Server_IsDevelopment || env.IsDevelopment())
+            {
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "web v1"));
             }
@@ -153,9 +179,25 @@ namespace web
                 endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
             });
-        }
 
-        #endregion
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
+        }
 
         #region Private Methods
 

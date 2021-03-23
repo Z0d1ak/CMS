@@ -190,7 +190,7 @@ namespace web
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "../../frontEnd";
 
                 if (env.IsDevelopment())
                 {

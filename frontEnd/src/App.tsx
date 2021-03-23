@@ -8,11 +8,14 @@ import {Redactor} from "./redactor/redactor";
 import {
     Switch,
     Route,
+    Redirect
   } from "react-router-dom";
 
   import {useHistory} from "react-router-dom";
+  import {createBrowserHistory} from 'history'
 
-  
+  const history = createBrowserHistory()
+
 export class App extends React.Component<{},{}> {
 
   
@@ -35,7 +38,10 @@ export class App extends React.Component<{},{}> {
             <Profile></Profile>
           </Route>
           <Route path="/redactor">
-            <Redactor id={"bba9d209-aa4c-4385-8f62-623844e02345"}></Redactor>
+            <Redactor id={"97502518-e972-4fc3-9695-3c7708267332"}></Redactor>
+          </Route>
+          <Route path="/">
+            <Redirect from='/' to='/login'/>
           </Route>
         </Switch>
         );

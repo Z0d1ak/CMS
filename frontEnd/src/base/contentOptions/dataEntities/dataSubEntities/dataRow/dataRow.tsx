@@ -44,7 +44,7 @@ export function DataRowEditable({dataStr, titleStr,typeName,editFieldCallback}: 
             </Col>
             <Col span={19}>
                 <Paragraph className='DataRowData'editable={{
-                maxLength: 40,
+                maxLength: 10000,
                 icon: <EditOutlined />,
                 tooltip: 'Изменить',
                 onChange:(editableStr)=>{setEditableStr(editableStr);editFieldCallback(editableStr,typeName);},

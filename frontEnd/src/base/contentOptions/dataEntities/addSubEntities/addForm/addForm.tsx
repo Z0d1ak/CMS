@@ -392,8 +392,8 @@ export class AddForm extends React.Component<{
                 let guis1:string=uuidv4();
                 buf={
                     id: guis1,
-                    title: this.state.fields[1].value,
-                    content: "{}",
+                    title: this.state.fields[0].value,
+                    content: "[]",
                 }
                 break;
             }
@@ -481,10 +481,11 @@ export class AddForm extends React.Component<{
             onFinishFailed={this.onFinishFailed}
             onFieldsChange={(_, allFields) => {
                 let buf=this.state.fields;
-                for (var _i = 0; _i < allFields.length; _i++){
-                    buf[_i].value=allFields[_i].value;
+                for (var i = 0; i < allFields.length; i++){
+                    buf[i].value=allFields[i].value;
 
                 }
+                console.log(buf)
                 this.setState({
                    fields:buf
                 })

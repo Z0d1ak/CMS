@@ -45,8 +45,8 @@ interface menuOpt {
  * Массив опций меню
  */
 const leftMenuContent: Array<menuOpt> = [ 
-    {text:"В работе",link:"/home/inwork", icon:<UsbOutlined/>,component: <Task/>},
-    {text:"Статьи",link:"/home/alltexts", icon:<SnippetsOutlined />,component:< Article/>},
+    {text:"Статьи",link:"/home/inwork", icon:<SnippetsOutlined />,component:< Article/>},
+    //{text:"Статьи",link:"/home/alltexts", icon:<SnippetsOutlined />,component:< Article/>},
     {text:"Компании",link:"/home/company", icon:<BankOutlined />,component: <Company/>},
     {text:"Роли",link:"/home/role", icon:<FunctionOutlined />,component:<Role/>},
     {text:"Сотрудники",link:"/home/emplo", icon:<IdcardOutlined />,component:<Employees/>},

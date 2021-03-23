@@ -26,6 +26,8 @@ import {
 import axios from 'axios'
 import { OmitProps } from 'antd/lib/transfer/ListBody';
 import { paths } from '../swaggerCode/swaggerCode';
+import { RouteComponentProps } from 'react-router-dom'
+
 
 type getArticle=paths["/api/Article/{id}"]["get"]["responses"]["200"]["content"]["application/json"]
 type deleteArticle=paths["/api/Article/{id}"]["delete"]["parameters"]["path"]
@@ -46,10 +48,10 @@ type cel={
 }
 
 
-export class Redactor extends React.Component<{id:string},{    
-}> {
+export class Redactor extends  React.Component<RouteComponentProps<{id:string}>, {}>{
 
     state={
+        id:this.props.match.params.id,
         dataType:"Redactor",
         requestUrl:"https://hse-cms.herokuapp.com",
         requestPath:"/api/Article/",
@@ -138,7 +140,7 @@ export class Redactor extends React.Component<{id:string},{
 
     update(){ 
         this.setState({loading:true});
-        let request:string=this.props.id;
+        let request:string=this.props.match.params.id;
       
         axios.get(
             this.state.requestUrl+this.state.requestPath+request,
@@ -171,7 +173,8 @@ export class Redactor extends React.Component<{id:string},{
  
 
     render() {
-        //console.log(JSON.parse(this.state.article));
+        console.log("ID:");
+        console.log(this.props.match.params.id);
         //  return(
         //      <ArticleV gridArticle={this.state.grid}/>        
         //  );
@@ -467,15 +470,61 @@ function Cell(props:{x:number,y:number,width:number,
 }
 
 
-export class ArticleV extends React.Component<{gridArticle:cel[][]|null},{
+export class ArticleV extends  React.Component<RouteComponentProps<{id:string}>, {}>{
 
-}> {
+//extends React.Component<{gridArticle:cel[][]|null},{}> {
+    state={
+        id:this.props.match.params.id,
+        dataType:"Redactor",
+        requestUrl:"https://hse-cms.herokuapp.com",
+        requestPath:"/api/Article/",
+        loading:false,
+        article:{
+            id:"",
+            tasks:[],
+            title:"",
+            content:'[[{"x":0,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":1,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":2,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":3,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":4,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":5,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":6,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":7,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":8,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":9,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":10,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":11,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":12,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":13,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":14,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":15,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":16,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":17,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":18,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":19,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":20,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":21,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":22,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":23,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null}]]'
+        },
+        grid:[[{x:0,y:0,width:1,content:null,cOpt:null,cOptVal:null}]]
+    }
+
+    update(){ 
+        this.setState({loading:true});
+        let request:string=this.props.match.params.id;
+      
+        axios.get(
+            this.state.requestUrl+this.state.requestPath+request,
+            {
+                headers: {
+                    "Authorization": "Bearer "+sessionStorage.getItem("AuthUserSecurityToken")
+                }
+            }
+        )
+        .then(res => {
+            //console.log(res);
+            this.setState({article:res.data});
+            this.setState({grid:JSON.parse(res.data.content)})
+        })
+        .catch(err => {  
+            switch(err.response.status)
+            {
+                case 401:{
+                    console.log("401"); 
+                    break;
+                }
+                default:{
+                    console.log("Undefined error"); 
+                    break;
+                }
+            }
+        })
+    }
 
     render() {
             
         return(
             <div className="articleB"  title="Макет саттьи">
-            {this.props.gridArticle!.map((r,i)=>{
+            {this.state.grid!.map((r,i)=>{
             return(
             <Row>
                 <Col span={1}></Col>
@@ -486,7 +535,7 @@ export class ArticleV extends React.Component<{gridArticle:cel[][]|null},{
                 <Col span={c.width}>
                 {(() => {
               //console.log(props.content);
-              switch(c.content) {
+              switch(c.content!) {
               case 'text':
                   return (<TextBlock  styleTypes={c.cOpt!} styleValues={c.cOptVal!}/>)
               case 'img':
@@ -508,7 +557,9 @@ export class ArticleV extends React.Component<{gridArticle:cel[][]|null},{
         );
     }
 
-
+componentDidMount() {
+        this.update();
+    }
 }
 
 
@@ -838,5 +889,5 @@ export class ArticleV extends React.Component<{gridArticle:cel[][]|null},{
 
     }
 
-export default Redactor;
+export default {Redactor,ArticleV};
 

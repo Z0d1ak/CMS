@@ -23,6 +23,7 @@ export class Article extends React.Component<{},{}> {
   
 
     state={
+        title:"",
         dataType:"article",
         requestUrl:"https://hse-cms.herokuapp.com",
         requestPath:"/api/Article",
@@ -48,7 +49,33 @@ export class Article extends React.Component<{},{}> {
         items: [
             {
                 id: "",
-                name: ""
+                name: "",
+                tasks:[]
+            },
+            {
+                id: "",
+                name: "",
+                tasks:[]
+            },
+            {
+                id: "",
+                name: "",
+                tasks:[]
+            },
+            {
+                id: "",
+                name: "",
+                tasks:[]
+            },
+            {
+                id: "",
+                name: "",
+                tasks:[]
+            },
+            {
+                id: "",
+                name: "",
+                tasks:[]
             },
             {
                 id: "",
@@ -56,35 +83,18 @@ export class Article extends React.Component<{},{}> {
             },
             {
                 id: "",
-                name: ""
+                name: "",
+                tasks:[]
             },
             {
                 id: "",
-                name: ""
+                name: "",
+                tasks:[]
             },
             {
                 id: "",
-                name: ""
-            },
-            {
-                id: "",
-                name: ""
-            },
-            {
-                id: "",
-                name: ""
-            },
-            {
-                id: "",
-                name: ""
-            },
-            {
-                id: "",
-                name: ""
-            },
-            {
-                id: "",
-                name: ""
+                name: "",
+                tasks:[]
             },
         ],
         loading:false
@@ -149,7 +159,6 @@ export class Article extends React.Component<{},{}> {
     }
 
     create=(val:addArticle)=>{
-        val.content='[[{"x":0,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":1,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":2,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":3,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":4,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":5,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":6,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":7,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":8,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":9,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":10,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":11,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":12,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":13,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":14,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":15,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":16,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":17,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":18,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":19,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":20,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":21,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":22,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null},{"x":23,"y":0,"width":1,"content":null,"cOpt":null,"cOptVal":null}]]'
         axios.post(this.state.requestUrl+this.state.requestPath,val,
         {
             headers: {
@@ -350,10 +359,10 @@ export class Article extends React.Component<{},{}> {
                 <DataEntity 
                     dataType={this.state.dataType}
                     loading={this.state.loading}    
-                    updateDataCallback={this.updateData} 
+                    updateDataCallback={()=>{}} 
                     deleteCallback={this.delete} 
-                    updateCallback={this.update} 
-                    changeValueCallback={this.changeValue} 
+                    updateCallback={()=>{}} 
+                    changeValueCallback={()=>{}} 
                     items={this.state.items}
                 />  
                 <PaginationEntity 

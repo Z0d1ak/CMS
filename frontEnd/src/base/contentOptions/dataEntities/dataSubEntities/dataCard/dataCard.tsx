@@ -19,6 +19,13 @@ import {DataRow,DataRowEditable,DataRowList,DataRowListEditable} from "../dataRo
 import { Steps } from 'antd';
 import { MultiplyPicker } from "../multiplyPicker/multiplyPicker";
 import { ConsoleLogger } from 'typedoc/dist/lib/utils';
+import {Redactor,ArticleV} from "../../../../../redactor/redactor"
+import {
+    Route,
+    Redirect,
+    Link
+  } from "react-router-dom";
+  
 
 const { Step } = Steps;
 const { Search } = Input;
@@ -191,7 +198,21 @@ export class DataCard extends React.Component<{
                 ) 
             } 
         }
-        }
+    }
+
+    openArticle=(id:string)=>{
+        console.log(id)
+        return <Redirect from='/home/inwork' to='/article/:id/'/>
+        return <Route path="/article/:id/" component={ArticleV} />
+    }
+
+    editArticle=(id:string)=>{
+        console.log(id)
+        return <Redirect from='/home/inwork' to='/redactor/:id/'/>
+        return <Route path="/redactor/:id/" component={Redactor} />
+        
+    }
+        
 
         DataRows= ():JSX.Element[] =>{
             switch(this.props.dataType) { 
@@ -222,11 +243,21 @@ export class DataCard extends React.Component<{
                                  <Col span={2}></Col>
                                 <Col span={20}>
                                 <Steps direction="horizontal" current={2}>
-                                {this.props.data.tasks.map((d:any, i:number) => {
-                                return (
-                                    <Step key={i+"tk"} title={d.description} description={d.comment} />
-                                )
-                                })}
+                                {
+                                ()=>{if(this.props.data.tasks!==null)
+                                {
+                                    this.props.data.task.map((d:any, i:number) => {
+                                        return (
+                                            <Step key={i+"tk"} title={d.description} description={d.comment} />
+                                        )
+                                        })
+                                }
+                                else
+                                {
+                                   return "null"
+
+                                }
+                                }}
                                 </Steps>
                                 </Col>
                                 </Row>
@@ -356,23 +387,55 @@ export class DataCard extends React.Component<{
                              <Divider />,
                              <Paragraph strong>Задачи</Paragraph>,
                              <div>
-                                 {this.props.data.tasks.map((d:any, i:number) => {
-                                 return (
-                                     <Row>
-                                     <Col key={i+"tk"}>{d.description}</Col>
-                                     <Col key={i+"tk"}>{d.comment}</Col></Row>
-                                 )
-                                 })}
+                                 { this.props.data.task!==null
+                                        ? [this.props.data.task].map((d:any, i:number) => {
+                                            return (
+                                                <Row>
+                                                <Col key={i+"tk"}>{d.description}</Col>
+                                                <Col key={i+"tk"}>{d.comment}</Col></Row>
+                                            )
+                                            })
+                                        : <>null</>
+                                    }
+                                
                                  </div>,
                                   <Divider />,
                                  <Paragraph strong>Предпросмотр</Paragraph>,
                                  <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
-                                    <div className="prev"></div>
+                                      <Link to={'/article/'+this.props.data.id }>
+                                    <Button className="butttonart" onClick={()=>this.openArticle(this.props.data.id)}>Открыть статью</Button>
+                                    </Link>
                                 </Skeleton>,
                                 <Paragraph strong>Редактор</Paragraph>,
                                 <Skeleton  title={{width:"100%"}} active loading={this.props.loading} paragraph={{ rows: 0}}>
-                                    <button className="red">редактор</button>
+                                  <Link to={'/redactor/'+this.props.data.id }>
+                                    <Button className="butttonart"  onClick={()=>this.editArticle(this.props.data.id)}>    
+                                    Открыть редактор  
+                                    </Button>
+                                    </Link>
+                                    
+                                    
                                </Skeleton>
+
+
+
+/*
+ openArticle=(id:string)=>{
+        console.log(id)
+        return <Redirect from='/home/inwork' to='/article/:id/'/>
+        return <Route path="/article/:id/" component={ArticleV} />
+    }
+
+    editArticle=(id:string)=>{
+        console.log(id)
+        return <Redirect from='/home/inwork' to='/redactor/:id/'/>
+        return <Route path="/redactor/:id/" component={Redactor} />
+        
+    } <Route path={r.link}  key={"ll"+i} >
+    {r.component}
+</Route>
+        
+*/
                         ]  
                     ) 
                 } 
@@ -491,7 +554,7 @@ export class DataCard extends React.Component<{
                 
                 <Card className="userCard wide"
                     hoverable={true}
-                    extra={<a href={window.location.href + "/" +this.props.data.id}>More</a>}
+                    
                     actions={
                         this.state.status==="narrow"?this.optionsNarrow():this.state.status==="expand"?this.optionsExpand():this.optionsExpandEditable()
                     }

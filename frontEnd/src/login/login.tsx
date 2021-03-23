@@ -5,7 +5,7 @@ import {Form, Input, Button, Checkbox, Col, Row,notification} from 'antd';
 import axios from 'axios'
 import {paths,/*components,operations*/ } from "../swaggerCode/swaggerCode"
 import  { useState } from 'react';
-  import {useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 
 const layout = {

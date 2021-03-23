@@ -59,7 +59,7 @@ namespace web
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = "../../frontEnd/build";
             });
 
             var swaggerConfig = new SwaggerConfig();

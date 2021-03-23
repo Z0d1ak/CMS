@@ -236,6 +236,18 @@ export class Company extends React.Component<{},{}> {
     }
 
     updateData=(val:updateUser)=>{
+
+        if(!val.password){
+            val.password = null;
+        }
+        else if(val.password.length < 8){
+            notification.error({
+                message: "Пароль слишком короткий",
+                description: "Длина пароля должны быть не менее 8 символов."
+            });
+            return;
+        }
+        
         axios.put(this.state.requestUrl+this.state.requestPath,val,
         {
             headers: {

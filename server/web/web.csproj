@@ -9,7 +9,7 @@
     <UserSecretsId>dfac2d24-789e-4a69-80c3-7e0a12eb05c3</UserSecretsId>
     <Nullable>enable</Nullable>
     <NoWarn>1701;1702;1591</NoWarn>
-    <SpaRoot>../../frontEnd</SpaRoot>
+    <SpaRoot>../../frontEnd/</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <TypeScriptJSXEmit>react</TypeScriptJSXEmit>
 
@@ -63,7 +63,7 @@
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
-      <DistFiles Include="$(SpaRoot)build\**" />
+      <DistFiles Include="$(SpaRoot)build/**" />
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

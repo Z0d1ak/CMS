@@ -25,6 +25,7 @@ using Swashbuckle.AspNetCore.Filters;
 using web.Db;
 using web.Options;
 using web.Other;
+using Microsoft.Extensions.FileProviders;
 
 namespace web
 {
@@ -59,8 +60,10 @@ namespace web
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "../../frontEnd/build";
+                configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddDirectoryBrowser();
 
             var swaggerConfig = new SwaggerConfig();
             this.configuration.GetSection(SwaggerConfig.Swagger).Bind(swaggerConfig);
@@ -152,6 +155,13 @@ namespace web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                env.WebRootPath),
+                RequestPath = "/files"
+            });
 
             if (Server_Test || Server_IsDevelopment || env.IsDevelopment())
             {

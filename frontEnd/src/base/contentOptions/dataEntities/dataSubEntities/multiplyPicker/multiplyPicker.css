@@ -19,3 +19,14 @@ width: 100%;
 background-color: grey;
 height: 50px;
   }
+
+
+  .addButtun
+  {
+   min-width: 300px;
+  }
+
+  .deleteButton{
+    min-width: 300px;
+    margin-left: 27px;
+  }

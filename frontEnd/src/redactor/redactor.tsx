@@ -8,7 +8,13 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { useState } from 'react';
 import DataEntity from "../base/contentOptions/dataEntities/dataEntity/dataEntity"
-import { DataRowEditable } from "../base/contentOptions/dataEntities/dataSubEntities/dataRow/dataRow"
+//import { DataRowEditable } from "../base/contentOptions/dataEntities/dataSubEntities/dataRow/dataRow"
+//import '../base/contentOptions/dataEntities/dataSubEntities/dataRow/dataRow.css';
+import {
+
+    PlusOutlined
+} from '@ant-design/icons';
+import { Dropdown, Menu, message, Space } from "antd";
 import {
     DeleteOutlined,
     CheckOutlined,
@@ -23,6 +29,7 @@ import axios from 'axios'
 import { paths } from '../swaggerCode/swaggerCode';
 import { RouteComponentProps } from 'react-router-dom'
 
+const { Paragraph } = Typography;
 
 type getArticle = paths["/api/Article/{id}"]["get"]["responses"]["200"]["content"]["application/json"]
 type deleteArticle = paths["/api/Article/{id}"]["delete"]["parameters"]["path"]
@@ -349,6 +356,38 @@ function Instuments(props: {
         </>
     );
 }
+
+
+export interface IDataRowE {
+    dataStr: string
+    titleStr: string
+    typeName: string
+    editFieldCallback: (val: string, param: string) => void;
+}
+
+export function DataRowEditable({ dataStr, titleStr, typeName, editFieldCallback }: IDataRowE) {
+    const [editableStr, setEditableStr] = React.useState(dataStr);
+    return (
+        <Row className="DataRow">
+            <Col span={4} className='title' >
+                <Paragraph className='DataRowTitle'>{titleStr}</Paragraph>
+            </Col>
+            <Col span={1}></Col>
+            <Col span={17}>
+                <Paragraph className='DataRowData' editable={{
+                    maxLength: 10000,
+                    icon: <EditOutlined />,
+                    tooltip: 'Изменить',
+                    autoSize: { maxRows: 3, minRows: 1 },
+                    onChange: (editableStr) => { setEditableStr(editableStr); editFieldCallback(editableStr, typeName); },
+                }}>
+                    {editableStr}
+                </Paragraph>
+            </Col>
+        </Row>
+    )
+}
+
 
 function Settings(props: {
     visible: boolean,

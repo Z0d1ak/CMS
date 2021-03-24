@@ -37,3 +37,10 @@
   padding-top: 6px;
   font-size: 14px;
 }
+
+.DataRowData{
+  word-wrap: break-word;
+  word-break: break-all;
+  max-height: 100px;
+  overflow: auto;
+}

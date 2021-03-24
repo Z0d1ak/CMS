@@ -87,7 +87,7 @@ export class MultiplyPicker extends React.Component<{
                     )
                 })}
                 <Dropdown overlay={this.updateOptionsMenuCallBack()}>
-                    <Button
+                    <Button className="addButtun"
                         type="dashed"
                         onClick={() => { }}
                         style={{ width: '100%' }}

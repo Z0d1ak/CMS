@@ -63,8 +63,6 @@ namespace web
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddDirectoryBrowser();
-
             var swaggerConfig = new SwaggerConfig();
             this.configuration.GetSection(SwaggerConfig.Swagger).Bind(swaggerConfig);
             services.AddControllers().AddJsonOptions(options =>
@@ -155,13 +153,6 @@ namespace web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
-            app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                env.WebRootPath),
-                RequestPath = "/files"
-            });
 
             if (Server_Test || Server_IsDevelopment || env.IsDevelopment())
             {

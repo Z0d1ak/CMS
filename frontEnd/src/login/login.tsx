@@ -82,7 +82,9 @@ const LoginForm = (props: { fields: field[], onChangeFields: (newFields: any) =>
                 console.log(res);
                 sessionStorage.setItem('AuthUserId', res.data.user.id);
                 sessionStorage.setItem('AuthUserSecurityToken', res.data.securityToken);
-                history.push("/home/inwork");
+
+
+                history.push("/home/info");
             })
             .catch(err => {
                 switch (err.response.status) {

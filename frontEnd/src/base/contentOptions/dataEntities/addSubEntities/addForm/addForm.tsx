@@ -145,7 +145,7 @@ const employeeFields: field[] = [
     },
     {
         name: 'roles',
-        value: '',
+        value: '1',
         type: 'multiplyPicker',
         label: 'Роли',
         options: [

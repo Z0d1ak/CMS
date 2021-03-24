@@ -25,9 +25,8 @@ body{
 }
 
 .redactorRow{
-    border-bottom-color: black;
-    border-bottom-width: 2px;
-    background-color: green;
+    border: rgb(228, 228, 228);
+    border: 1px;
     width: 90%;
     margin-left: auto;
     margin-right: auto;
@@ -46,7 +45,7 @@ body{
 }
 
 .redactorCell:hover{
-    background-color:  rgb(172, 172, 172);
+    background-color:  rgb(228, 228, 228);
 }
 
 
@@ -55,7 +54,7 @@ body{
     color: #fff;
     line-height: 160px;
     text-align: center;
-    background-color: #364d79;
+    background-color: #4d5970;
     margin: 10px;
 }
 
@@ -143,6 +142,6 @@ margin-left: auto;
 margin-right: auto;
 margin-top: 50px;
 height: auto;
-border: 1px solid  grey ;
+border: 1px solid  rgb(201, 201, 201) ;
 padding: 10px;
 }

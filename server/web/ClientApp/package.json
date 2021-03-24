@@ -58,5 +58,6 @@
     "@types/react-router-dom": "^5.1.7"
   },
    "options": {
-    "outputPath": "build",
+    "outputPath": "build"
+  }
 }

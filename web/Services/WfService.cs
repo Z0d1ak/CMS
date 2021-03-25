@@ -79,7 +79,7 @@ namespace web.Services
                     AuthorId = this.UserInfoProvider.UserId,
                     CreationDate = DateTime.Now,
                     Type = nextType.Value,
-                    Description = null,
+                    Description = GetDescription(nextType.Value),
                     PerformerId = userId,
                     ParentTaskId = task.Id
                 };
@@ -108,6 +108,24 @@ namespace web.Services
                     return TaskType.ValidateCorrect;
                 case TaskType.ValidateCorrect:
                     return null;
+            }
+            return null;
+        }
+
+        private string GetDescription(TaskType type)
+        {
+            switch (type)
+            {
+                case TaskType.Write:
+                    return "Написание статьи";
+                case TaskType.Redact:
+                    return "Редакция статьи";
+                case TaskType.ValidateRedact:
+                    return "Проверка редакции статьи";
+                case TaskType.Correct:
+                    return "Коррекция статьи";
+                case TaskType.ValidateCorrect:
+                    return "Проверка коррекции статьи";
             }
             return null;
         }

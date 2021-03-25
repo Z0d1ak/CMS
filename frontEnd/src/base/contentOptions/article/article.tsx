@@ -8,6 +8,7 @@ import AddEntity from "../dataEntities/addEntity/addEntity"
 import DataEntity from "../dataEntities/dataEntity/dataEntity"
 import FilterEntity from "../dataEntities/filterEntity/filterEntity"
 import PaginationEntity from "../dataEntities/paginationEntity/paginationEntity"
+import { v4 as uuidv4 } from 'uuid';
 
 type getArticle = paths["/api/Article"]["get"]["responses"]["200"]["content"]["application/json"]
 type deleteArticle = paths["/api/Article/{id}"]["delete"]["parameters"]["path"]
@@ -157,6 +158,64 @@ export class Article extends React.Component<{}, {}> {
             })
     }
 
+
+    createTask=(aid: string,taskType:string,descr:string) => {
+        let guis1: string = uuidv4();
+        let val={
+            id: guis1,
+            articleId: aid,
+            taskType: taskType,
+            description: descr,
+            assignee: null
+          }
+          console.log(val)
+        axios.post(this.state.requestUrl + "/api/Task/create", val,
+            {
+                headers: {
+                    "Authorization": "Bearer " + sessionStorage.getItem("AuthUserSecurityToken")
+                }
+            })
+            .then(res => {
+                this.update();
+                notification.success({
+                    message: 'Создание прошло успешно',
+                    description:
+                        'Статья с id:' + val.id + " была успешно создана",
+                });
+
+
+            })
+            .catch(err => {
+                console.log(err);
+                switch (err.response.status) {
+                    case 401: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                "Недостаточно прав для создания статьи"
+                        });
+                        break;
+                    }
+                    case 409: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                "Конфликт данных, убедитесь что данные корректны и не дублируют существующие"
+                        });
+                        break;
+                    }
+                    default: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                err.response.body
+                        });
+                        break;
+                    }
+                }
+            })
+    }
+
     create = (val: addArticle) => {
         axios.post(this.state.requestUrl + this.state.requestPath, val,
             {
@@ -171,6 +230,10 @@ export class Article extends React.Component<{}, {}> {
                     description:
                         'Статья с id:' + val.id + " была успешно создана",
                 });
+                this.createTask(val.id,"Write","Написать статью");
+              // this.createTask(val.id,"Redact","Редактировать статью");
+              //  this.createTask(val.id,"Correct","Подправить текст");
+
             })
             .catch(err => {
                 console.log(err);

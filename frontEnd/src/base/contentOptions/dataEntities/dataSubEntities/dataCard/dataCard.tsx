@@ -13,6 +13,8 @@ import {
 
 } from '@ant-design/icons';
 import { DataRow, DataRowEditable, DataRowList } from "../dataRow/dataRow";
+import axios from 'axios'
+import { notification } from 'antd';
 import { Steps } from 'antd';
 import { MultiplyPicker } from "../multiplyPicker/multiplyPicker";
 
@@ -36,6 +38,7 @@ type article = paths["/api/Article"]["post"]["responses"]["201"]["content"]["app
 type role = paths["/api/Role"]["get"]["responses"]["200"]["content"]["application/json"]["items"][0]
 type task = paths["/api/Article"]["post"]["responses"]["201"]["content"]["application/json"]["tasks"]
 type emploe = paths["/api/User"]["get"]["responses"]["200"]["content"]["application/json"]["items"][0]
+type t = paths["/api/Task/take"]["post"]["parameters"]
 
 export class DataCard extends React.Component<{
     deleteItemCallback: (position: number) => void,
@@ -481,11 +484,13 @@ export class DataCard extends React.Component<{
                         <Divider />,
                         <Paragraph strong>Управление заданием</Paragraph>,
                         <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                            <button className="red">Завершить</button>
+                            {this.props.data.сompletionDate==null?<button className="red"  onClick={()=>this.finish(this.props.data.id)}>Завершить</button>:<></>}
+            
                         </Skeleton>,
-                        <Paragraph strong>Редактор</Paragraph>,
+                        <Paragraph strong>Взять в работу</Paragraph>,
                         <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                            <button className="red">редактор</button>
+                             {this.props.data.assignmentDate==null?<button className="red" onClick={()=>this.take(this.props.data.id)}>Взять</button>:<></>}
+                            
                         </Skeleton>
                     ]
                 );
@@ -503,6 +508,102 @@ export class DataCard extends React.Component<{
             [<EllipsisOutlined onClick={() => this.expandCardChange()} />]
         )
     }
+
+    
+    take = (idd:string) => {
+        console.log(this.props.data);
+        
+        axios.post("https://hse-cms.herokuapp.com/api/Task/take?taskId="+idd,{},
+            {
+                headers: {
+                    "Authorization": "Bearer " + sessionStorage.getItem("AuthUserSecurityToken")
+                }
+            })
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err);
+                switch (err.response.status) {
+                    case 401: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                "Недостаточно прав для создания статьи"
+                        });
+                        break;
+                    }
+                    case 409: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                "Конфликт данных, убедитесь что данные корректны и не дублируют существующие"
+                        });
+                        break;
+                    }
+                    default: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                err.response.body
+                        });
+                        break;
+                    }
+                }
+            })
+    }
+
+
+
+    finish = (idd:string) => {
+        console.log(this.props.data);
+        let val={
+            id:idd,
+            comment: "finished"
+        }
+        
+        axios.post("https://hse-cms.herokuapp.com" + "/api/Task/finish", val,
+            {
+                headers: {
+                    "Authorization": "Bearer " + sessionStorage.getItem("AuthUserSecurityToken")
+                }
+            })
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err);
+                switch (err.response.status) {
+                    case 401: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                "Недостаточно прав для создания статьи"
+                        });
+                        break;
+                    }
+                    case 409: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                "Конфликт данных, убедитесь что данные корректны и не дублируют существующие"
+                        });
+                        break;
+                    }
+                    default: {
+                        notification.error({
+                            message: 'Ошибка ' + err.response.status,
+                            description:
+                                err.response.body
+                        });
+                        break;
+                    }
+                }
+            })
+    }
+
+
+    
 
     optionsExpand = (): JSX.Element[] => {
         return (

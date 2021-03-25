@@ -16,6 +16,9 @@ import {
 } from '@ant-design/icons';
 import { Dropdown, Menu, message, Space } from "antd";
 import {
+    Link
+} from "react-router-dom";
+import {
     DeleteOutlined,
     CheckOutlined,
     CloseOutlined,
@@ -23,7 +26,8 @@ import {
     CaretRightOutlined,
     VerticalLeftOutlined,
     VerticalRightOutlined,
-    EditOutlined
+    EditOutlined,
+    RollbackOutlined
 } from '@ant-design/icons';
 import axios from 'axios'
 import { paths } from '../swaggerCode/swaggerCode';
@@ -909,8 +913,13 @@ export class ArticleBlock extends React.Component<{ updateCallback: (content: ce
 
                     <Col span={22}>
                         <Button type="dashed" onClick={() => this.addRow()}>Add</Button>
-                        <Button type="dashed" onClick={() => this.update()}>Update</Button>
                         <Button type="dashed" onClick={() => { console.log(JSON.stringify(this.props.gridArticle!)); this.props.save(this.props.gridArticle!) }}>Save</Button>
+                        <Link to="/home/inwork">
+                            <Button icon={<RollbackOutlined style={{ fontSize: '20px' }} />} onClick={() => {
+                                console.log("back");
+                            }}>
+                            </Button>
+                        </Link>
                     </Col>
                     <Col span={1}></Col>
                 </Row>

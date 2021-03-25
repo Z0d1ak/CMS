@@ -484,12 +484,15 @@ export class DataCard extends React.Component<{
                         <Divider />,
                         <Paragraph strong>Управление заданием</Paragraph>,
                         <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                            {this.props.data.сompletionDate==null?<button className="red"  onClick={()=>this.finish(this.props.data.id)}>Завершить</button>:<></>}
+                              
+
+                            {this.props.data.сompletionDate==null?<Link to={'/home/inwork'}><Button className="red"  onClick={()=>this.finish(this.props.data.id)}>Завершить</Button>
+                            </Link>:<></>}
             
                         </Skeleton>,
                         <Paragraph strong>Взять в работу</Paragraph>,
                         <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                             {this.props.data.assignmentDate==null?<button className="red" onClick={()=>this.take(this.props.data.id)}>Взять</button>:<></>}
+                             {this.props.data.assignmentDate==null?<Button className="red" onClick={()=>this.take(this.props.data.id)}>Взять</Button>:<></>}
                             
                         </Skeleton>
                     ]
@@ -512,7 +515,6 @@ export class DataCard extends React.Component<{
     
     take = (idd:string) => {
         console.log(this.props.data);
-        
         axios.post("https://hse-cms.herokuapp.com/api/Task/take?taskId="+idd,{},
             {
                 headers: {
@@ -521,6 +523,7 @@ export class DataCard extends React.Component<{
             })
             .then(res => {
                 console.log(res)
+                 window.location.reload(false);
             })
             .catch(err => {
                 console.log(err);

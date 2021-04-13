@@ -13,21 +13,20 @@ body{
     background-color: white;
     height: 60vh;
     margin: 10px;
-    overflow-y: auto scroll;
+    overflow: auto scroll;
     max-height: 60vh;
 }
 
 
 .dataPoolTop{
     background-color: white;
-    height: 150px;
+    height: auto;
     margin: 10px;
 }
 
 .redactorRow{
-    border-bottom-color: black;
-    border-bottom-width: 2px;
-    background-color: green;
+    border: rgb(228, 228, 228);
+    border: 1px;
     width: 90%;
     margin-left: auto;
     margin-right: auto;
@@ -46,7 +45,7 @@ body{
 }
 
 .redactorCell:hover{
-    background-color:  rgb(172, 172, 172);
+    background-color:  rgb(228, 228, 228);
 }
 
 
@@ -55,7 +54,8 @@ body{
     color: #fff;
     line-height: 160px;
     text-align: center;
-    background-color: #364d79;
+    background-color: #4d5970;
+    margin: 10px;
 }
 
 
@@ -64,6 +64,7 @@ body{
     height:30px;
     position:absolute;
     z-index: 10;
+    
 }
 
 
@@ -126,9 +127,21 @@ body{
 {
     top: calc(50% + 50px);
     right: -340px;
-    background-color: grey;
+    background-color: white;
     width: 300px;
     height: 300px;
     z-index: 50;
     position:absolute;
+}
+
+
+.articleB{
+    background-color: white;
+    width:80%;
+margin-left: auto;
+margin-right: auto;
+margin-top: 50px;
+height: auto;
+border: 1px solid  rgb(201, 201, 201) ;
+padding: 10px;
 }

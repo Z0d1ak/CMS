@@ -1,7 +1,7 @@
 import React from 'react';
 import './chooseBox.css';
 import 'antd/dist/antd.css';
-import { Menu, Dropdown, Button, Space,Typography} from 'antd';
+import { Menu, Dropdown, Button, Space, Typography } from 'antd';
 
 
 /**
@@ -14,40 +14,40 @@ import { Menu, Dropdown, Button, Space,Typography} from 'antd';
  * @param changeValueCallback Колбек функции на обновление значения переменой, которой соотвествуеют option, в родительском компоненте.
  */
 export class ChooseBox extends React.Component<{
-    option:string,
-    optionName:string,
-    optionList:string[],
-    text:string,
-    updateCallback:()=>void,
-    changeValueCallback:(val:any,type:string,callback:()=>void)=>void
-},{}> {
+    option: string,
+    optionName: string,
+    optionList: string[],
+    text: string,
+    updateCallback: () => void,
+    changeValueCallback: (val: any, type: string, callback: () => void) => void
+}, {}> {
 
-    
+
     /**
      * Функция генерирующая выпадающий список на основании props
      */
-    optionGenerate=():JSX.Element=>{
+    optionGenerate = (): JSX.Element => {
         return <Menu>
-         {this.props.optionList.map((u, i) => {
-                 if (u!==this.props.option) return (
-                    <Menu.Item onClick={()=>this.props.changeValueCallback(u,this.props.optionName,this.props.updateCallback)} key={this.props.optionName+i}>
+            {this.props.optionList.map((u, i) => {
+                if (u !== this.props.option) return (
+                    <Menu.Item onClick={() => this.props.changeValueCallback(u, this.props.optionName, this.props.updateCallback)} key={this.props.optionName + i}>
                         <Typography.Paragraph>
-                        {u}
+                            {u}
                         </Typography.Paragraph>
                     </Menu.Item>
                 )
             })}
         </Menu>
     }
-  
-    render(){
+
+    render() {
         return (
-                <Space size={5}>
-                    <Typography.Paragraph> {this.props.text}</Typography.Paragraph> 
-                    <Dropdown overlay={this.optionGenerate} placement="bottomLeft">
-                        <Button>{this.props.option}</Button>
-                    </Dropdown>
-                </Space>
+            <Space size={5}>
+                <Typography.Paragraph> {this.props.text}</Typography.Paragraph>
+                <Dropdown overlay={this.optionGenerate} placement="bottomLeft">
+                    <Button>{this.props.option}</Button>
+                </Dropdown>
+            </Space>
         );
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './leftMenu.css';
-import {Layout, Menu} from 'antd';
+import { Layout, Menu } from 'antd';
 import {
     UsbOutlined,
     SnippetsOutlined,
@@ -14,7 +14,7 @@ import {
 import {
     Link,
     Route
-  } from "react-router-dom";
+} from "react-router-dom";
 
 
 import Employees from "../../contentOptions/employee/employee"
@@ -35,23 +35,23 @@ import Role from '../../contentOptions/role/role';
  * @param component Генерируемый по нажатию компонент в поле Content в Layout.
  */
 interface menuOpt {
-    text:string;
-    link:string;
-    icon:JSX.Element;
-    component:JSX.Element;
+    text: string;
+    link: string;
+    icon: JSX.Element;
+    component: JSX.Element;
 }
 
 /**
  * Массив опций меню
  */
-const leftMenuContent: Array<menuOpt> = [ 
-    {text:"В работе",link:"/home/inwork", icon:<UsbOutlined/>,component: <Task/>},
-    {text:"Статьи",link:"/home/alltexts", icon:<SnippetsOutlined />,component:< Article/>},
-    {text:"Компании",link:"/home/company", icon:<BankOutlined />,component: <Company/>},
-    {text:"Роли",link:"/home/role", icon:<FunctionOutlined />,component:<Role/>},
-    {text:"Сотрудники",link:"/home/emplo", icon:<IdcardOutlined />,component:<Employees/>},
-    {text:"Инфографика",link:"/home/info", icon:<AreaChartOutlined />,component:<Infographic/>}
-];  
+const leftMenuContent: Array<menuOpt> = [
+    { text: "Статьи", link: "/home/inwork", icon: <SnippetsOutlined />, component: < Article /> },
+    //{text:"Статьи",link:"/home/alltexts", icon:<SnippetsOutlined />,component:< Article/>},
+    { text: "Компании", link: "/home/company", icon: <BankOutlined />, component: <Company /> },
+    { text: "Роли", link: "/home/role", icon: <FunctionOutlined />, component: <Role /> },
+    { text: "Сотрудники", link: "/home/emplo", icon: <IdcardOutlined />, component: <Employees /> },
+    { text: "Инфографика", link: "/home/info", icon: <AreaChartOutlined />, component: <Infographic /> }
+];
 
 
 /**
@@ -61,7 +61,7 @@ export function getLinksLeftMenu() {
     return (
         leftMenuContent.map((r, i) => {
             return (
-                <Route path={r.link}  key={"ll"+i} >
+                <Route path={r.link} key={"ll" + i} >
                     {r.component}
                 </Route>
             )
@@ -77,7 +77,7 @@ function generateMenu() {
     return (<Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
         {leftMenuContent.map((r, i) => {
             return (
-                <Menu.Item key={i+"lm"} icon={r.icon}>
+                <Menu.Item key={i + "lm"} icon={r.icon}>
                     <Link to={r.link}>{r.text}</Link>
                 </Menu.Item>
             )
@@ -89,16 +89,16 @@ function generateMenu() {
  * Компонент левого меню.
  * @param collapsed Состояние меню (расшиернное/суженное)
  */
-export class LeftMenu extends React.Component<{collapsed:boolean},{}> {
+export class LeftMenu extends React.Component<{ collapsed: boolean }, {}> {
     render() {
         return (
-                <Layout.Sider trigger={null} collapsible collapsed={this.props.collapsed}>
-                    <div className="logo" />
-                    {generateMenu()}
-                </Layout.Sider>
+            <Layout.Sider trigger={null} collapsible collapsed={this.props.collapsed}>
+                <div className="logo" />
+                {generateMenu()}
+            </Layout.Sider>
         );
     }
 }
 
-export default {getLinksLeftMenu,LeftMenu}; 
+export default { getLinksLeftMenu, LeftMenu };
 

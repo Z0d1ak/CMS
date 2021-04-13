@@ -1,7 +1,7 @@
 import React from 'react';
 import './sortBox.css';
 import 'antd/dist/antd.css';
-import { Menu, Dropdown, Button, Space,Typography} from 'antd';
+import { Menu, Dropdown, Button, Space, Typography } from 'antd';
 
 
 /**
@@ -14,24 +14,24 @@ import { Menu, Dropdown, Button, Space,Typography} from 'antd';
  * @param changeValueCallback Колбек функции на обновление значения переменой, в родительском компоненте.
  */
 export class SortBox extends React.Component<{
-    SortDirection:string,
-    SortDirectionOptions:string[],
-    SortingColumn:string,
-    SortingColumnOptions:string[],
-    updateCallback:()=>void,
-    changeValueCallback:(val:any,type:string,callback:()=>void)=>void
-},{}> {
+    SortDirection: string,
+    SortDirectionOptions: string[],
+    SortingColumn: string,
+    SortingColumnOptions: string[],
+    updateCallback: () => void,
+    changeValueCallback: (val: any, type: string, callback: () => void) => void
+}, {}> {
 
-     /**
-     * Функция генерирующая выпадающий список на основании props, для выбора направления сортировки.
-     */
-    SortDirectionGenerate=():JSX.Element=>{
+    /**
+    * Функция генерирующая выпадающий список на основании props, для выбора направления сортировки.
+    */
+    SortDirectionGenerate = (): JSX.Element => {
         return <Menu>
-         {this.props.SortDirectionOptions.map((u, i) => {
-                if (u!==this.props.SortDirection) return (
-                    <Menu.Item onClick={()=>this.props.changeValueCallback(u,"SortDirection",this.props.updateCallback)} key={"SortDirection"+i}>
+            {this.props.SortDirectionOptions.map((u, i) => {
+                if (u !== this.props.SortDirection) return (
+                    <Menu.Item onClick={() => this.props.changeValueCallback(u, "SortDirection", this.props.updateCallback)} key={"SortDirection" + i}>
                         <Typography.Paragraph>
-                        {u}
+                            {u}
                         </Typography.Paragraph>
                     </Menu.Item>
                 )
@@ -43,33 +43,33 @@ export class SortBox extends React.Component<{
     /**
      * Функция генерирующая выпадающий список на основании props, для выбора критерия сортировки.
      */
-    SortingColumnGenerate=():JSX.Element=>{
+    SortingColumnGenerate = (): JSX.Element => {
         return <Menu>
-         {this.props.SortingColumnOptions.map((u, i) => {
-                 if (u!==this.props.SortingColumn) return (
-                    <Menu.Item onClick={()=>this.props.changeValueCallback(u,"SortingColumn",this.props.updateCallback)} key={"SortingColumn"+i}>
+            {this.props.SortingColumnOptions.map((u, i) => {
+                if (u !== this.props.SortingColumn) return (
+                    <Menu.Item onClick={() => this.props.changeValueCallback(u, "SortingColumn", this.props.updateCallback)} key={"SortingColumn" + i}>
                         <Typography.Paragraph>
-                        {u}
+                            {u}
                         </Typography.Paragraph>
                     </Menu.Item>
                 )
             })}
         </Menu>
     }
-    
-  
-    render(){
+
+
+    render() {
         return (
-                <Space size={5}>
-                    <Typography.Paragraph className="text"> Сортировать</Typography.Paragraph> 
-                    <Dropdown overlay={this.SortingColumnGenerate} placement="bottomLeft">
-                        <Button>{this.props.SortingColumn}</Button>
-                    </Dropdown>
-                    <Typography.Paragraph className="text">по</Typography.Paragraph>
-                    <Dropdown overlay={this.SortDirectionGenerate} placement="bottomLeft">
-                        <Button>{this.props.SortDirection}</Button>
-                    </Dropdown>
-                </Space>
+            <Space size={5}>
+                <Typography.Paragraph className="text"> Сортировать</Typography.Paragraph>
+                <Dropdown overlay={this.SortingColumnGenerate} placement="bottomLeft">
+                    <Button>{this.props.SortingColumn}</Button>
+                </Dropdown>
+                <Typography.Paragraph className="text">по</Typography.Paragraph>
+                <Dropdown overlay={this.SortDirectionGenerate} placement="bottomLeft">
+                    <Button>{this.props.SortDirection}</Button>
+                </Dropdown>
+            </Space>
         );
     }
 }

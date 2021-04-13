@@ -11,18 +11,18 @@ import { Input } from 'antd';
  * @param changeValueCallback Колбек функции на обновление значения переменой, в родительском компоненте. В данном случае QuickSearch.
  */
 export class SearchBox extends React.Component<{
-        updateCallback:()=>void,
-        changeValueCallback:(val:any,type:string,callback:()=>void)=>void
-    },{}> {
-    
+    updateCallback: () => void,
+    changeValueCallback: (val: any, type: string, callback: () => void) => void
+}, {}> {
 
-    render(){
+
+    render() {
         return (
-                <Input.Search 
-                    placeholder="Искать"  
-                    onSearch={(value: string)=>this.props.changeValueCallback(value,"QuickSearch",this.props.updateCallback)}
-                    className={"searchBox"}
-                />
+            <Input.Search
+                placeholder="Искать"
+                onSearch={(value: string) => this.props.changeValueCallback(value, "QuickSearch", this.props.updateCallback)}
+                className={"searchBox"}
+            />
 
         );
     }

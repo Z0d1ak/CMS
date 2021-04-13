@@ -151,7 +151,6 @@ namespace web
             app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             if (Server_Test || Server_IsDevelopment || env.IsDevelopment())

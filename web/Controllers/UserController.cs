@@ -98,7 +98,7 @@ namespace web.Controllers
         /// <returns>Список пользователей.</returns>
         /// <response code="200">Запрос успешный.</response>
         [HttpGet]
-        [Authorize(Roles = AccessRoles.AnyAdmin)]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<SearchResponseDto<ResponseUserDto>>> FindUsersAsync([FromQuery] UserSearchParameters searchParameters, CancellationToken cancellationToken)
         {

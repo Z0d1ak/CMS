@@ -10,7 +10,8 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-
+import { ArticlePreview, ArticlePreview2, EditorJSRedactor } from './redactor/editorJsRedactor';
+import {MediaSources} from "./mediasources/mediaSources.js"
 
 export class App extends React.Component<{}, {}> {
 
@@ -33,11 +34,16 @@ export class App extends React.Component<{}, {}> {
         <Route path="/profile">
           <Profile></Profile>
         </Route>
-        <Route path="/redactor/:id" component={Redactor} />
-        <Route path="/article/:id" component={ArticleV} />
+        <Route path="/redactor/:id" component={EditorJSRedactor} />
+        <Route path="/article/:id" component={ArticlePreview} />
         <Route path="/">
           <Redirect from='/' to='/login' />
         </Route>
+        <Route path="/media">
+          <MediaSources></MediaSources>
+        </Route>
+        <Route path="/article/:name" component={ArticlePreview2} />
+
       </Switch>
     );
   }

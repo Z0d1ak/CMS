@@ -6,7 +6,7 @@ import axios from 'axios'
 import { paths,/*components,operations*/ } from "../swaggerCode/swaggerCode"
 import { useState } from 'react';
 import { useHistory } from "react-router-dom";
-
+import { getUser, setUser} from "../const/shared"
 
 const layout = {
     labelCol: {
@@ -82,11 +82,12 @@ const LoginForm = (props: { fields: field[], onChangeFields: (newFields: any) =>
                 console.log(res);
                 sessionStorage.setItem('AuthUserId', res.data.user.id);
                 sessionStorage.setItem('AuthUserSecurityToken', res.data.securityToken);
-
-
+                setUser(res.data.user)
+                console.log(JSON.stringify(getUser()))
                 history.push("/home/info");
             })
             .catch(err => {
+                console.log(err)
                 switch (err.response.status) {
                     case 401: {
                         notification.error({

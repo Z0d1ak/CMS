@@ -22,7 +22,7 @@ import {
     CaretLeftOutlined,
     CaretRightOutlined,
     VerticalLeftOutlined,
-    VerticalRightOutlined,
+    VerticalRightOutlined,  
     EditOutlined
 } from '@ant-design/icons';
 import axios from 'axios'
@@ -312,17 +312,6 @@ function BlockImg(props: { name: string }) {
         <div ref={drag} className="contentStyle">{props.name}</div>
     );
 }
-
-
-
-
-
-
-
-
-
-
-
 
 function Instuments(props: {
     cOpt: string[],

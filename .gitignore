@@ -385,3 +385,5 @@ MigrationBackup/
 FodyWeavers.xsd
 frontEnd/.eslintcache
 frontEnd/.eslintcache
+server/web/ClientApp/build
+server/web/ClientApp/.eslintcache

@@ -50,22 +50,37 @@ namespace web.Db
 
         public DbSet<Article> Articles { get; set; } = null!;
 
+        public DbSet<Data> Datas { get; set; } = null!;
+
+        public DbSet<TelegrammData> TelegrammDatas { get; set; } = null!;
+
+        public DbSet<PublishData> PublishDatas { get; set; } = null!;
+
         #endregion
 
         #region Base Overrides
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            this.ConfigureDataEntity(modelBuilder);
             this.ConfigureArticleEntity(modelBuilder);
             this.ConfigureRoleEntity(modelBuilder);
             this.ConfigureUserEntity(modelBuilder);
             this.ConfigureCompanyEntity(modelBuilder);
             this.ConfigureWfTaskEntity(modelBuilder);
+            this.ConfigureSomeEntity(modelBuilder);
+
         }
 
         #endregion
 
         #region Private Methods
+
+        private void ConfigureDataEntity(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Data>().HasKey(x => x.Id);
+            modelBuilder.Entity<Data>().Property(x => x.Extension).IsRequired();
+        }
 
         private void ConfigureArticleEntity(ModelBuilder modelBuilder)
         {
@@ -93,6 +108,35 @@ namespace web.Db
                 .HasForeignKey(x => x.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
+
+
+        private void ConfigureSomeEntity(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TelegrammData>().HasKey(x => x.Id);
+            modelBuilder.Entity<TelegrammData>().Property(x => x.CompanyId).IsRequired();
+            modelBuilder.Entity<TelegrammData>()
+                .HasQueryFilter(x =>
+                    this.userInfoProvider.CompanyId == AdminGuid
+                    || this.userInfoProvider.CompanyId == x.CompanyId);
+            modelBuilder.Entity<TelegrammData>()
+                .HasOne(x => x.Company)
+                .WithMany(x => x.TelegrammDatas)
+                .HasForeignKey(x => x.CompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PublishData>().HasKey(x => x.Id);
+            modelBuilder.Entity<PublishData>().Property(x => x.CompanyId).IsRequired();
+            modelBuilder.Entity<PublishData>()
+                .HasQueryFilter(x =>
+                    this.userInfoProvider.CompanyId == AdminGuid
+                    || this.userInfoProvider.CompanyId == x.CompanyId);
+            modelBuilder.Entity<PublishData>()
+                .HasOne(x => x.Company)
+                .WithMany(x => x.PublishDatas)
+                .HasForeignKey(x => x.CompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+
 
         private void ConfigureRoleEntity(ModelBuilder modelBuilder)
         {

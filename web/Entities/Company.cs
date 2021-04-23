@@ -23,5 +23,10 @@ namespace web.Entities
 
         public ICollection<Role> Roles { get; set; } = new List<Role>();
 
+        public ICollection<TelegrammData> TelegrammDatas { get; set; } = new List<TelegrammData>();
+
+
+        public ICollection<PublishData> PublishDatas { get; set; } = new List<PublishData>();
+
     }
 }

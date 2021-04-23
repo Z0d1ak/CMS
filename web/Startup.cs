@@ -85,6 +85,7 @@ namespace web
                     new List<string>()}
                 });
             });
+            services.AddHostedService<TimedHostedService>();
             services.AddServices();
             services.AddInfrastructure();
             services.AddRepositories();
@@ -144,6 +145,7 @@ namespace web
 
             app.UseHttpsRedirection();
             app.UseHttpMethodOverride();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();

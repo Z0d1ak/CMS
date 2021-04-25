@@ -114,7 +114,7 @@ namespace web
                }
                );
 
-            var herocuDatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            var herocuDatabaseUrl = "postgres://ndryfkjwdclqgz:b98673f4a528474065874b102e0c19d5ab730966af98b456e84afc273d2c133f@ec2-34-248-165-3.eu-west-1.compute.amazonaws.com:5432/d7q7tpg6p220o9";//Environment.GetEnvironmentVariable("DATABASE_URL");
 
             if (herocuDatabaseUrl is not null)
             {

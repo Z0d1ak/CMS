@@ -72,7 +72,7 @@ namespace web.Controllers
 
             data.BotName = telegrammDto.BotName;
             data.ChanelName = telegrammDto.ChanelName;
-
+            this.dataContext.Update(data);
             await this.dataContext.SaveChangesAsync();
 
             return this.Ok();
@@ -93,6 +93,7 @@ namespace web.Controllers
             var p = new PublishData
             {
                 Id = Guid.NewGuid(),
+                CompanyId = this.userInfoProvider.CompanyId,
                 ArticleId = article.Id,
                 Date = requestPublishDto.Date,
                 Link = name

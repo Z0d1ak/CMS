@@ -333,21 +333,24 @@ export class EditorJSRedactor extends React.Component{
                 }
             })
         axios.get(
-            this.state.requestUrl + "api/publish/pubdata/" +this.props.match.params.id,
+            this.state.requestUrl + "/api/publish/pubdata/" +this.props.match.params.id,
             {
                 headers: {
                     "Authorization": "Bearer " + sessionStorage.getItem("AuthUserSecurityToken")
                 }
             })
             .then(res =>{
+                console.log(res)
                 this.setState({
                     published: res.data.published,
                     pubdate: res.data.date,
-                    link: res.data.link
+                    link: res.data.link,
+                    haspubdata: true
                 })
             })
             .catch(
                 err => {
+                    console.log(err)
                     this.setState({haspubdata: false})
                 }
             )
@@ -380,12 +383,14 @@ export class EditorJSRedactor extends React.Component{
         });
     }
 
+
+
     async savePub(){
          let val = {
             articleId: this.state.article.id,
             date: this.state.pubdate
         }
-        var resp = await axios.post(this.state.requestUrl + "api/publish/pubdata", val,
+        var resp = await axios.post(this.state.requestUrl + "/api/publish/pubdata", val,
             {
                 headers: {
                     "Authorization": "Bearer " + sessionStorage.getItem("AuthUserSecurityToken")
@@ -408,11 +413,11 @@ export class EditorJSRedactor extends React.Component{
             </Row>
             
             <Row>
-                {(this.state.disppubdata && this.state.haspubdata) &&
+                {(this.state.haspubdata &&this.state.disppubdata)  &&
                     <Row>
                     <Col span={12}>
                         <p>Дата публикации</p>
-                        <DatePicker onChange={this.onChange} value={this.state.pubdate}/>
+                        <DatePicker onChange={this.dateChange} value={this.state.pubdate}/>
                         <Button onClick={this.savePub}>Сохранить</Button>
 
                     </Col>

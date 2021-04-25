@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NickBuhro.Translit;
 using web.Contracts.Dto.Request;
 using web.Contracts.Dto.Response;
 using web.Contracts.SearchParameters;
@@ -87,21 +89,35 @@ namespace web.Controllers
             {
                 return this.NotFound();
             }
-
+            
             var name = string.Join('_', article.Title.Split(' ', StringSplitOptions.RemoveEmptyEntries));
-
-            var p = new PublishData
+            var latinName = Transliteration.CyrillicToLatin(
+                name,
+                Language.Russian);
+            var pd = await this.dataContext.PublishDatas.FirstOrDefaultAsync(x => x.ArticleId == requestPublishDto.ArticleID);
+            DateTime? date = requestPublishDto.Date is null ? null : DateTime.Parse(requestPublishDto.Date);
+            if (pd is null)
             {
-                Id = Guid.NewGuid(),
-                CompanyId = this.userInfoProvider.CompanyId,
-                ArticleId = article.Id,
-                Date = requestPublishDto.Date,
-                Link = name
-            };
+                pd = new PublishData
+                {
+                    Id = Guid.NewGuid(),
+                    CompanyId = this.userInfoProvider.CompanyId,
+                    ArticleId = article.Id,
+                    Date = date,
+                    Link = latinName
+                };
+                this.dataContext.PublishDatas.Add(pd);
 
-            this.dataContext.PublishDatas.Add(p);
+            }
+            else
+            {
+                pd.Date = date;
+                pd.Link = latinName;
+                this.dataContext.Update(pd);
+            }
+
             await this.dataContext.SaveChangesAsync();
-            return this.Ok(p);
+            return this.Ok(pd);
 
         }
 
@@ -195,7 +211,8 @@ namespace web.Controllers
     {
         public Guid ArticleID { get; set; }
 
-        public DateTime Date { get; set; }
+        
+        public string? Date { get; set; }
     }
 
 

@@ -10,6 +10,9 @@ import 'antd/dist/antd.css';
 import {EditorCore} from "./articleEditor"
 import { EDITOR_JS_TOOLS } from './tools'
 import { throws } from "assert";
+import moment from 'moment';
+
+
 
 const { Option } = AutoComplete;
 
@@ -31,7 +34,8 @@ export class EditorJSRedactor extends React.Component{
     state = {
         id: this.props.match.params.id,
         dataType: "Redactor",
-        requestUrl: "https://hse-cms.herokuapp.com",
+        requestUrl: "https://localhost:44329",
+        //requestUrl: "https://hse-cms.herokuapp.com",
         requestPath: "/api/Article/",
         loaded: false,
         task: null,
@@ -343,7 +347,7 @@ export class EditorJSRedactor extends React.Component{
                 console.log(res)
                 this.setState({
                     published: res.data.published,
-                    pubdate: res.data.date,
+                    pubdate: res.data.date!=null ? moment(res.data.date) : null,
                     link: res.data.link,
                     haspubdata: true
                 })
@@ -378,8 +382,9 @@ export class EditorJSRedactor extends React.Component{
     }
 
     dateChange(date, datestr){
+        console.log(date);
         this.setState({
-            date: date
+            pubdate: date
         });
     }
 
@@ -388,8 +393,9 @@ export class EditorJSRedactor extends React.Component{
     async savePub(){
          let val = {
             articleId: this.state.article.id,
-            date: this.state.pubdate
+            date: this.state.pubdate == null ? null : this.state.pubdate.format()
         }
+        console.log(val)
         var resp = await axios.post(this.state.requestUrl + "/api/publish/pubdata", val,
             {
                 headers: {
@@ -413,12 +419,12 @@ export class EditorJSRedactor extends React.Component{
             </Row>
             
             <Row>
-                {(this.state.haspubdata &&this.state.disppubdata)  &&
+                {(this.state.haspubdata && this.state.disppubdata)  &&
                     <Row>
                     <Col span={12}>
                         <p>Дата публикации</p>
-                        <DatePicker onChange={this.dateChange} value={this.state.pubdate}/>
-                        <Button onClick={this.savePub}>Сохранить</Button>
+                        <DatePicker showTime onChange={this.dateChange} value={this.state.pubdate}/>
+                        <Button type="primary" onClick={this.savePub}>Сохранить</Button>
 
                     </Col>
                     </Row>

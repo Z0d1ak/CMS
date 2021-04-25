@@ -36,14 +36,14 @@ export class App extends React.Component<{}, {}> {
         </Route>
         <Route path="/redactor/:id" component={EditorJSRedactor} />
         <Route path="/article/:id" component={ArticlePreview} />
-        <Route path="/">
-          <Redirect from='/' to='/login' />
-        </Route>
+
         <Route path="/media">
           <MediaSources></MediaSources>
         </Route>
-        <Route path="/article/:name" component={ArticlePreview2} />
-
+        <Route path="/:name" component={ArticlePreview2} />
+        <Route path="/">
+          <Redirect from='/' to='/login' />
+        </Route>
       </Switch>
     );
   }

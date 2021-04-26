@@ -18,6 +18,6 @@ namespace web.Contracts.Dto.Request
         /// <summary>
         /// Комментарии.
         /// </summary>
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
     }
 }

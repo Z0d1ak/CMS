@@ -59,7 +59,7 @@ namespace web.Services
 
 
             task.СompletionDate = DateTime.Now;
-            task.Comment = finishTaskDto.Comment;
+            task.Comment = finishTaskDto.Comment ?? string.Empty;
             task.Content = article.Content;
 
             this.DataContext.Update(task);

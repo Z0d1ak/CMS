@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import React, { Component } from "react";
-import { Row, Col, Card, Input, Button, AutoComplete, notification, DatePicker } from 'antd';
+import { Row, Col, Card, Input, Tag, Button, AutoComplete, notification, DatePicker } from 'antd';
 import EditorJs from "react-editor-js";
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid';
@@ -40,6 +40,7 @@ export class EditorJSRedactor extends React.Component{
         loaded: false,
         task: null,
         comment: null,
+        ispublished: false,
         disppubdata: false,
          published: null,
                     pubdate: null,
@@ -217,7 +218,7 @@ export class EditorJSRedactor extends React.Component{
                         
                         <input  value={this.state.comment} onChange={this.handleCommentChange} title={'Комментарии к заданию'} rows={3}></input>
                         <br></br>
-                        <Button type="primary" onClick={this.sentToAuthor} >Отправить</Button>
+                        <Button style={{marginTop: 5}} type="primary" onClick={this.sentToAuthor} >Отправить</Button>
                     </Card>
                 )
             }
@@ -228,7 +229,7 @@ export class EditorJSRedactor extends React.Component{
                         
                         <input  value={this.state.comment} onChange={this.handleCommentChange} title={'Комментарии к заданию'} rows={3}></input>
                         <br></br>
-                        <Button type="primary" onClick={this.sentToAuthor} >Отправить</Button>
+                        <Button style={{marginTop: 5}} type="primary" onClick={this.sentToAuthor} >Отправить</Button>
                     </Card>
                 )
             }
@@ -241,7 +242,7 @@ export class EditorJSRedactor extends React.Component{
                     <Card>
                         <p>Задание: <b>{taskCaption}</b></p>
                         <br></br>
-                        <Button type="primary" onClick={this.takeToWork} >Взять в работу</Button>
+                        <Button style={{marginTop: 5}} type="primary" onClick={this.takeToWork} >Взять в работу</Button>
                     </Card>
                 )
             }
@@ -252,15 +253,15 @@ export class EditorJSRedactor extends React.Component{
                         <p>Задание: <b>{taskCaption}</b></p>
                         <input  value={this.state.comment} onChange={this.handleCommentChange} title={'Комментарии к заданию'} rows={3}></input>
                         <br></br>
-                        <Button type="primary" onClick={this.complete} >Завершить</Button>
+                        <Button style={{marginTop: 5}} type="primary" onClick={this.complete} >Завершить</Button>
                     </Card>
                 )
             }
             else{
                 return (
-                    <Card>
+                    <div>
                         
-                    </Card>
+                    </div>
                 )
             }
 
@@ -349,7 +350,8 @@ export class EditorJSRedactor extends React.Component{
                     published: res.data.published,
                     pubdate: res.data.date!=null ? moment(res.data.date) : null,
                     link: res.data.link,
-                    haspubdata: true
+                    haspubdata: true,
+                    ispublished: res.data.published
                 })
             })
             .catch(
@@ -396,14 +398,23 @@ export class EditorJSRedactor extends React.Component{
             date: this.state.pubdate == null ? null : this.state.pubdate.format()
         }
         console.log(val)
-        var resp = await axios.post(this.state.requestUrl + "/api/publish/pubdata", val,
+        axios.post(this.state.requestUrl + "/api/publish/pubdata", val,
             {
                 headers: {
                     "Authorization": "Bearer " + sessionStorage.getItem("AuthUserSecurityToken")
                 }
             })
-
-        console.log(resp)
+            .then(res => {
+                console.log(res)
+                this.setState({
+                    published: res.data.published,
+                    pubdate: res.data.date!=null ? moment(res.data.date) : null,
+                    link: res.data.link,
+                    haspubdata: true,
+                    ispublished: res.data.published
+                })
+            })
+            .catch(err => console.log(err))
     }
 
     render(){
@@ -411,7 +422,10 @@ export class EditorJSRedactor extends React.Component{
             return (<div></div>)
         }
         return (
-            <div>
+            <div style={{margin: 10}}>
+            {this.state.ispublished && <Tag color="#87d068">Опубликована</Tag>}
+
+            <h1 style={{}}>{this.state.article.title}</h1>
            <Row>
                <Col span={24}>
                     {this.processTask(this.state.article) }
@@ -419,19 +433,17 @@ export class EditorJSRedactor extends React.Component{
             </Row>
             
             <Row>
-                {(this.state.haspubdata && this.state.disppubdata)  &&
-                    <Row>
-                    <Col span={12}>
-                        <p>Дата публикации</p>
-                        <DatePicker showTime onChange={this.dateChange} value={this.state.pubdate}/>
-                        <Button type="primary" onClick={this.savePub}>Сохранить</Button>
-
-                    </Col>
-                    </Row>
+                {( !this.state.ispublished && this.state.haspubdata && this.state.disppubdata)  &&
+                    <div>
+                        <p style={{float: "left", marginRight: 7}}>Дата публикации</p>
+                        <DatePicker style={{float: "left", marginRight: 7}} showTime onChange={this.dateChange} value={this.state.pubdate}/>
+                        <Button type="primary" onClick={this.savePub}>Опубликовать</Button>
+                    </div>
                 }
-               <Col span={12}>
-                    <Button onClick={this.save}>Сохранить</Button>
-               </Col>
+            </Row>
+            <Row>
+                <Button style={{marginTop: 10}} type="primary" onClick={this.save}>Сохранить</Button>
+
             </Row>
             <Row>
                <Col span={24}>
@@ -516,8 +528,8 @@ export class ArticlePreview2 extends React.Component{
      state = {
         id: this.props.match.params.name,
         dataType: "Redactor",
-        requestUrl: "https://hse-cms.herokuapp.com",
-        requestPath: "/publish/art/",
+        requestUrl: "https://localhost:44329",
+        requestPath: "/api/publish/art/",
         loaded: false,
         task: null,
         comment: null,

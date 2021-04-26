@@ -144,7 +144,9 @@ namespace web.Controllers
             {
                 try
                 {
-                    var name = "http://localhost:3000/" + item.Link;
+                    var article = await this.dataContext.Articles.FirstAsync(x => x.Id == item.ArticleId);
+
+                    var name = article + Environment.NewLine + "http://localhost:3000/" + item.Link;
                     await PublishASync(tg.BotName, tg.ChanelName, name);
                     item.Published = true;
                     this.dataContext.Update(item);
@@ -166,7 +168,7 @@ namespace web.Controllers
             {
                 return this.NotFound();
             }
-            var article = await this.dataContext.Articles.IgnoreQueryFilters().Select(Mappers.ToResponseArticleDtoExpression).FirstOrDefaultAsync(x => x.Id == data.ArticleId);
+            var article = await this.dataContext.Articles.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == data.ArticleId);
 
             return this.Ok(article);
         }

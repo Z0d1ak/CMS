@@ -31,7 +31,7 @@ namespace web.Services
         {
             try
             {
-                WebRequest request = WebRequest.Create("https://hse-cms.herokuapp.com/api/publish/check");
+                WebRequest request = WebRequest.Create("https://localhost:44329/api/publish/check");
                 Stream rs = request.GetResponse().GetResponseStream();
                 StreamReader reader = new StreamReader(rs);
             }

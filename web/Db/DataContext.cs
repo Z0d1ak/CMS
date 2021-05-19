@@ -41,13 +41,9 @@ namespace web.Db
         #region Public Properties
 
         public DbSet<User> Users { get; set; } = null!;
-
         public DbSet<Company> Companies { get; set; } = null!;
-
         public DbSet<WfTask> Tasks { get; set; } = null!;
-
         public DbSet<Role> Roles { get; set; } = null!;
-
         public DbSet<Article> Articles { get; set; } = null!;
 
         public DbSet<Data> Datas { get; set; } = null!;
@@ -168,6 +164,49 @@ namespace web.Db
                 .HasForeignKey(x => x.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+        }
+
+        private void ConfigureUserEntity2(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasKey(x => x.Id); // id пользователя - первичный ключ
+            modelBuilder.Entity<User>().HasIndex(x => x.Email).IsUnique(); // добавляем уникальный индекс email
+            modelBuilder.Entity<User>().Property(x => x.CompanyId).IsRequired(); // идентификатор компании обязательный
+            modelBuilder.Entity<User>()                                 // при выборке пользователей к запросу всегда
+                .HasQueryFilter(x =>                                    // добавляется фильтр, который отграничивает
+                    this.userInfoProvider.CompanyId == AdminGuid        // доступ к пользователям из других компаний.
+                    || this.userInfoProvider.CompanyId == x.CompanyId); // у администраторов доступ не ограничивается
+            modelBuilder.Entity<User>().Property(x => x.PasswordHash).IsRequired(); // хэш пароля - обязательный 
+            modelBuilder.Entity<User>().Property(x => x.PasswordSalt).IsRequired(); // соль пароля обязательная
+            modelBuilder.Entity<User>().Property(x => x.Email) // email обязательный и имеет длину не более
+                .IsRequired().HasMaxLength(32);                // 32 символов
+            modelBuilder.Entity<User>().Property(x => x.FirstName) // имя обязательное и имеет длину не более
+                .IsRequired().HasMaxLength(32);                    // 32 символов
+            modelBuilder.Entity<User>().Property(x => x.LastName) // фамилия обязательная и имеет длину не более 
+                .IsRequired().HasMaxLength(32);                   // 32 символов
+            modelBuilder.Entity<User>()                         // задается отношение один-ко-многим между компанией и
+                .HasOne(x => x.Company).WithMany(x => x.Users)  // пользователями с каскадным удалением
+                .HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<User>() // задается свзязь многие-ко многим между пользователями и ролями
+                .HasMany(x => x.Roles)  // для задания отношения не нужен entity-класс промежуточной роли
+                .WithMany(x => x.Users) // можно задавать начальные значения промежуточной роли 
+                .UsingEntity(j => j.HasData(new { UsersId = AdminGuid, RolesId = AdminGuid }));
+
+            using var hmac = new HMACSHA512();
+            var admin = new User()
+            {
+                Id = AdminGuid,
+                Email = "admin@admin.com",
+                FirstName = "Admin",
+                CompanyId = AdminGuid,
+                PasswordSalt = hmac.Key,
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Master1234"))
+            };
+            modelBuilder.Entity<User>().HasData(admin);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Roles)
+                .WithMany(x => x.Users)
+                .UsingEntity(j => j.HasData(new { UsersId = AdminGuid, RolesId = AdminGuid }));
         }
 
         private void ConfigureUserEntity(ModelBuilder modelBuilder)

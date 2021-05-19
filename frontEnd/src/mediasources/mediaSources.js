@@ -53,8 +53,8 @@ class TelegrammMedia extends React.Component{
             chanelname: this.state.thChanelName
         };
 
-        axios.post("https://localhost:44329/api/publish/tg",
-        //axios.post("https://hse-cms.herokuapp.com/api/publish/tg",
+        //axios.post("https://localhost:44329/api/publish/tg",
+        axios.post("https://hse-cms.herokuapp.com/api/publish/tg",
         val,
         {
         headers: {
@@ -71,8 +71,8 @@ class TelegrammMedia extends React.Component{
     }
 
     componentDidMount(){
-        axios.get("https://localhost:44329/api/publish/tg",
-        //axios.get("https://hse-cms.herokuapp.com/api/publish/tg",
+        //axios.get("https://localhost:44329/api/publish/tg",
+        axios.get("https://hse-cms.herokuapp.com/api/publish/tg",
         {
         headers: {
             "Authorization": "Bearer " + sessionStorage.getItem("AuthUserSecurityToken")

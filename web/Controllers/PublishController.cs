@@ -71,10 +71,14 @@ namespace web.Controllers
                 };
                 this.dataContext.TelegrammDatas.Add(data);
             }
+            else
+            {
+                this.dataContext.Update(data);
+
+            }
 
             data.BotName = telegrammDto.BotName;
             data.ChanelName = telegrammDto.ChanelName;
-            this.dataContext.Update(data);
             await this.dataContext.SaveChangesAsync();
 
             return this.Ok();
@@ -144,9 +148,9 @@ namespace web.Controllers
             {
                 try
                 {
-                    var article = await this.dataContext.Articles.FirstAsync(x => x.Id == item.ArticleId);
+                    var article = await this.dataContext.Articles.IgnoreQueryFilters().FirstAsync(x => x.Id == item.ArticleId);
 
-                    var name = article + Environment.NewLine + "http://localhost:3000/" + item.Link;
+                    var name = article.Title + Environment.NewLine + "http://localhost:3000/" + item.Link;
                     await PublishASync(tg.BotName, tg.ChanelName, name);
                     item.Published = true;
                     this.dataContext.Update(item);

@@ -11,6 +11,10 @@ import axios from 'axios';
 import {
     Link
 } from "react-router-dom";
+import CalendarHeatmap from 'react-calendar-heatmap';
+import ReactTooltip from "react-tooltip";
+import "react-calendar-heatmap/dist/styles.css";
+
 
 // type userData=paths["/api/User/{id}"]["get"]["responses"]["200"]["content"]["application/json"]
 
@@ -39,8 +43,31 @@ export class Profile extends React.Component<{}, {}> {
         },
         loading: true
 
+    };
+
+    shiftDate(date, numDays) {
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + numDays);
+        return newDate;
     }
+
+    getRange(count) {
+        return Array.from({ length: count }, (_, i) => i);
+    }
+
+    getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
     render() {
+        let today = new Date();
+        const randomValues = this.getRange(200).map((index) => {
+            return {
+            date: this.shiftDate(today, -index),
+            count: this.getRandomInt(1, 3)
+            };
+        });
         return (
             <Layout className="site-layout whole-layout">
                 <Layout.Header className="site-layout-background" style={{ padding: 0 }}>
@@ -63,13 +90,12 @@ export class Profile extends React.Component<{}, {}> {
                                 console.log("back");
                             }}>
 
-
                             </Button>
                         </Link>
                     </Row>
                     <Row>
                         <Col span={1}></Col>
-                        <Col span={22}>
+                        <Col span={12}>
                             <Title>Сотрудник</Title>
                         </Col>
                         <Col span={1}></Col>
@@ -77,43 +103,31 @@ export class Profile extends React.Component<{}, {}> {
                     <Row>
                         <Col span={1}></Col>
                         <Col span={2}><Paragraph strong>Имя:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.userD.firstName}</Paragraph></Col>
+                        <Col span={10} ><Paragraph> {this.state.userD.firstName}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
                     <Row>
                         <Col span={1}></Col>
                         <Col span={2}><Paragraph strong>Фамилия:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.userD.lastName}</Paragraph></Col>
+                        <Col span={10} ><Paragraph> {this.state.userD.lastName}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
                     <Row>
                         <Col span={1}></Col>
                         <Col span={2}><Paragraph strong>Email:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.userD.email}</Paragraph></Col>
+                        <Col span={10} ><Paragraph> {this.state.userD.email}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
                     <Row>
                         <Col span={1}></Col>
                         <Col span={2}><Paragraph strong>Роли:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.userD.roles[0]}</Paragraph></Col>
-                        <Col span={1}></Col>
-                    </Row>
-                    <Row>
-                        <Col span={1}></Col>
-                        <Col span={2}><Paragraph strong>ID:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.userD.id}</Paragraph></Col>
-                        <Col span={1}></Col>
-                    </Row>
-                    <Row>
-                        <Col span={1}></Col>
-                        <Col span={2}><Paragraph strong>CompId:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.userD.companyId}</Paragraph></Col>
+                        <Col span={10} ><Paragraph> {this.state.userD.roles[0]}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
                     <Divider />
                     <Row>
                         <Col span={1}></Col>
-                        <Col span={22}>
+                        <Col span={12}>
                             <Title>Компания</Title>
                         </Col>
                         <Col span={1}></Col>
@@ -121,10 +135,45 @@ export class Profile extends React.Component<{}, {}> {
                     <Row>
                         <Col span={1}></Col>
                         <Col span={2}><Paragraph strong>Название:</Paragraph></Col>
-                        <Col span={20} ><Paragraph> {this.state.companyD.name}</Paragraph></Col>
+                        <Col span={10} ><Paragraph> {this.state.companyD.name}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
-                    <BackTop>
+                    <Row>
+                        <Col span={1}></Col>
+                        <Col span={12} >
+                             <div>
+                                <Title>Активность</Title>
+
+                                <CalendarHeatmap
+                                    startDate={this.shiftDate(today, -150)}
+                                    endDate={today}
+                                    values={randomValues}
+                                    classForValue={(value) => {
+                                    if (!value) {
+                                        return "color-empty";
+                                    }
+                                    return `color-gitlab-${value.count}`;
+                                    }}
+                                    tooltipDataAttrs={(value) => {
+                                    return {
+                                        "data-tip": `${value.date.toISOString().slice(0, 10)} has count: ${
+                                        value.count
+                                        }`
+                                    };
+                                    }}
+                                    showWeekdayLabels={true}
+                                    onClick={(value) =>
+                                    alert(`Clicked on value with count: ${value.count}`)
+                                    }
+                                />
+                                <ReactTooltip />
+                            </div>
+                        </Col>
+                        <Col span={1}></Col>
+                    </Row>
+                   
+                   
+                     <BackTop>
                         <div className="BackUp">Вверх</div>
                     </BackTop>
                 </Layout.Content>

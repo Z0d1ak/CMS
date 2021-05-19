@@ -47,7 +47,7 @@ interface menuOpt {
  * Массив опций меню
  */
 const leftMenuContent: Array<menuOpt> = [
-    { text: "Статьи", link: "/home/inwork", icon: <SnippetsOutlined />, component: < Article /> }
+    //{ text: "Статьи", link: "/home/inwork", icon: <SnippetsOutlined />, component: < Article /> }
     //{ text: "Компании", link: "/home/company", icon: <BankOutlined />, component: <Company /> },
     //{ text: "Роли", link: "/home/role", icon: <FunctionOutlined />, component: <Role /> },
     //{ text: "Сотрудники", link: "/home/emplo", icon: <IdcardOutlined />, component: <Employees /> },
@@ -73,13 +73,17 @@ export function getLinksLeftMenu() {
 function getMenuOpt(){
     let menu = [...leftMenuContent]
     var user = getUser();
+    if(!user.roles.includes("SuperAdmin")){
+        menu.push({ text: "Статьи", link: "/home/inwork", icon: <SnippetsOutlined />, component: < Article /> })
+    }
+
     if(user.roles.includes("ChiefRedactor")){
         menu.push({ text: "Сотрудники", link: "/home/emplo", icon: <IdcardOutlined />, component: <Employees /> })
         menu.push({ text: "Инфографика", link: "/home/info", icon: <AreaChartOutlined />, component: <Infographic /> })
     }
     if(user.roles.includes("CompanyAdmin")){
         menu.push({ text: "Сотрудники", link: "/home/emplo", icon: <IdcardOutlined />, component: <Employees /> })
-        menu.push({ text: "Инфографика", link: "/home/info", icon: <AreaChartOutlined />, component: <Infographic /> })
+        //menu.push({ text: "Инфографика", link: "/home/info", icon: <AreaChartOutlined />, component: <Infographic /> })
         menu.push({ text: "Роли", link: "/home/role", icon: <FunctionOutlined />, component: <Role /> })
         menu.push({ text: "Платформы", link: "/home/media", icon: <FunctionOutlined />, component: <MediaSources /> })        
     }

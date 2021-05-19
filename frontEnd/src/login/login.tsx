@@ -84,7 +84,7 @@ const LoginForm = (props: { fields: field[], onChangeFields: (newFields: any) =>
                 sessionStorage.setItem('AuthUserSecurityToken', res.data.securityToken);
                 setUser(res.data.user)
                 console.log(JSON.stringify(getUser()))
-                history.push("/home/info");
+                history.push("/home/inwork");
             })
             .catch(err => {
                 console.log(err)

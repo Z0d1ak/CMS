@@ -143,7 +143,6 @@ export class DataCard extends React.Component<{
                     <Skeleton title={{ width: "30%" }} active loading={this.props.loading} paragraph={{ rows: 1, width: "50%" }}>
                         <Meta
                             title={<div className="titleCard">{this.props.data.title}</div>}
-                            description={<div className="titleDescriptionCard">{this.props.data.id}</div>}
                         />
                     </Skeleton>
                 );
@@ -154,7 +153,6 @@ export class DataCard extends React.Component<{
                         <Meta
                             avatar={<Avatar size={50} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                             title={<div className="titleCard">{this.props.data.firstName}  {this.isNull(this.props.data.lastName) ? "" : this.props.data.lastName}</div>}
-                            description={<div className="titleDescriptionCard">{this.props.data.id}</div>}
                         />
                     </Skeleton>
                 );
@@ -164,7 +162,6 @@ export class DataCard extends React.Component<{
                     <Skeleton title={{ width: "30%" }} active loading={this.props.loading} paragraph={{ rows: 1, width: "50%" }}>
                         <Meta
                             title={<div className="titleCard">{this.props.data.name}</div>}
-                            description={<div className="titleDescriptionCard">{this.props.data.id}</div>}
                         />
                     </Skeleton>
                 );
@@ -174,7 +171,6 @@ export class DataCard extends React.Component<{
                     <Skeleton title={{ width: "30%" }} active loading={this.props.loading} paragraph={{ rows: 1, width: "50%" }}>
                         <Meta
                             title={<div className="titleCard">{this.props.data.name}</div>}
-                            description={<div className="titleDescriptionCard">{this.props.data.id}</div>}
                         />
                     </Skeleton>
                 );
@@ -184,7 +180,6 @@ export class DataCard extends React.Component<{
                     <Skeleton title={{ width: "30%" }} active loading={this.props.loading} paragraph={{ rows: 1, width: "50%" }}>
                         <Meta
                             title={<div className="titleCard">{this.props.data.description}</div>}
-                            description={<div className="titleDescriptionCard">{this.props.data.creationDate}</div>}
                         />
                     </Skeleton>
                 );
@@ -229,9 +224,6 @@ export class DataCard extends React.Component<{
                         </Skeleton>,
                         <Divider />,
                         <Paragraph strong>Статус статьи</Paragraph>,
-                        <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                            <DataRow dataStr={this.props.data.id} titleStr="id : " />
-                        </Skeleton>,
                         <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
                             <DataRow dataStr={this.props.data.creationDate} titleStr="Cоздано : " />
                         </Skeleton>,
@@ -286,9 +278,6 @@ export class DataCard extends React.Component<{
                             <DataRow dataStr={this.props.data.name} titleStr="Название : " />
                         </Skeleton>,
                         <Divider />,
-                        <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                            <DataRow dataStr={this.props.data.id} titleStr="id : " />
-                        </Skeleton>
                     ]
                 );
             }
@@ -300,9 +289,6 @@ export class DataCard extends React.Component<{
                             <DataRow dataStr={this.props.data.name} titleStr="Название : " />
                         </Skeleton>,
                         <Divider />,
-                        <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                            <DataRow dataStr={this.props.data.id} titleStr="id : " />
-                        </Skeleton>
                     ]
                 );
             }
@@ -313,7 +299,6 @@ export class DataCard extends React.Component<{
                         <Paragraph strong>Задание</Paragraph>,
                         <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 3 }}>
                             <DataRow dataStr={this.props.data.description} titleStr="Формулировка : " />
-                            <DataRow dataStr={this.props.data.id} titleStr="id : " />
                             <DataRow dataStr={this.props.data.creationDate} titleStr="Дата создания : " />
                             <DataRow dataStr={this.props.data.assignmentDate} titleStr="Дата поручения : " />
                         </Skeleton>,
@@ -391,7 +376,7 @@ export class DataCard extends React.Component<{
                                             <Col key={i + "tk"}>{d.comment}</Col></Row>
                                     )
                                 })
-                                : <>null</>
+                                : <>Отсутствует</>
                             }
 
                         </div>,
@@ -457,9 +442,6 @@ export class DataCard extends React.Component<{
                             <DataRowEditable dataStr={this.props.data.name} titleStr="Название : " typeName="name" editFieldCallback={this.updateDataFieldCallBack} />
                         </Skeleton>,
                         <Divider />,
-                        <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                            <DataRow dataStr={this.props.data.id} titleStr="id : " />
-                        </Skeleton>
                     ]
 
                 );
@@ -472,9 +454,6 @@ export class DataCard extends React.Component<{
                             <DataRowEditable dataStr={this.props.data.name} titleStr="Название : " typeName="name" editFieldCallback={this.updateDataFieldCallBack} />
                         </Skeleton>,
                         <Divider />,
-                        <Skeleton title={{ width: "100%" }} active loading={this.props.loading} paragraph={{ rows: 0 }}>
-                            <DataRow dataStr={this.props.data.id} titleStr="id : " />
-                        </Skeleton>
                     ]
                 );
             }

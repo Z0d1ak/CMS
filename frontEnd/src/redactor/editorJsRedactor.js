@@ -34,8 +34,8 @@ export class EditorJSRedactor extends React.Component{
     state = {
         id: this.props.match.params.id,
         dataType: "Redactor",
-        requestUrl: "https://localhost:44329",
-        //requestUrl: "https://hse-cms.herokuapp.com",
+        //requestUrl: "https://localhost:44329",
+        requestUrl: "https://hse-cms.herokuapp.com",
         requestPath: "/api/Article/",
         loaded: false,
         task: null,
@@ -235,7 +235,35 @@ export class EditorJSRedactor extends React.Component{
             }
         }
         else {
+            let roles = getUser().roles;
+            console.log(roles)
+            let nl = <div></div>
             this.actualTask = tasks.find(x => x.сompletionDate == null);
+
+            if(this.actualTask == null){
+                return nl
+            }
+            let taskType = this.actualTask.type
+            if(taskType === "Write" && !roles.some(x => x === "Author")){
+                return nl
+            }
+            if(taskType === "Redact" && !roles.some(x => x === "Redactor" || x === "ChiefRedactor")){
+                return  nl
+            }
+            if(taskType === "ValidateRedact" && !roles.some(x => x === "Author")){
+                return  nl
+            }
+            if(taskType === "Correct" && !roles.some(x => x === "Corrector")){
+                return  nl
+            }
+            if(taskType === "ValidateCorrect" && !roles.some(x => x === "Author")){
+                return  nl
+            }
+            if(taskType === "Approve" && !roles.some(x => x === "ChiefRedactor")){
+                return  nl
+            }
+
+
             if(this.actualTask !=null && this.actualTask.assignmentDate == null){
                 let taskCaption = this.getTaskName(this.actualTask.type)
                 return (
@@ -528,7 +556,7 @@ export class ArticlePreview2 extends React.Component{
      state = {
         id: this.props.match.params.name,
         dataType: "Redactor",
-        requestUrl: "https://localhost:44329",
+        requestUrl: "https://hse-cms.herokuapp.com",
         requestPath: "/api/publish/art/",
         loaded: false,
         task: null,

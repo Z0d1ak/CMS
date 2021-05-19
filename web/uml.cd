@@ -1,0 +1,735 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="web.Contracts.Dto.Request.CreateAdminDto" Collapsed="true">
+    <Position X="18" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAACAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAg=</HashCode>
+      <FileName>Contracts\Dto\Request\CreateAdminDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.CreateCompanyDto" Collapsed="true">
+    <Position X="19.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Request\CreateCompanyDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.CreateTaskDto" Collapsed="true">
+    <Position X="21.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAQAAAAAAAAAAAAgAAAAAAACAA=</HashCode>
+      <FileName>Contracts\Dto\Request\CreateTaskDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.CreateUserDto" Collapsed="true">
+    <Position X="23.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAACAAAAAAAAAAAAAAAgAAAAACAAAAAAAAAAg=</HashCode>
+      <FileName>Contracts\Dto\Request\CreateUserDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.FinishTaskDto" Collapsed="true">
+    <Position X="18" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Request\FinishTaskDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.LoginRequestDto" Collapsed="true">
+    <Position X="21.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Request\LoginRequestDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.StoreArticleDto" Collapsed="true">
+    <Position X="16.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Request\StoreArticleDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.StoreCompanyDto" Collapsed="true">
+    <Position X="18" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Request\StoreCompanyDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.StoreRoleDto" Collapsed="true">
+    <Position X="19.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Request\StoreRoleDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Request.StoreUserDto" Collapsed="true">
+    <Position X="21.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAACAAAAAAAAAAAAAAAgAAAAACAAAAAAAAAAg=</HashCode>
+      <FileName>Contracts\Dto\Request\StoreUserDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Response.LoginResponseDto" Collapsed="true">
+    <Position X="23.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Response\LoginResponseDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Response.ResponseArticleDto" Collapsed="true">
+    <Position X="25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAIBAAgAAA=</HashCode>
+      <FileName>Contracts\Dto\Response\ResponseArticleDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Response.ResponseArticleInfoDto" Collapsed="true">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAAAAAEAAAAAAAAAAAAAAAAAAAEAABAAgAAA=</HashCode>
+      <FileName>Contracts\Dto\Response\ResponseArticleInfoDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Response.ResponseCompanyDto" Collapsed="true">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Response\ResponseCompanyDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Response.ResponseRoleDto" Collapsed="true">
+    <Position X="23.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Response\ResponseRoleDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Response.ResponseTaskDto" Collapsed="true">
+    <Position X="25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAEAAAgAAAAgAAAAAEAAQAAAIAAAQAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Response\ResponseTaskDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Response.ResponseUserDto" Collapsed="true">
+    <Position X="11" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAACIAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Contracts\Dto\Response\ResponseUserDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.Dto.Response.SearchResponseDto&lt;TItem&gt;" Collapsed="true">
+    <Position X="21.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\Dto\Response\SearchResponseDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.SearchParameters.ArticleSearchParameters" Collapsed="true">
+    <Position X="1.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAkAARAAAAAAAAAAAAAAAABAAACAA=</HashCode>
+      <FileName>Contracts\SearchParameters\ArticleSearchParameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.SearchParameters.CompanySearchParameters" Collapsed="true">
+    <Position X="4" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAQAAAEAAA=</HashCode>
+      <FileName>Contracts\SearchParameters\CompanySearchParameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.SearchParameters.DefaultSearchParameters" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAQAAAgEAAAAAAAAAgQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\SearchParameters\DefaultSearchParameters.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="web.Contracts.SearchParameters.RoleSearchParameters" Collapsed="true">
+    <Position X="6.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAQAAAEAAA=</HashCode>
+      <FileName>Contracts\SearchParameters\RoleSearchParameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.SearchParameters.SearchParametersExtensions" Collapsed="true">
+    <Position X="19.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\SearchParameters\SearchParametersExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Contracts.SearchParameters.UserSearchParameters" Collapsed="true">
+    <Position X="8.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAMEAABQAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Contracts\SearchParameters\UserSearchParameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.ArticleController" Collapsed="true">
+    <Position X="16.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAABAAAAAAAAAEAAgAAAAAAAAABgAAAA=</HashCode>
+      <FileName>Controllers\ArticleController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.AuthController" Collapsed="true">
+    <Position X="21.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\AuthController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.CompanyController" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAEAIAAEAAAAAAQAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\CompanyController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.DataController" Collapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAgAAAAQAAAAAAAEAAAAAAAAAAAACACA=</HashCode>
+      <FileName>Controllers\DataController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.ResponseLinkDto" Collapsed="true">
+    <Position X="19.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\DataController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.ResponseFLinkMeta" Collapsed="true">
+    <Position X="18" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAEAAAAAAAAAAAAAAABAAAAAAAAAAAAE=</HashCode>
+      <FileName>Controllers\DataController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.ResponseDataDto" Collapsed="true">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\DataController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.ResponseFileDto" Collapsed="true">
+    <Position X="16.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\DataController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.PublishController" Collapsed="true">
+    <Position X="18" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIAAAAAAABAAAAAEAAAAAAAAAAEAQEEAAAAIAAAAA=</HashCode>
+      <FileName>Controllers\PublishController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.TelegrammDto" Collapsed="true">
+    <Position X="12.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Controllers\PublishController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.PublishDto" Collapsed="true">
+    <Position X="21.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAACAAAAA=</HashCode>
+      <FileName>Controllers\PublishController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.RequestPublishDto" Collapsed="true">
+    <Position X="23.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\PublishController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.ResponsePublishDto" Collapsed="true">
+    <Position X="21.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\PublishController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.RoleController" Collapsed="true">
+    <Position X="14.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAQAAAAAAAgAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Controllers\RoleController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.TaskController" Collapsed="true">
+    <Position X="25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAADAAAAAAAAAAAAAAQAAAAAAAAAABAA=</HashCode>
+      <FileName>Controllers\TaskController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Controllers.UserController" Collapsed="true">
+    <Position X="21.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAACAAAAAAAAAAAABABAAAAAAAQQAAAA=</HashCode>
+      <FileName>Controllers\UserController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Db.DataContext" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACCAIAgAAAgABAACgAAAAEgggkAAAAAQIAQAgAAA=</HashCode>
+      <FileName>Db\DataContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Db.NpgSqlExceptionConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Db\NpgSqlExceptionConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Entities.Article" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAgIAAEAAAEAAAAAAAAAAAAAAAAAIBAAgAAA=</HashCode>
+      <FileName>Entities\Article.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Entities.Company" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAIAgAAAAAAAAAAAAQAAgAAAAAAAAAIAQAAAAA=</HashCode>
+      <FileName>Entities\Company.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Entities.Data" Collapsed="true">
+    <Position X="25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Data.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Entities.PublishData" Collapsed="true">
+    <Position X="19.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAIAAAAACAAAAAAAAAAAAAABgAAARAAAAAA=</HashCode>
+      <FileName>Entities\PublishData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Entities.Role" Collapsed="true">
+    <Position X="12.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAIAAAAAAAAAAAQAAAAAAAAAAQAABAAAAAA=</HashCode>
+      <FileName>Entities\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Entities.TelegrammData" Collapsed="true">
+    <Position X="11" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAIAAAAAAAAAAAAAAQAAAAAAAAAABAAAACA=</HashCode>
+      <FileName>Entities\TelegrammData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Entities.User" Collapsed="true">
+    <Position X="19.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EACCAEAAACIAAAAAAAAAAAAAAgAAAAAAQAAABAAAABg=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Entities.WfTask" Collapsed="true">
+    <Position X="14.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAEAgIgAAAAgAAAAAkAEQAAAIACgRAABAAAAAA=</HashCode>
+      <FileName>Entities\WfTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Migrations.InitialCreate" Collapsed="true">
+    <Position X="19.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Migrations\20210127133810_InitialCreate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Migrations.AddParentTask" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Migrations\20210321192908_AddParentTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Migrations.nojsonb" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Migrations\20210321232654_nojsonb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Migrations.datas" Collapsed="true">
+    <Position X="16.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Migrations\20210422185444_datas.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Migrations.tg" Collapsed="true">
+    <Position X="14.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Migrations\20210423104950_tg.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Migrations.tg2" Collapsed="true">
+    <Position X="16.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Migrations\20210423145032_tg2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Migrations.DataContextModelSnapshot" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Migrations\DataContextModelSnapshot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Options.AccessRoles" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAQAAACBAAAAYAgAAAAAAAAEAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Options\AccessRoles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Options.SwaggerConfig" Collapsed="true">
+    <Position X="23.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAgAFAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Options\SwaggerConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Other.SearchResponseSchemeFilter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Other\SearchResponseSchemeFilter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Other.ServiceResult" Collapsed="true">
+    <Position X="11" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIIAQAAAIAAAAA=</HashCode>
+      <FileName>Other\ServiceResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Other.ServiceResult&lt;T&gt;" Collapsed="true">
+    <Position X="25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAQAgAIAAAAA=</HashCode>
+      <FileName>Other\ServiceResult`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Other.ServicesRegistrationExtension" Collapsed="true">
+    <Position X="12.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAQAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Other\ServicesRegistrationExtension.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Repositories.Helpers.Mappers" Collapsed="true">
+    <Position X="25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgRAAAAAAQAAAAAQAgAAAMAAAAAAAAAgAAAAIAAACAA=</HashCode>
+      <FileName>Repositories\Helpers\Mappers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Repositories.ArticleRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAACAAAEAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Repositories\ArticleRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Repositories.AuthRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAEAAA=</HashCode>
+      <FileName>Repositories\AuthRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Repositories.CompanyRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAACAAAAAgAAAAAAIAEIIA=</HashCode>
+      <FileName>Repositories\CompanyRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Repositories.RoleRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAACAAAAAgAAAAAAIAAIAA=</HashCode>
+      <FileName>Repositories\RoleRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Repositories.UserRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAACAAAEAgAAAAAAIAEIIA=</HashCode>
+      <FileName>Repositories\UserRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.ArticleService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAEAgAAACAAIAAIIA=</HashCode>
+      <FileName>Services\ArticleService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.AuthService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAACAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\AuthService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.CompanyService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAgAAIAAIIA=</HashCode>
+      <FileName>Services\CompanyService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.PasswordService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\PasswordService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.RoleService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAACAAAAAgAAAAAAAAAIAA=</HashCode>
+      <FileName>Services\RoleService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.TimedHostedService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACQgAAAAAAgAAAAAAAAAAAgAAQAAAAAAAAA=</HashCode>
+      <FileName>Services\SenderService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.UserInfoProvider" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAIAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\UserInfoProvider.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.UserService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAEAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Services\UserService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Services.WfService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAADAIAAAAAAAAAAAAAAAABAAAAAAFAA=</HashCode>
+      <FileName>Services\WfService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="web.Program" Collapsed="true">
+    <Position X="16.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="web.Startup" Collapsed="true">
+    <Position X="14.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAQAAAAAAAgAAAAAABAAAAAAACAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Startup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="web.Contracts.SearchParameters.ISearchParameter" Collapsed="true">
+    <Position X="11" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\SearchParameters\ISearchParameter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Db.ISqlExceptionConverter" Collapsed="true">
+    <Position X="12.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Db\ISqlExceptionConverter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Repositories.IArticleRepository" Collapsed="true">
+    <Position X="11" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Repositories\IArticleRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Repositories.IAuthRepository" Collapsed="true">
+    <Position X="14.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\IAuthRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Repositories.ICompanyRepository" Collapsed="true">
+    <Position X="18" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Repositories\ICompanyRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Repositories.IRoleRepository" Collapsed="true">
+    <Position X="23.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAAAAIAA=</HashCode>
+      <FileName>Repositories\IRoleRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Repositories.IUserRepository" Collapsed="true">
+    <Position X="16.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Repositories\IUserRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Services.IArticleService" Collapsed="true">
+    <Position X="12.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Services\IArticleService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Services.IAuthService" Collapsed="true">
+    <Position X="16.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\IAuthService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Services.ICompanyService" Collapsed="true">
+    <Position X="19.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Services\ICompanyService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Services.IPasswordService" Collapsed="true">
+    <Position X="21.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\IPasswordService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Services.IRoleService" Collapsed="true">
+    <Position X="25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAAAAIAA=</HashCode>
+      <FileName>Services\IRoleService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Services.IUserInfoProvider" Collapsed="true">
+    <Position X="14.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAIAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\IUserInfoProvider.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Services.IUserService" Collapsed="true">
+    <Position X="18" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Services\IUserService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="web.Services.IWfService" Collapsed="true">
+    <Position X="19.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Services\IWfService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="web.Contracts.SearchParameters.SortingColumns.ArticleSortingColumn" Collapsed="true">
+    <Position X="11" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAABAAAAAEAAAAAAAAAAAAAAAAAAAAAABAAACAA=</HashCode>
+      <FileName>Contracts\SearchParameters\SortingColumns\ArticleSortingColumn.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="web.Contracts.SearchParameters.SortingColumns.CompanySortingColumn" Collapsed="true">
+    <Position X="14.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\SearchParameters\SortingColumns\CompanySortingColumn.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="web.Contracts.SearchParameters.SortingColumns.RoleSortingColumn" Collapsed="true">
+    <Position X="16.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Contracts\SearchParameters\SortingColumns\RoleSortingColumn.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="web.Contracts.SearchParameters.SortingColumns.UserSortingColumn" Collapsed="true">
+    <Position X="21.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Contracts\SearchParameters\SortingColumns\UserSortingColumn.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="web.Entities.ArticleState" Collapsed="true">
+    <Position X="12.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ArticleState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="web.Entities.RoleType" Collapsed="true">
+    <Position X="18" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAABABAAQAgAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\RoleType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="web.Entities.TaskType" Collapsed="true">
+    <Position X="19.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAACBAAAAAAAAAAAAAAEIAAg=</HashCode>
+      <FileName>Entities\TaskType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

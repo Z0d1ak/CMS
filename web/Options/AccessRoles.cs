@@ -17,7 +17,7 @@ namespace web.Options
         public const string ChiefRedactor = nameof(RoleType.ChiefRedactor);
 
         public const string Сorrector = nameof(RoleType.Corrector);
-
+         
         public const string Author = nameof(RoleType.Author);
 
         public const string AnyAdmin = SuperAdmin + "," + CompanyAdmin;

@@ -1,0 +1,147 @@
+body{
+    background-color:white;
+}
+
+.articleBody{
+    background-color: white;
+    height: 60vh;
+    overflow: auto scroll; 
+    margin: 10px;
+}
+
+.partsPoolright{
+    background-color: white;
+    height: 60vh;
+    margin: 10px;
+    overflow: auto scroll;
+    max-height: 60vh;
+}
+
+
+.dataPoolTop{
+    background-color: white;
+    height: auto;
+    margin: 10px;
+}
+
+.redactorRow{
+    border: rgb(228, 228, 228);
+    border: 1px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.redactorRow:hover{
+    border-style: solid;
+}
+
+.redactorCell{
+    width:100%;
+    min-height: 25px;
+    height: 100%;
+    background-color: white;
+    border-style: none;
+}
+
+.redactorCell:hover{
+    background-color:  rgb(228, 228, 228);
+}
+
+
+.contentStyle{
+    height: 160px;
+    color: #fff;
+    line-height: 160px;
+    text-align: center;
+    background-color: #4d5970;
+    margin: 10px;
+}
+
+
+.buttonStyle{
+    width:30px;
+    height:30px;
+    position:absolute;
+    z-index: 10;
+    
+}
+
+
+
+.deleteButton{
+
+  
+    top: calc(50% + 30px);
+    left: -27px;
+}
+.editButton{
+
+    top: calc(50% + 30px);
+    right: -35px;
+}
+.moveRightButton{
+
+    top: calc(50% - 30px);
+    right: -25px;
+}
+
+.moveLeftButton{
+
+    top: calc(50% - 30px);
+    left: -25px;
+}
+
+.addRightButton{
+
+    top: calc(50% - 10px);
+    right: -45px;
+}
+.reduceRightButton{
+
+    top: calc(50% - 10px);
+    right: -25px;
+}
+.addLeftButton{
+
+    top:calc(50% - 10px);
+    left: -45px;
+}
+
+.reduceLeftButton{
+
+    top: calc(50% - 10px);
+    left: -25px;
+}
+
+.delRowButton{
+    width:20px;
+    height:20px;
+    position:absolute;
+    z-index: 10;
+    right: -10px;
+}
+
+
+.settingsForm
+{
+    top: calc(50% + 50px);
+    right: -340px;
+    background-color: white;
+    width: 300px;
+    height: 300px;
+    z-index: 50;
+    position:absolute;
+}
+
+
+.articleB{
+    background-color: white;
+    width:80%;
+margin-left: auto;
+margin-right: auto;
+margin-top: 50px;
+height: auto;
+border: 1px solid  rgb(201, 201, 201) ;
+padding: 10px;
+}

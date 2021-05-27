@@ -1,0 +1,46 @@
+.DataRowTitle {
+  display: inline-flex;
+  
+}
+
+.DataRowData {
+  display: inline-flex;
+  width: 100%;
+}
+
+.DataRow{
+  margin-top: 20px;
+}
+
+.DataRowList{
+  width: 100%;
+  margin-top: -5px;
+}
+
+
+.title{
+  text-align: right;
+  padding-right: 2%;
+}
+
+.deleteButton
+{
+  width: 100%;
+  text-align: left;
+}
+
+.optionText
+{
+  align-content: center;
+  height: 32px;
+  width: 100%;
+  padding-top: 6px;
+  font-size: 14px;
+}
+
+.DataRowData{
+  word-wrap: break-word;
+  word-break: break-all;
+  max-height: 100px;
+  overflow: auto;
+}

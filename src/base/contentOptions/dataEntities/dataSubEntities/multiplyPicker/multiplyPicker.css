@@ -1,0 +1,32 @@
+.userCard {
+    margin-top: 16px;
+  }
+  
+  .userCard.wide {
+    width: 100%;
+  }
+  
+  .userCard.narrow {
+    width: 30%;
+  }
+
+  .red{
+width: 100%;
+  }
+
+  .prev{
+
+background-color: grey;
+height: 50px;
+  }
+
+
+  .addButtun
+  {
+   min-width: 300px;
+  }
+
+  .deleteButton{
+    min-width: 300px;
+    margin-left: 27px;
+  }

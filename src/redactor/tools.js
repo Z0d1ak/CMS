@@ -28,14 +28,14 @@ export const EDITOR_JS_TOOLS = {
       config: {
         endpoints: {
           byFile: 'https://localhost:44329/api/Data/ByContent', // Your backend file uploader endpoint
-          byUrl: 'https://localhost:44329/api/Data/ByUrl', // Your endpoint that provides uploading by Url
+          byUrl: 'https://hse-cms.herokuapp.com/api/Data/ByUrl', // Your endpoint that provides uploading by Url
         }
       }
     },
   link: {
       class: LinkTool,
       config: {
-        endpoint: 'https://localhost:44329/api/Data/urimeta', // Your backend endpoint for url data fetching
+        endpoint: 'https://hse-cms.herokuapp.com/api/Data/urimeta', // Your backend endpoint for url data fetching
       }
     },
   checklist: CheckList,

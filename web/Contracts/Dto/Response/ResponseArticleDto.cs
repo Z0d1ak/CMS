@@ -44,6 +44,8 @@ namespace web.Contracts.Dto.Response
         /// </summary>
         public string? Content { get; set; } = null!;
 
+        public int? Views { get; set; }
+
         /// <summary>
         ///   Активное задание.
         /// </summary>

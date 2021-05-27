@@ -161,6 +161,7 @@ namespace web.Repositories
                 State = dbArticle.State,
                 Title = dbArticle.Title,
                 Content = dbArticle.Content,
+                Views = dbArticle.Views,
                 Tasks = dbArticle.Tasks.Select(x => x.ToResponseDto())
             };
 

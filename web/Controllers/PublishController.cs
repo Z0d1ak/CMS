@@ -133,6 +133,34 @@ namespace web.Controllers
             return this.Ok(data);
         }
 
+        [HttpGet("activity/{id}")]
+        public async Task<IActionResult> GetUserAcivityAsync([FromRoute] Guid id)
+        {
+            var userId = id;
+            var tasks = await this.dataContext.Tasks
+                .Where(x => x.PerformerId == userId && x.СompletionDate >= DateTime.Now.Date.AddDays(-200)).ToListAsync();
+            var acts = new List<UserActivity>(200);
+            for(int i = 199; i>=0; i--)
+            {
+                var date = DateTime.Now.Date.AddDays(-i).Date;
+                var act = new UserActivity
+                {
+                    Date = date,
+                    Count = tasks.Where(x => x.СompletionDate != null).Count(x => x.СompletionDate.Value.Date.Equals(date))
+                };
+                acts.Add(act);
+                
+            }
+            var vl = acts.Where(x => x.Count > 0);
+            return this.Ok(acts);
+        }
+
+        public class UserActivity
+        {
+            public DateTime Date { get; set; }
+            public int Count { get; set; }
+        } 
+
 
         [HttpGet("check")]
         public async Task Publish()
@@ -173,6 +201,15 @@ namespace web.Controllers
                 return this.NotFound();
             }
             var article = await this.dataContext.Articles.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == data.ArticleId);
+
+            if(article is not null)
+            {
+                article.Views = article.Views is null
+                    ? 1
+                    : article.Views + 1;
+                dataContext.Entry(article).State = EntityState.Modified;
+                dataContext.SaveChangesAsync();
+            }
 
             return this.Ok(article);
         }

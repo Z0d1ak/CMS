@@ -27,5 +27,7 @@ namespace web.Entities
         public string? Content { get; set; }
 
         public ICollection<WfTask> Tasks { get; set; }
+
+        public int? Views { get; set; }
     }
 }

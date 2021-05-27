@@ -55,25 +55,25 @@ namespace web.Controllers
             {
                 url = await reader.ReadToEndAsync();
             }
-            var type = GetFileExtensionFromUrl(url);
-            byte[] payLoad;
-            using WebClient webClient = new WebClient();
-            var id = Guid.NewGuid();
-            //Fetch the File Name.
-            string fileName = $"{id}{type}";
-            if (!Directory.Exists(this.environment.WebRootPath + "\\Upload\\"))
-            {
-                Directory.CreateDirectory(this.environment.WebRootPath + "\\Upload\\");
-            }
-
-            webClient.DownloadFile(new Uri(url), this.environment.WebRootPath + "\\Upload\\" + fileName);
+            //var type = GetFileExtensionFromUrl(url);
+            //byte[] payLoad;
+            //using WebClient webClient = new WebClient();
+            //var id = Guid.NewGuid();
+            ////Fetch the File Name.
+            //string fileName = $"{id}{type}";
+            //if (!Directory.Exists(this.environment.WebRootPath + "\\Upload\\"))
+            //{
+            //    Directory.CreateDirectory(this.environment.WebRootPath + "\\Upload\\");
+            //}
+            //
+            //webClient.DownloadFile(new Uri(url), this.environment.WebRootPath + "\\Upload\\" + fileName);
 
             var resp = new ResponseDataDto
             {
                 Success = 1,
                 File = new ResponseFileDto
                 {
-                    Url = "https://localhost:44329/Upload/" + fileName
+                    Url = url//"https://localhost:44329/Upload/" + fileName
                 }
             };
 

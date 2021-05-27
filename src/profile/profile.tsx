@@ -29,14 +29,14 @@ const { Title, Paragraph, Text } = Typography;
 export class Profile extends React.Component<{}, {}> {
     state = {
         requestUrl: "https://hse-cms.herokuapp.com",
+        activity: null,
         userD: {
             id: "",
             companyId: "",
             email: "",
             firstName: "",
             lastName: "",
-            roles: []
-        },
+            roles: []        },
         companyD: {
             id: "",
             name: ""
@@ -138,6 +138,7 @@ export class Profile extends React.Component<{}, {}> {
                         <Col span={10} ><Paragraph> {this.state.companyD.name}</Paragraph></Col>
                         <Col span={1}></Col>
                     </Row>
+                    {this.state.activity != null &&
                     <Row>
                         <Col span={1}></Col>
                         <Col span={12} >
@@ -147,7 +148,7 @@ export class Profile extends React.Component<{}, {}> {
                                 <CalendarHeatmap
                                     startDate={this.shiftDate(today, -150)}
                                     endDate={today}
-                                    values={randomValues}
+                                    values={this.state.activity}
                                     classForValue={(value) => {
                                     if (!value) {
                                         return "color-empty";
@@ -171,6 +172,7 @@ export class Profile extends React.Component<{}, {}> {
                         </Col>
                         <Col span={1}></Col>
                     </Row>
+                    }
                    
                    
                      <BackTop>
@@ -187,6 +189,27 @@ export class Profile extends React.Component<{}, {}> {
 
         this.setState({ loading: true });
         let request: string = "/" + sessionStorage.getItem('AuthUserId');
+
+        axios.get(
+            this.state.requestUrl + "/api/Publish/activity" + request,
+            {
+                headers: {
+                    "Authorization": "Bearer " + sessionStorage.getItem("AuthUserSecurityToken")
+                }
+            }
+        )
+        .then(res => {
+            let today = new Date();
+
+            const randomValues = this.getRange(200).map((index) => {
+                return {
+                date: this.shiftDate(today, -index),
+                count: res.data.reverse()[index].count
+                };
+            });
+            console.log(randomValues)
+            this.setState({activity: randomValues})
+        })
 
         axios.get(
             this.state.requestUrl + "/api/User" + request,

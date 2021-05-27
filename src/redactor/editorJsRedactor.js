@@ -54,6 +54,7 @@ export class EditorJSRedactor extends React.Component{
             title: "",
             content: ''
         },
+        views: null,
         data: {},
         grid: {}
     }
@@ -327,6 +328,7 @@ export class EditorJSRedactor extends React.Component{
 
                 }
                 if(role == null){
+                    this.setState({views: res.data.views})
                     this.setState({ article: res.data });
                     this.setState({ grid: JSON.parse(res.data.content) })
                     this.setState({ loaded: true })
@@ -344,6 +346,7 @@ export class EditorJSRedactor extends React.Component{
                             this.setState({ article: res.data });
                             this.setState({ grid: JSON.parse(res.data.content) })
                             this.setState({ loaded: true })
+                            this.setState({views: res.data.views})
                         })
                         .catch(err2 =>
                             console.log(err2));
@@ -452,6 +455,8 @@ export class EditorJSRedactor extends React.Component{
         return (
             <div style={{margin: 10}}>
             {this.state.ispublished && <Tag color="#87d068">Опубликована</Tag>}
+            {this.state.views != null && <Tag color="#87d068">{this.this.state.views}</Tag>}
+
 
             <h1 style={{}}>{this.state.article.title}</h1>
            <Row>

@@ -230,7 +230,7 @@ export class Article extends React.Component<{}, {}> {
                     description:
                         'Статья с id:' + val.id + " была успешно создана",
                 });
-                this.createTask(val.id,"Write","Написать статью");
+                //this.createTask(val.id,"Write","Написать статью");
               // this.createTask(val.id,"Redact","Редактировать статью");
               //  this.createTask(val.id,"Correct","Подправить текст");
 

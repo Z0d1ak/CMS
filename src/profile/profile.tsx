@@ -153,7 +153,7 @@ export class Profile extends React.Component<{}, {}> {
                                     if (!value) {
                                         return "color-empty";
                                     }
-                                    return `color-gitlab-${value.count}`;
+                                    return `color-gitlab-${Math.min(value.count, 4)}`;
                                     }}
                                     tooltipDataAttrs={(value) => {
                                     return {

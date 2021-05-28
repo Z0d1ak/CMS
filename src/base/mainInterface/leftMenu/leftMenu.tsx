@@ -79,7 +79,7 @@ function getMenuOpt(){
 
     if(user.roles.includes("ChiefRedactor")){
         menu.push({ text: "Сотрудники", link: "/home/emplo", icon: <IdcardOutlined />, component: <Employees /> })
-        menu.push({ text: "Инфографика", link: "/home/info", icon: <AreaChartOutlined />, component: <Infographic /> })
+        //menu.push({ text: "Инфографика", link: "/home/info", icon: <AreaChartOutlined />, component: <Infographic /> })
     }
     if(user.roles.includes("CompanyAdmin")){
         menu.push({ text: "Сотрудники", link: "/home/emplo", icon: <IdcardOutlined />, component: <Employees /> })

@@ -178,7 +178,7 @@ namespace web.Controllers
                 {
                     var article = await this.dataContext.Articles.IgnoreQueryFilters().FirstAsync(x => x.Id == item.ArticleId);
 
-                    var name = article.Title + Environment.NewLine + "http://localhost:3000/" + item.Link;
+                    var name = article.Title + Environment.NewLine + "https://diplomacms.herokuapp.com/" + item.Link;
                     await PublishASync(tg.BotName, tg.ChanelName, name);
                     item.Published = true;
                     this.dataContext.Update(item);
@@ -207,8 +207,8 @@ namespace web.Controllers
                 article.Views = article.Views is null
                     ? 1
                     : article.Views + 1;
-                dataContext.Entry(article).State = EntityState.Modified;
-                dataContext.SaveChangesAsync();
+                dataContext.Update(article);
+                await  dataContext.SaveChangesAsync();
             }
 
             return this.Ok(article);

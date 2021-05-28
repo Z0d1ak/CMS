@@ -342,11 +342,12 @@ export class EditorJSRedactor extends React.Component{
                             }
                         })
                         .then(usersRes =>{
+                            this.setState({views: res.data.views})
                             this.setState({usersSearch: usersRes.data.items})
                             this.setState({ article: res.data });
                             this.setState({ grid: JSON.parse(res.data.content) })
                             this.setState({ loaded: true })
-                            this.setState({views: res.data.views})
+                            
                         })
                         .catch(err2 =>
                             console.log(err2));
@@ -356,17 +357,6 @@ export class EditorJSRedactor extends React.Component{
             })
             .catch(err => {
                 console.log(err);
-
-                switch (err.response.status) {
-                    case 401: {
-                        console.log("401");
-                        break;
-                    }
-                    default: {
-                        console.log("Undefined error");
-                        break;
-                    }
-                }
             })
         axios.get(
             this.state.requestUrl + "/api/publish/pubdata/" +this.props.match.params.id,
@@ -455,7 +445,7 @@ export class EditorJSRedactor extends React.Component{
         return (
             <div style={{margin: 10}}>
             {this.state.ispublished && <Tag color="#87d068">Опубликована</Tag>}
-            {this.state.views != null && <Tag color="#87d068">{this.this.state.views}</Tag>}
+            {this.state.views !== null && <Tag color="#87d068">{this.state.views}</Tag>}
 
 
             <h1 style={{}}>{this.state.article.title}</h1>

@@ -85,7 +85,7 @@ namespace web
                     new List<string>()}
                 });
             });
-            //services.AddHostedService<TimedHostedService>();
+            services.AddHostedService<TimedHostedService>();
             services.AddServices();
             services.AddInfrastructure();
             services.AddRepositories();

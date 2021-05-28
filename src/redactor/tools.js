@@ -27,15 +27,15 @@ export const EDITOR_JS_TOOLS = {
       class: ImageTool,
       config: {
         endpoints: {
-          byFile: 'https://localhost:44329/api/Data/ByContent', // Your backend file uploader endpoint
-          byUrl: 'https://hse-cms.herokuapp.com/api/Data/ByUrl', // Your endpoint that provides uploading by Url
+          byFile: 'https://localhost:5001/api/Data/ByContent', // Your backend file uploader endpoint
+          byUrl: 'https://localhost:5001/api/Data/ByUrl', // Your endpoint that provides uploading by Url
         }
       }
     },
   link: {
       class: LinkTool,
       config: {
-        endpoint: 'https://hse-cms.herokuapp.com/api/Data/urimeta', // Your backend endpoint for url data fetching
+        endpoint: 'https://localhost:5001/api/Data/urimeta', // Your backend endpoint for url data fetching
       }
     },
   checklist: CheckList,
